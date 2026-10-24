@@ -238,6 +238,7 @@ class MantellaConfigValueDefinitionsNew:
         other_category.add_config_value(SpeechFlavorDefinitions.get_speech_flavor_intensity_config_value())
         other_category.add_config_value(SpeechFlavorDefinitions.get_speech_flavor_scope_config_value())
         other_category.add_config_value(SpeechFlavorDefinitions.get_speech_flavor_tts_respell_config_value())
+        other_category.add_config_value(SpeechFlavorDefinitions.get_social_register_enabled_config_value())
         other_category.add_config_value(OtherDefinitions.get_save_audio_data_to_character_folder_config_value())
         other_category.add_config_value(OtherDefinitions.get_port_config_value())
         other_category.add_config_value(OtherDefinitions.get_show_http_debug_messages_config_value())
