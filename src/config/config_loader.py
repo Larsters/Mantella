@@ -389,6 +389,13 @@ LLM parameter list must be valid JSON""")
             self.enable_telemetry = self.__definitions.get_bool_value("enable_telemetry")
             self.telemetry_otlp_endpoint = self.__definitions.get_string_value("telemetry_otlp_endpoint")
             self.telemetry_protocol = self.__definitions.get_string_value("telemetry_protocol")
+
+            # Lore lookup (src/lore)
+            self.lore_enabled: bool = self.__definitions.get_bool_value("lore_enabled")
+            self.lore_per_turn: bool = self.__definitions.get_bool_value("lore_per_turn")
+            self.lore_max_notes: int = self.__definitions.get_int_value("lore_max_notes")
+            self.lore_max_tokens: int = self.__definitions.get_int_value("lore_max_tokens")
+            self.lore_allow_spoilers: bool = self.__definitions.get_bool_value("lore_allow_spoilers")
             
             # Actions
             self.advanced_actions_enabled = self.__definitions.get_bool_value("advanced_actions_enabled")

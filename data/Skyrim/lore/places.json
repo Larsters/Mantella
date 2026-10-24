@@ -1,0 +1,1120 @@
+{
+  "attribution": "Notes paraphrased in our own words from the Unofficial Elder Scrolls Pages (UESP, https://en.uesp.net), licensed CC BY-SA 2.5. Each note lists the page it was drawn from in 'source'.",
+  "notes": [
+    {
+      "id": "skyrim_province",
+      "title": "Skyrim",
+      "scope": "place",
+      "aliases": [
+        "Skyrim",
+        "the province",
+        "Old Kingdom"
+      ],
+      "keywords": [
+        "nine holds",
+        "high king",
+        "province",
+        "homeland",
+        "nords"
+      ],
+      "text": "Skyrim is the cold northern province of the Empire, homeland of the Nords, split into nine holds each ruled by a Jarl. The Jarls choose a High King at a council called the Moot. Since High King Torygg's death the throne is empty and the province is torn by civil war.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Skyrim"
+    },
+    {
+      "id": "whiterun_hold",
+      "title": "Whiterun Hold",
+      "scope": "place",
+      "aliases": [
+        "Whiterun Hold",
+        "the tundra",
+        "Whiterun plains"
+      ],
+      "keywords": [
+        "giants",
+        "farms",
+        "plains",
+        "Pelagia Farm",
+        "Western Watchtower",
+        "Honningbrew Meadery",
+        "Battle-Born Farm",
+        "Chillfurrow Farm"
+      ],
+      "places": [
+        "whiterun"
+      ],
+      "text": "Whiterun Hold sits at the heart of Skyrim: open tundra, rich farmland, giant camps and herds of mammoths. Its Jarl, Balgruuf the Greater, has kept the hold neutral in the civil war, though both sides covet its central position.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Whiterun_Hold"
+    },
+    {
+      "id": "whiterun",
+      "title": "Whiterun",
+      "scope": "place",
+      "aliases": [
+        "Whiterun",
+        "Dragonsreach",
+        "Plains District",
+        "Wind District",
+        "Cloud District",
+        "Bannered Mare",
+        "Breezehome",
+        "Gildergreen",
+        "Temple of Kynareth",
+        "Warmaiden's",
+        "Drunken Huntsman",
+        "Belethor's General Goods",
+        "Arcadia's Cauldron",
+        "Whiterun Stables",
+        "Hall of the Dead, Whiterun"
+      ],
+      "keywords": [
+        "trade",
+        "market",
+        "Skyforge",
+        "Jarl Balgruuf",
+        "city gate",
+        "Heimskr"
+      ],
+      "parent": "whiterun_hold",
+      "text": "Whiterun is a trading city on a hill in the middle of Skyrim, crowned by Dragonsreach, the Jarl's palace built long ago to hold a captive dragon. It has the Plains, Wind and Cloud Districts, and is home to the Companions in Jorrvaskr and the ancient Skyforge.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Whiterun"
+    },
+    {
+      "id": "riverwood",
+      "title": "Riverwood",
+      "scope": "place",
+      "aliases": [
+        "Riverwood",
+        "Sleeping Giant Inn",
+        "Riverwood Trader",
+        "Riverwood Mill"
+      ],
+      "keywords": [
+        "lumber mill",
+        "Alvor",
+        "Gerdur",
+        "Camilla Valerius",
+        "Lucan",
+        "Bleak Falls Barrow",
+        "golden claw"
+      ],
+      "parent": "whiterun_hold",
+      "text": "Riverwood is a small lumber village on the White River in southern Whiterun Hold, near the road from Helgen. Folk there run the mill, Alvor's forge, the Riverwood Trader and the Sleeping Giant Inn, and they worry about the ruins of Bleak Falls Barrow on the mountain above town.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Riverwood"
+    },
+    {
+      "id": "rorikstead",
+      "title": "Rorikstead",
+      "scope": "place",
+      "aliases": [
+        "Rorikstead",
+        "Frostfruit Inn"
+      ],
+      "keywords": [
+        "farming village",
+        "Erik the Slayer",
+        "Lemkil",
+        "crops"
+      ],
+      "parent": "whiterun_hold",
+      "text": "Rorikstead is a farming village on the western edge of Whiterun Hold, on the road to the Reach. Its fields stay oddly fertile even in bad years, and its only inn is the Frostfruit.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Rorikstead"
+    },
+    {
+      "id": "helgen",
+      "title": "Helgen",
+      "scope": "place",
+      "aliases": [
+        "Helgen"
+      ],
+      "keywords": [
+        "execution",
+        "dragon attack",
+        "burned",
+        "Ulfric captured",
+        "keep",
+        "Imperial fort"
+      ],
+      "parent": "falkreath_hold",
+      "text": "Helgen was an Imperial-held town guarding the pass into Cyrodiil. On the day Ulfric Stormcloak was to be executed there, a black dragon fell on the town and burned it to the ground; it was the first dragon seen in Skyrim in living memory.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Helgen"
+    },
+    {
+      "id": "bleak_falls_barrow",
+      "title": "Bleak Falls Barrow",
+      "scope": "place",
+      "aliases": [
+        "Bleak Falls Barrow",
+        "Bleak Falls"
+      ],
+      "keywords": [
+        "draugr",
+        "dragonstone",
+        "golden claw",
+        "ruin",
+        "nordic tomb"
+      ],
+      "parent": "whiterun_hold",
+      "text": "Bleak Falls Barrow is an ancient Nordic tomb on the mountain above Riverwood. Locals say draugr and bandits haunt it, and a court wizard in Whiterun has been asking after a carved stone said to rest inside.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Bleak_Falls_Barrow"
+    },
+    {
+      "id": "haafingar",
+      "title": "Haafingar",
+      "scope": "place",
+      "aliases": [
+        "Haafingar",
+        "Haafingar Hold"
+      ],
+      "keywords": [
+        "Thalmor Embassy",
+        "Dragon Bridge",
+        "Karth River",
+        "Wolfskull Cave",
+        "Imperial stronghold"
+      ],
+      "places": [
+        "solitude"
+      ],
+      "text": "Haafingar is the northwestern hold, ruled from Solitude by Jarl Elisif the Fair. It is the firmest Imperial stronghold in Skyrim, home to General Tullius's headquarters and, in the mountains nearby, the Thalmor Embassy.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Haafingar"
+    },
+    {
+      "id": "solitude",
+      "title": "Solitude",
+      "scope": "place",
+      "aliases": [
+        "Solitude",
+        "Blue Palace",
+        "Castle Dour",
+        "Winking Skeever",
+        "Bards College",
+        "Radiant Raiment",
+        "Proudspire Manor",
+        "Temple of the Divines",
+        "Solitude Docks",
+        "Angeline's Aromatics",
+        "Bits and Pieces"
+      ],
+      "keywords": [
+        "capital",
+        "Elisif",
+        "Tullius",
+        "arch",
+        "Imperial headquarters",
+        "Roggvir",
+        "execution"
+      ],
+      "parent": "haafingar",
+      "text": "Solitude is Skyrim's capital, built on a great stone arch over the mouth of the Karth River. Jarl Elisif rules from the Blue Palace while General Tullius commands the Legion from Castle Dour. It is the most Imperial-minded city in Skyrim and home of the Bards College.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Solitude"
+    },
+    {
+      "id": "dragon_bridge",
+      "title": "Dragon Bridge",
+      "scope": "place",
+      "aliases": [
+        "Dragon Bridge",
+        "Four Shields Tavern"
+      ],
+      "keywords": [
+        "Penitus Oculatus",
+        "bridge",
+        "lumber mill",
+        "Horgeir"
+      ],
+      "parent": "haafingar",
+      "text": "Dragon Bridge is a lumber village in Haafingar named for the ancient stone bridge carved with dragon heads that spans the Karth River. Its tavern is the Four Shields, and the Emperor's Penitus Oculatus keep an outpost there.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Dragon_Bridge"
+    },
+    {
+      "id": "thalmor_embassy",
+      "title": "Thalmor Embassy",
+      "scope": "place",
+      "aliases": [
+        "Thalmor Embassy",
+        "the embassy",
+        "Elenwen's party"
+      ],
+      "keywords": [
+        "Elenwen",
+        "prisoners",
+        "interrogation",
+        "reception",
+        "Haafingar mountains"
+      ],
+      "parent": "haafingar",
+      "text": "The Thalmor Embassy is a fortified estate in the mountains of Haafingar where Ambassador Elenwen hosts lavish receptions for Skyrim's nobility. Behind the parties, the Thalmor hold and question those suspected of worshipping Talos.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Thalmor_Embassy"
+    },
+    {
+      "id": "the_reach",
+      "title": "The Reach",
+      "scope": "place",
+      "aliases": [
+        "the Reach",
+        "Reach Hold",
+        "Karthwasten",
+        "Salvius Farm",
+        "Old Hroldan",
+        "Sky Haven",
+        "Left Hand Mine",
+        "Kolskeggr Mine"
+      ],
+      "keywords": [
+        "Forsworn",
+        "Reachmen",
+        "hagravens",
+        "silver",
+        "canyons",
+        "Karth River",
+        "ambush"
+      ],
+      "places": [
+        "markarth"
+      ],
+      "text": "The Reach is the rugged western hold of cliffs, rivers and silver mines, ruled from Markarth by Jarl Igmund. Its native Reachmen have never fully accepted Nord rule, and Forsworn raiders ambush travellers on its roads, so few people leave the city walls unarmed.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:The_Reach"
+    },
+    {
+      "id": "markarth",
+      "title": "Markarth",
+      "scope": "place",
+      "aliases": [
+        "Markarth",
+        "Understone Keep",
+        "Silver-Blood Inn",
+        "Cidhna Mine",
+        "the Warrens",
+        "Treasury House",
+        "Temple of Dibella",
+        "Vlindrel Hall",
+        "Hag's End",
+        "Arnleif and Sons"
+      ],
+      "keywords": [
+        "Dwemer city",
+        "silver",
+        "stone city",
+        "Igmund",
+        "Silver-Blood",
+        "corruption",
+        "Forsworn",
+        "murder in the market"
+      ],
+      "parent": "the_reach",
+      "text": "Markarth is carved into the cliffs from an ancient Dwemer city and ruled by Jarl Igmund from Understone Keep. The Silver-Blood family truly owns the mines, the inn and much of the guard, and those who cross them end up in Cidhna Mine. Forsworn violence reaches even the market.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Markarth"
+    },
+    {
+      "id": "cidhna_mine",
+      "title": "Cidhna Mine",
+      "scope": "place",
+      "aliases": [
+        "Cidhna Mine",
+        "the silver mine prison"
+      ],
+      "keywords": [
+        "prison",
+        "Madanach",
+        "Silver-Blood",
+        "skooma",
+        "prisoners",
+        "No one escapes"
+      ],
+      "parent": "markarth",
+      "text": "Cidhna Mine is the Silver-Blood silver mine beneath Markarth that doubles as the Reach's prison; inmates dig silver until they die. The saying in Markarth is that no one escapes Cidhna Mine, and the most famous prisoner is said to be Madanach, the King in Rags.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Cidhna_Mine"
+    },
+    {
+      "id": "eastmarch",
+      "title": "Eastmarch",
+      "scope": "place",
+      "aliases": [
+        "Eastmarch",
+        "Kynesgrove",
+        "Darkwater Crossing",
+        "Mixwater Mill",
+        "Windstad",
+        "Narzulbur",
+        "hot springs"
+      ],
+      "keywords": [
+        "volcanic",
+        "Stormcloak",
+        "Ulfric",
+        "Braidwood Inn",
+        "Anga's Mill"
+      ],
+      "places": [
+        "windhelm"
+      ],
+      "text": "Eastmarch is the eastern hold of snowy mountains and steaming volcanic hot springs, ruled from Windhelm by Ulfric Stormcloak. It is the heart of the Stormcloak rebellion, and its villages such as Kynesgrove and Darkwater Crossing live by mining.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Eastmarch"
+    },
+    {
+      "id": "windhelm",
+      "title": "Windhelm",
+      "scope": "place",
+      "aliases": [
+        "Windhelm",
+        "City of Kings",
+        "Palace of the Kings",
+        "Candlehearth Hall",
+        "Gray Quarter",
+        "Grey Quarter",
+        "Snow Quarter",
+        "New Gnisis Cornerclub",
+        "Hjerim",
+        "White Phial",
+        "Temple of Talos",
+        "Windhelm Docks",
+        "Argonian Assemblage",
+        "Hall of the Dead, Windhelm"
+      ],
+      "keywords": [
+        "Ulfric",
+        "Stormcloak capital",
+        "Ysgramor",
+        "oldest city",
+        "Butcher",
+        "dark elves",
+        "Argonians on the docks"
+      ],
+      "parent": "eastmarch",
+      "text": "Windhelm is the oldest city in Skyrim, said to be founded by Ysgramor, and Ulfric Stormcloak leads the rebellion from its Palace of the Kings. Its Nords are proud and distrust outsiders: Dunmer are crowded into the Gray Quarter and Argonians must live on the docks. Lately a killer stalks its streets at night.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Windhelm"
+    },
+    {
+      "id": "the_rift",
+      "title": "The Rift",
+      "scope": "place",
+      "aliases": [
+        "the Rift",
+        "Rift Hold",
+        "Shor's Stone",
+        "Ivarstead",
+        "Lake Honrich",
+        "Merryfair Farm",
+        "Snow-Shod Farm"
+      ],
+      "keywords": [
+        "autumn forest",
+        "golden birch",
+        "Black-Briar",
+        "Laila Law-Giver",
+        "Stormcloak hold"
+      ],
+      "places": [
+        "riften"
+      ],
+      "text": "The Rift is the southeastern hold of golden autumn forests and lakes, ruled from Riften by Jarl Laila Law-Giver, a Stormcloak supporter. Its most powerful person is not the Jarl but Maven Black-Briar, whose meadery and money touch everything in the hold.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:The_Rift"
+    },
+    {
+      "id": "riften",
+      "title": "Riften",
+      "scope": "place",
+      "aliases": [
+        "Riften",
+        "Mistveil Keep",
+        "Bee and Barb",
+        "Ratway",
+        "Ragged Flagon",
+        "Honorhall Orphanage",
+        "Black-Briar Manor",
+        "Temple of Mara",
+        "Haelga's Bunkhouse",
+        "Honeyside",
+        "Riften canals",
+        "Elgrim's Elixirs",
+        "Pawned Prawn"
+      ],
+      "keywords": [
+        "thieves",
+        "corruption",
+        "canals",
+        "guards on the take",
+        "Maven",
+        "skooma",
+        "Brynjolf"
+      ],
+      "parent": "the_rift",
+      "text": "Riften is a city of wooden walkways and canals on Lake Honrich, known across Skyrim as a nest of thieves and crooked guards. The Thieves Guild meets under the city in the Ratway's Ragged Flagon, and the Black-Briar family runs most of what matters above it.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Riften"
+    },
+    {
+      "id": "ivarstead",
+      "title": "Ivarstead",
+      "scope": "place",
+      "aliases": [
+        "Ivarstead",
+        "Vilemyr Inn",
+        "Seven Thousand Steps",
+        "7000 steps"
+      ],
+      "keywords": [
+        "pilgrims",
+        "Klimmek",
+        "Shroud Hearth Barrow",
+        "Throat of the World",
+        "Greybeards supplies"
+      ],
+      "parent": "the_rift",
+      "text": "Ivarstead is a small farming village in the Rift at the foot of the Throat of the World. Pilgrims climb the Seven Thousand Steps from here to High Hrothgar, and villagers carry supplies up to the Greybeards.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Ivarstead"
+    },
+    {
+      "id": "the_pale",
+      "title": "The Pale",
+      "scope": "place",
+      "aliases": [
+        "the Pale",
+        "Pale Hold",
+        "Anga's Mill",
+        "Heartwood Mill"
+      ],
+      "keywords": [
+        "northern coast",
+        "Sea of Ghosts",
+        "snow",
+        "Skald",
+        "mines"
+      ],
+      "places": [
+        "dawnstar"
+      ],
+      "text": "The Pale is a cold, snow-swept hold along the northern coast, ruled from Dawnstar by old Jarl Skald, a loyal Stormcloak. Its wealth comes from mines and fishing on the Sea of Ghosts.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:The_Pale"
+    },
+    {
+      "id": "dawnstar",
+      "title": "Dawnstar",
+      "scope": "place",
+      "aliases": [
+        "Dawnstar",
+        "Windpeak Inn",
+        "White Hall",
+        "Iron-Breaker Mine",
+        "Quicksilver Mine",
+        "Nightcaller Temple",
+        "The Mortar and Pestle"
+      ],
+      "keywords": [
+        "nightmares",
+        "harbor",
+        "mining town",
+        "Skald",
+        "Erandur"
+      ],
+      "parent": "the_pale",
+      "text": "Dawnstar is a harbor and mining town on the Sea of Ghosts and the seat of the Pale. Lately the townsfolk all suffer the same terrible nightmares, and a priest of Mara has come to town claiming he knows why.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Dawnstar"
+    },
+    {
+      "id": "winterhold_hold",
+      "title": "Winterhold (hold)",
+      "scope": "place",
+      "aliases": [
+        "Winterhold Hold",
+        "Hold of Winterhold"
+      ],
+      "keywords": [
+        "frozen",
+        "Sea of Ghosts",
+        "ice floes",
+        "Korir",
+        "Stormcloak"
+      ],
+      "places": [
+        "winterhold"
+      ],
+      "text": "Winterhold is the frozen northeastern hold on the Sea of Ghosts, ruled by Jarl Korir, who backs the Stormcloaks. Once among the greatest holds, it has never recovered from the disaster that swallowed most of its capital.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Winterhold"
+    },
+    {
+      "id": "winterhold",
+      "title": "Winterhold",
+      "scope": "place",
+      "aliases": [
+        "Winterhold",
+        "Frozen Hearth",
+        "Birna's Oddments"
+      ],
+      "keywords": [
+        "Great Collapse",
+        "ruined city",
+        "College",
+        "Korir",
+        "mages blamed",
+        "cliffs"
+      ],
+      "parent": "winterhold_hold",
+      "text": "Winterhold was once Skyrim's capital and a great city, but in the Great Collapse of 4E 122 most of it slid into the sea. The townsfolk who remain blame the mages of the College, whose tower still stands apart on a cliff, and Jarl Korir resents them bitterly.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Winterhold_(town)"
+    },
+    {
+      "id": "hjaalmarch",
+      "title": "Hjaalmarch",
+      "scope": "place",
+      "aliases": [
+        "Hjaalmarch",
+        "Drunken Dregs Swamp",
+        "Stonehills",
+        "Labyrinthian"
+      ],
+      "keywords": [
+        "marsh",
+        "swamp",
+        "fog",
+        "Idgrod",
+        "Imperial hold"
+      ],
+      "places": [
+        "morthal"
+      ],
+      "text": "Hjaalmarch is a small hold of fog-covered marshes in northwest Skyrim, ruled from Morthal by Jarl Idgrod Ravencrone. It sides with the Empire, and the ruined city of Labyrinthian lies in its southern hills.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Hjaalmarch"
+    },
+    {
+      "id": "morthal",
+      "title": "Morthal",
+      "scope": "place",
+      "aliases": [
+        "Morthal",
+        "Highmoon Hall",
+        "Moorside Inn",
+        "Thaumaturgist's Hut",
+        "Jorgen and Lami's House",
+        "Alva's House"
+      ],
+      "keywords": [
+        "marsh town",
+        "Idgrod",
+        "visions",
+        "Falion",
+        "vampires",
+        "house fire"
+      ],
+      "parent": "hjaalmarch",
+      "text": "Morthal is a gloomy town on the edge of the Hjaalmarch marshes. Its Jarl, Idgrod Ravencrone, is said to have visions, the wizard Falion makes people uneasy, and a recent house fire that killed a mother and child has the townsfolk whispering.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Morthal"
+    },
+    {
+      "id": "falkreath_hold",
+      "title": "Falkreath Hold",
+      "scope": "place",
+      "aliases": [
+        "Falkreath Hold",
+        "Pine Forest",
+        "Lake Ilinalta",
+        "Half-Moon Mill",
+        "Lakeview Manor"
+      ],
+      "keywords": [
+        "forest",
+        "Cyrodiil border",
+        "Siddgeir",
+        "Imperial hold",
+        "Jaggarsfeld"
+      ],
+      "places": [
+        "falkreath"
+      ],
+      "text": "Falkreath Hold is the forested southern hold bordering Cyrodiil, with Lake Ilinalta at its heart. Its young Jarl Siddgeir openly sides with the Empire, though most say he cares more for his own comfort than for the war.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Falkreath_Hold"
+    },
+    {
+      "id": "falkreath",
+      "title": "Falkreath",
+      "scope": "place",
+      "aliases": [
+        "Falkreath",
+        "Dead Man's Drink",
+        "Falkreath Hall of the Dead",
+        "Lod's forge",
+        "Corpselight Farm",
+        "Gray Pine Goods"
+      ],
+      "keywords": [
+        "graveyard",
+        "Siddgeir",
+        "Runil",
+        "Dengeir",
+        "old battlefields"
+      ],
+      "parent": "falkreath_hold",
+      "text": "Falkreath is a quiet forest town in southern Skyrim, best known for its enormous graveyard, which holds the dead of countless old battles near the Cyrodiil border. Its tavern is aptly called Dead Man's Drink.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Falkreath"
+    },
+    {
+      "id": "high_hrothgar",
+      "title": "High Hrothgar",
+      "scope": "place",
+      "aliases": [
+        "High Hrothgar",
+        "Throat of the World"
+      ],
+      "keywords": [
+        "Greybeards",
+        "monastery",
+        "mountain",
+        "Seven Thousand Steps",
+        "pilgrimage",
+        "summit"
+      ],
+      "parent": "whiterun_hold",
+      "text": "High Hrothgar is the Greybeards' monastery high on the Throat of the World, the tallest mountain in Tamriel. Pilgrims climb the Seven Thousand Steps from Ivarstead to pray there, but few ever see the silent monks themselves.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:High_Hrothgar"
+    },
+    {
+      "id": "jorrvaskr",
+      "title": "Jorrvaskr",
+      "scope": "place",
+      "aliases": [
+        "Jorrvaskr"
+      ],
+      "keywords": [
+        "Companions",
+        "Skyforge",
+        "longhouse",
+        "upside-down ship"
+      ],
+      "parent": "whiterun",
+      "text": "Jorrvaskr is the oldest mead hall in Skyrim, built in Whiterun beside the Skyforge and roofed like an overturned longship. It is the home of the Companions, and brawls on its porch are a common sight.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Jorrvaskr"
+    },
+    {
+      "id": "skyforge",
+      "title": "The Skyforge",
+      "scope": "place",
+      "aliases": [
+        "Skyforge",
+        "Sky Forge"
+      ],
+      "keywords": [
+        "Eorlund Gray-Mane",
+        "forge",
+        "eagle",
+        "Skyforge Steel"
+      ],
+      "parent": "whiterun",
+      "text": "The Skyforge is an ancient forge above Jorrvaskr in Whiterun, older than the city itself and said to predate even Ysgramor's arrival. Eorlund Gray-Mane works it, and its steel arms the Companions.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Skyforge"
+    },
+    {
+      "id": "ratway",
+      "title": "The Ratway",
+      "scope": "place",
+      "aliases": [
+        "Ratway",
+        "Ratway Warrens",
+        "Ragged Flagon"
+      ],
+      "keywords": [
+        "sewers",
+        "Thieves Guild",
+        "Cistern",
+        "skooma addicts"
+      ],
+      "parent": "riften",
+      "text": "The Ratway is the warren of tunnels and sewers beneath Riften, full of desperate cutthroats and the lost. Deep inside lies the Ragged Flagon tavern, the public face of the Thieves Guild.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:The_Ratway"
+    },
+    {
+      "id": "college_grounds",
+      "title": "College of Winterhold (building)",
+      "scope": "place",
+      "aliases": [
+        "Hall of the Elements",
+        "Arcanaeum",
+        "Hall of Attainment",
+        "Hall of Countenance",
+        "Arch-Mage's Quarters",
+        "Midden"
+      ],
+      "keywords": [
+        "bridge",
+        "Faralda",
+        "library",
+        "Urag gro-Shub"
+      ],
+      "parent": "winterhold",
+      "text": "The College of Winterhold stands on a crag reached by a narrow stone bridge from the ruined town. Its halls include the Hall of the Elements for lectures, the Arcanaeum library kept by the Orc Urag gro-Shub, and the student quarters.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:College_of_Winterhold_(place)"
+    },
+    {
+      "id": "solstheim",
+      "title": "Solstheim",
+      "scope": "place",
+      "aliases": [
+        "Solstheim",
+        "Raven Rock",
+        "Skaal Village",
+        "Tel Mithryn",
+        "Bulwark",
+        "Retching Netch"
+      ],
+      "keywords": [
+        "island",
+        "ash",
+        "Red Mountain",
+        "Morrowind",
+        "Dunmer",
+        "Skaal",
+        "East Empire Company"
+      ],
+      "text": "Solstheim is an island north of Morrowind, once part of Skyrim but given to the Dunmer as refuge after Red Mountain erupted. Ash now covers its south, where the Dunmer town of Raven Rock is struggling, while the Nordic Skaal keep the old ways in the snowy north.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Dragonborn:Solstheim"
+    },
+    {
+      "id": "fort_dawnguard",
+      "title": "Fort Dawnguard",
+      "scope": "place",
+      "aliases": [
+        "Fort Dawnguard",
+        "Dayspring Canyon"
+      ],
+      "keywords": [
+        "vampire hunters",
+        "Isran",
+        "crossbows"
+      ],
+      "parent": "the_rift",
+      "text": "Fort Dawnguard is an old fortress in a canyon east of Riften that Isran has reopened as the base of the Dawnguard, an order of vampire hunters. He is recruiting anyone willing to fight.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Dawnguard:Fort_Dawnguard"
+    },
+    {
+      "id": "castle_volkihar",
+      "title": "Castle Volkihar",
+      "scope": "place",
+      "aliases": [
+        "Castle Volkihar",
+        "Volkihar Keep",
+        "Icewater Jetty"
+      ],
+      "keywords": [
+        "vampires",
+        "island castle",
+        "Harkon",
+        "Soul Cairn"
+      ],
+      "parent": "haafingar",
+      "text": "Castle Volkihar is a grim castle on an icy island off the coast of Haafingar. It is the court of Lord Harkon and the ancient Volkihar vampire clan, who keep human cattle in its halls.",
+      "spoiler": true,
+      "gate": "Dawnguard: Awakening",
+      "source": "https://en.uesp.net/wiki/Dawnguard:Castle_Volkihar"
+    },
+    {
+      "id": "sky_haven_temple",
+      "title": "Sky Haven Temple",
+      "scope": "place",
+      "aliases": [
+        "Sky Haven Temple",
+        "Karthspire"
+      ],
+      "keywords": [
+        "Blades",
+        "Alduin's Wall",
+        "Akaviri"
+      ],
+      "parent": "the_reach",
+      "text": "Sky Haven Temple is a hidden Blades stronghold carved into the Karthspire in the Reach, built by the Akaviri Dragonguard. Inside is Alduin's Wall, an ancient carving recording how the Nords once fought the World-Eater.",
+      "spoiler": true,
+      "gate": "Alduin's Wall",
+      "source": "https://en.uesp.net/wiki/Skyrim:Sky_Haven_Temple"
+    },
+    {
+      "id": "blackreach",
+      "title": "Blackreach",
+      "scope": "place",
+      "aliases": [
+        "Blackreach"
+      ],
+      "keywords": [
+        "underground",
+        "Dwemer",
+        "Falmer",
+        "glowing mushrooms",
+        "Tower of Mzark"
+      ],
+      "text": "Blackreach is a vast cavern deep beneath Skyrim, lit by giant glowing mushrooms and filled with Dwemer cities overrun by the Falmer. Most people have never heard of it, and scholars like Calcelmo only speculate.",
+      "spoiler": true,
+      "gate": "Discerning the Transmundane",
+      "source": "https://en.uesp.net/wiki/Skyrim:Blackreach"
+    },
+    {
+      "id": "sovngarde",
+      "title": "Sovngarde",
+      "scope": "place",
+      "aliases": [
+        "Sovngarde",
+        "Hall of Valor",
+        "Shor's hall"
+      ],
+      "keywords": [
+        "afterlife",
+        "honored dead",
+        "Tsun",
+        "glorious death",
+        "Nord heaven"
+      ],
+      "text": "Sovngarde is the Nord afterlife, where Shor welcomes the honored dead to feast and fight forever in the Hall of Valor. Nords hope to die bravely so their souls will be judged worthy to cross into it.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Sovngarde"
+    },
+    {
+      "id": "cyrodiil",
+      "title": "Cyrodiil",
+      "scope": "place",
+      "aliases": [
+        "Cyrodiil",
+        "Imperial City",
+        "Heartland",
+        "Bruma"
+      ],
+      "keywords": [
+        "Empire",
+        "Emperor",
+        "White-Gold Tower",
+        "south",
+        "capital of the Empire"
+      ],
+      "text": "Cyrodiil is the Imperial heartland south of Skyrim, ruled from the Imperial City and its White-Gold Tower. Its border town of Bruma is half Nord in spirit, and the Imperial City was sacked by the Thalmor during the Great War before being retaken.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Cyrodiil"
+    },
+    {
+      "id": "morrowind",
+      "title": "Morrowind",
+      "scope": "place",
+      "aliases": [
+        "Morrowind",
+        "Vvardenfell",
+        "Red Mountain",
+        "Mournhold",
+        "Blacklight"
+      ],
+      "keywords": [
+        "Dunmer homeland",
+        "ash",
+        "Great Houses",
+        "Argonian invasion",
+        "east"
+      ],
+      "text": "Morrowind is the homeland of the Dunmer, east of Skyrim. Since Red Mountain erupted and the Argonians invaded from Black Marsh, much of it lies in ruin, which is why so many dark elf refugees came to Skyrim.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Morrowind"
+    },
+    {
+      "id": "hammerfell",
+      "title": "Hammerfell",
+      "scope": "place",
+      "aliases": [
+        "Hammerfell",
+        "Alik'r",
+        "Sentinel",
+        "Taneth"
+      ],
+      "keywords": [
+        "Redguard homeland",
+        "desert",
+        "drove out the Thalmor",
+        "left the Empire"
+      ],
+      "text": "Hammerfell is the desert homeland of the Redguards, west of Skyrim. When the Empire signed away its southern lands to end the Great War, Hammerfell left the Empire and kept fighting until it drove the Aldmeri Dominion out on its own.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Hammerfell"
+    },
+    {
+      "id": "high_rock",
+      "title": "High Rock",
+      "scope": "place",
+      "aliases": [
+        "High Rock",
+        "Daggerfall",
+        "Wayrest",
+        "Evermor",
+        "Jehanna"
+      ],
+      "keywords": [
+        "Breton homeland",
+        "kingdoms",
+        "west"
+      ],
+      "text": "High Rock is the land of the Bretons, west of Skyrim and north of Hammerfell, a patchwork of rival petty kingdoms. Bretons are common in the western holds, especially in Markarth and the Reach.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:High_Rock"
+    },
+    {
+      "id": "summerset_isles",
+      "title": "Summerset Isles",
+      "scope": "place",
+      "aliases": [
+        "Summerset",
+        "Summerset Isles",
+        "Alinor"
+      ],
+      "keywords": [
+        "High Elf homeland",
+        "Thalmor",
+        "Aldmeri Dominion",
+        "islands"
+      ],
+      "text": "The Summerset Isles off Tamriel's southwest coast are the homeland of the Altmer, now called Alinor by the Thalmor who rule them. They are the seat of the Aldmeri Dominion.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Summerset_Isles"
+    },
+    {
+      "id": "elsweyr",
+      "title": "Elsweyr",
+      "scope": "place",
+      "aliases": [
+        "Elsweyr",
+        "Anequina",
+        "Pellitine"
+      ],
+      "keywords": [
+        "Khajiit homeland",
+        "moon sugar",
+        "Dominion ally",
+        "deserts and jungles"
+      ],
+      "text": "Elsweyr is the homeland of the Khajiit, south of Cyrodiil, with deserts in the north and jungles in the south. It is allied with the Aldmeri Dominion and is the source of moon sugar, and of the skooma made from it.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Elsweyr"
+    },
+    {
+      "id": "black_marsh",
+      "title": "Black Marsh",
+      "scope": "place",
+      "aliases": [
+        "Black Marsh",
+        "Argonia",
+        "the Hist"
+      ],
+      "keywords": [
+        "Argonian homeland",
+        "swamp",
+        "disease",
+        "Hist trees"
+      ],
+      "text": "Black Marsh, which its people call Argonia, is the vast disease-ridden swamp in Tamriel's southeast and the homeland of the Argonians. It left the Empire during the Oblivion Crisis and later invaded southern Morrowind.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Black_Marsh"
+    },
+    {
+      "id": "orc_strongholds",
+      "title": "Orc strongholds",
+      "scope": "place",
+      "aliases": [
+        "Orc stronghold",
+        "orc strongholds",
+        "Dushnikh Yal",
+        "Largashbur",
+        "Mor Khazgur",
+        "Narzulbur"
+      ],
+      "keywords": [
+        "Orsimer",
+        "chief",
+        "Malacath",
+        "Code of Malacath",
+        "wise woman",
+        "outsiders not welcome"
+      ],
+      "text": "Skyrim's Orcs live in fortified strongholds in the wilds, each ruled by a chief under the Code of Malacath. Outsiders are not welcome unless they have earned the title of blood-kin, and the Nords mostly leave them alone.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Orc_Strongholds"
+    },
+    {
+      "id": "dwemer_ruins",
+      "title": "Dwemer ruins",
+      "scope": "place",
+      "aliases": [
+        "Dwemer ruin",
+        "Dwarven ruin",
+        "Nchuand-Zel",
+        "Alftand",
+        "Mzinchaleft",
+        "Arkngthamz",
+        "Raldbthar",
+        "Mzulft"
+      ],
+      "keywords": [
+        "Dwemer",
+        "Dwarves",
+        "automatons",
+        "centurion",
+        "spiders",
+        "spheres",
+        "Falmer",
+        "steam"
+      ],
+      "text": "The ruined cities of the Dwemer, the vanished Dwarves, lie under Skyrim's mountains. Their brass machines still guard them, and Falmer now haunt the deeper halls, so only the bold or the desperate go treasure hunting there.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Dwemer_Ruins"
+    },
+    {
+      "id": "nordic_ruins",
+      "title": "Nordic barrows",
+      "scope": "place",
+      "aliases": [
+        "Nordic ruin",
+        "Ustengrav",
+        "Saarthal",
+        "Volunruud",
+        "Ragnvald",
+        "Dustman's Cairn",
+        "Forelhost"
+      ],
+      "keywords": [
+        "draugr",
+        "dragon priest",
+        "word wall",
+        "puzzle doors",
+        "claws",
+        "ancient Nords",
+        "cursed",
+        "barrow",
+        "tomb"
+      ],
+      "text": "Skyrim is dotted with the barrows of the ancient Nords, where draugr still guard their dead lords. Most people avoid them; the clever puzzle doors, traps and walking dead are the stuff of tavern stories.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Nordic_Ruins"
+    }
+  ]
+}

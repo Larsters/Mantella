@@ -1,0 +1,1132 @@
+{
+  "attribution": "Notes paraphrased in our own words from the Unofficial Elder Scrolls Pages (UESP, https://en.uesp.net), licensed CC BY-SA 2.5. Each note lists the page it was drawn from in 'source'.",
+  "notes": [
+    {
+      "id": "ulfric_stormcloak",
+      "title": "Ulfric Stormcloak",
+      "scope": "person",
+      "aliases": [
+        "Ulfric",
+        "Ulfric Stormcloak",
+        "Jarl of Windhelm",
+        "Jarl Ulfric"
+      ],
+      "keywords": [
+        "Stormcloaks",
+        "rebel leader",
+        "Torygg",
+        "Thu'um",
+        "Greybeards",
+        "Markarth Incident",
+        "Talos",
+        "war"
+      ],
+      "places": [
+        "windhelm",
+        "eastmarch"
+      ],
+      "text": "Ulfric Stormcloak is Jarl of Windhelm and leader of the rebellion. He trained with the Greybeards, fought in the Great War, and killed High King Torygg with his Voice. To his followers he is a true son of Skyrim; to his enemies, a power-hungry traitor.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Ulfric_Stormcloak"
+    },
+    {
+      "id": "galmar_stone_fist",
+      "title": "Galmar Stone-Fist",
+      "scope": "person",
+      "aliases": [
+        "Galmar",
+        "Galmar Stone-Fist"
+      ],
+      "keywords": [
+        "Stormcloak",
+        "general",
+        "housecarl",
+        "Windhelm",
+        "bear helmet"
+      ],
+      "places": [
+        "windhelm"
+      ],
+      "text": "Galmar Stone-Fist is Ulfric's housecarl and the gruff, fiercely loyal commander of the Stormcloak army. He is known for his bearskin helm and his contempt for the Empire.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Galmar_Stone-Fist"
+    },
+    {
+      "id": "general_tullius",
+      "title": "General Tullius",
+      "scope": "person",
+      "aliases": [
+        "Tullius",
+        "General Tullius",
+        "Military Governor"
+      ],
+      "keywords": [
+        "Imperial Legion",
+        "Castle Dour",
+        "Solitude",
+        "commander",
+        "Cyrodiil",
+        "war"
+      ],
+      "places": [
+        "solitude"
+      ],
+      "text": "General Tullius is the Imperial military governor of Skyrim, a seasoned Cyrodiilic commander sent to end the rebellion. He is blunt and practical, has little patience for Nord tradition, and leads the Legion from Castle Dour.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:General_Tullius"
+    },
+    {
+      "id": "legate_rikke",
+      "title": "Legate Rikke",
+      "scope": "person",
+      "aliases": [
+        "Rikke",
+        "Legate Rikke"
+      ],
+      "keywords": [
+        "Imperial Legion",
+        "Nord",
+        "Tullius's second",
+        "Ulfric",
+        "Great War comrade"
+      ],
+      "places": [
+        "solitude"
+      ],
+      "text": "Legate Rikke is a Nord officer and Tullius's second-in-command. She fought beside Ulfric in the Great War, believes the Empire is Skyrim's best hope, and is pained to fight her own people.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Legate_Rikke"
+    },
+    {
+      "id": "elisif",
+      "title": "Elisif the Fair",
+      "scope": "person",
+      "aliases": [
+        "Elisif",
+        "Elisif the Fair",
+        "Jarl Elisif",
+        "Jarl of Solitude"
+      ],
+      "keywords": [
+        "Torygg's widow",
+        "Blue Palace",
+        "Solitude",
+        "High Queen",
+        "Imperial",
+        "young"
+      ],
+      "places": [
+        "solitude",
+        "haafingar"
+      ],
+      "text": "Elisif the Fair is Jarl of Solitude and the young widow of High King Torygg. The Empire backs her claim to be the next High Queen; she is sincere and grieving, though many think her advisors and Tullius really hold the reins.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Elisif_the_Fair"
+    },
+    {
+      "id": "balgruuf",
+      "title": "Balgruuf the Greater",
+      "scope": "person",
+      "aliases": [
+        "Balgruuf",
+        "Balgruuf the Greater",
+        "Jarl Balgruuf",
+        "Jarl of Whiterun"
+      ],
+      "keywords": [
+        "Whiterun",
+        "Dragonsreach",
+        "neutral",
+        "war",
+        "civil war",
+        "Irileth",
+        "Proventus",
+        "Hrongar",
+        "side of Whiterun",
+        "Ulfric rivalry"
+      ],
+      "places": [
+        "whiterun",
+        "whiterun_hold"
+      ],
+      "text": "Balgruuf the Greater is the Jarl of Whiterun. He has kept his hold out of the civil war as long as he can, saying he is on the side of Whiterun, and is more worried about dragons than politics. He and Ulfric have been rivals since they were young.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Balgruuf_the_Greater"
+    },
+    {
+      "id": "irileth",
+      "title": "Irileth",
+      "scope": "person",
+      "aliases": [
+        "Irileth"
+      ],
+      "keywords": [
+        "housecarl",
+        "Dunmer",
+        "Whiterun guard",
+        "Balgruuf",
+        "Legion veteran"
+      ],
+      "places": [
+        "whiterun"
+      ],
+      "text": "Irileth is Balgruuf's Dunmer housecarl and commander of Whiterun's guard. She served with him in the Legion, is fiercely protective of him and has no patience for fools.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Irileth"
+    },
+    {
+      "id": "proventus_avenicci",
+      "title": "Proventus Avenicci",
+      "scope": "person",
+      "aliases": [
+        "Proventus",
+        "Proventus Avenicci",
+        "Avenicci"
+      ],
+      "keywords": [
+        "steward",
+        "Whiterun",
+        "Imperial",
+        "Adrianne"
+      ],
+      "places": [
+        "whiterun"
+      ],
+      "text": "Proventus Avenicci is the Imperial steward of Whiterun, a careful administrator who urges Balgruuf toward caution and the Empire. His daughter Adrianne runs the Warmaiden's forge.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Proventus_Avenicci"
+    },
+    {
+      "id": "farengar",
+      "title": "Farengar Secret-Fire",
+      "scope": "person",
+      "aliases": [
+        "Farengar",
+        "Farengar Secret-Fire"
+      ],
+      "keywords": [
+        "court wizard",
+        "Whiterun",
+        "dragons research",
+        "dragonstone",
+        "arrogant"
+      ],
+      "places": [
+        "whiterun"
+      ],
+      "text": "Farengar Secret-Fire is the Nord court wizard of Whiterun, a scholar obsessed with dragons who is known to look down on people who do not appreciate his work.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Farengar_Secret-Fire"
+    },
+    {
+      "id": "heimskr",
+      "title": "Heimskr",
+      "scope": "person",
+      "aliases": [
+        "Heimskr",
+        "preacher of Talos"
+      ],
+      "keywords": [
+        "Talos",
+        "Whiterun",
+        "preaching",
+        "Wind District",
+        "shrine"
+      ],
+      "places": [
+        "whiterun"
+      ],
+      "text": "Heimskr is a Talos preacher who shouts sermons all day beside the Talos shrine in Whiterun's Wind District. Most townsfolk find him tiresome, but no one has silenced him yet.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Heimskr"
+    },
+    {
+      "id": "nazeem",
+      "title": "Nazeem",
+      "scope": "person",
+      "aliases": [
+        "Nazeem"
+      ],
+      "keywords": [
+        "Cloud District",
+        "snob",
+        "Chillfurrow Farm",
+        "Redguard"
+      ],
+      "places": [
+        "whiterun"
+      ],
+      "text": "Nazeem is a wealthy Redguard farmer in Whiterun who never stops boasting about visiting the Cloud District. Almost everyone in town finds him insufferable.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Nazeem"
+    },
+    {
+      "id": "eorlund",
+      "title": "Eorlund Gray-Mane",
+      "scope": "person",
+      "aliases": [
+        "Eorlund",
+        "Eorlund Gray-Mane"
+      ],
+      "keywords": [
+        "Skyforge",
+        "smith",
+        "Companions",
+        "Gray-Mane",
+        "Whiterun"
+      ],
+      "places": [
+        "whiterun"
+      ],
+      "text": "Eorlund Gray-Mane is the greatest smith in Skyrim by many accounts and the only one allowed to work the Skyforge. He forges for the Companions, though he is not one of them.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Eorlund_Gray-Mane"
+    },
+    {
+      "id": "kodlak",
+      "title": "Kodlak Whitemane",
+      "scope": "person",
+      "aliases": [
+        "Kodlak",
+        "Kodlak Whitemane",
+        "the Harbinger"
+      ],
+      "keywords": [
+        "Companions",
+        "Harbinger",
+        "Jorrvaskr",
+        "old warrior",
+        "honor",
+        "Sovngarde"
+      ],
+      "places": [
+        "whiterun"
+      ],
+      "text": "Kodlak Whitemane is the aging Harbinger of the Companions, a wise and respected warrior. Even Jarl Balgruuf seeks his counsel, and lately he has been troubled by dreams about his fate after death.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Kodlak_Whitemane"
+    },
+    {
+      "id": "aela",
+      "title": "Aela the Huntress",
+      "scope": "person",
+      "aliases": [
+        "Aela",
+        "Aela the Huntress",
+        "Vilkas",
+        "Farkas",
+        "Skjor"
+      ],
+      "keywords": [
+        "Companions",
+        "huntress",
+        "archer",
+        "Circle",
+        "Skjor"
+      ],
+      "places": [
+        "whiterun"
+      ],
+      "text": "Aela the Huntress is a member of the Companions' Circle, a skilled archer and hunter with a wild streak. Vilkas and Farkas, twin brothers raised in Jorrvaskr, and the scarred veteran Skjor complete the Circle.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Aela_the_Huntress"
+    },
+    {
+      "id": "igmund",
+      "title": "Jarl Igmund",
+      "scope": "person",
+      "aliases": [
+        "Igmund",
+        "Jarl Igmund",
+        "Jarl of Markarth"
+      ],
+      "keywords": [
+        "Markarth",
+        "Understone Keep",
+        "Hrolfdir",
+        "Imperial",
+        "Talos worship",
+        "Forsworn"
+      ],
+      "places": [
+        "markarth",
+        "the_reach"
+      ],
+      "text": "Igmund is the young Jarl of Markarth, loyal to the Empire. His father Hrolfdir lost the city to the Forsworn and his reputation with it, and Igmund struggles to rule under the shadow of the Silver-Bloods and the Thalmor.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Igmund"
+    },
+    {
+      "id": "madanach",
+      "title": "Madanach, King in Rags",
+      "scope": "person",
+      "aliases": [
+        "Madanach",
+        "King in Rags"
+      ],
+      "keywords": [
+        "Forsworn",
+        "Cidhna Mine",
+        "Reach",
+        "prisoner",
+        "king"
+      ],
+      "places": [
+        "markarth"
+      ],
+      "text": "Madanach was the leader of the Forsworn when they held Markarth. After Ulfric retook the city he was thrown into Cidhna Mine, and Reachmen still call him their king.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Madanach"
+    },
+    {
+      "id": "calcelmo",
+      "title": "Calcelmo",
+      "scope": "person",
+      "aliases": [
+        "Calcelmo"
+      ],
+      "keywords": [
+        "Dwemer scholar",
+        "court wizard",
+        "Markarth",
+        "museum",
+        "Altmer",
+        "Nchuand-Zel"
+      ],
+      "places": [
+        "markarth"
+      ],
+      "text": "Calcelmo is the Altmer court wizard of Markarth and the leading scholar of the Dwemer, guarding the excavation of Nchuand-Zel beneath the city with near-obsessive jealousy.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Calcelmo"
+    },
+    {
+      "id": "maven_black_briar",
+      "title": "Maven Black-Briar",
+      "scope": "person",
+      "aliases": [
+        "Maven",
+        "Maven Black-Briar"
+      ],
+      "keywords": [
+        "Riften",
+        "meadery",
+        "Thieves Guild",
+        "Dark Brotherhood",
+        "power",
+        "ruthless"
+      ],
+      "places": [
+        "riften",
+        "the_rift"
+      ],
+      "text": "Maven Black-Briar is the cold, ruthless matriarch of the Black-Briar family and the most powerful person in Riften. She has the Jarl's ear and the Thieves Guild in her pocket, and she supports the Empire only as far as it pays.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Maven_Black-Briar"
+    },
+    {
+      "id": "laila_law_giver",
+      "title": "Laila Law-Giver",
+      "scope": "person",
+      "aliases": [
+        "Laila",
+        "Laila Law-Giver",
+        "Jarl of Riften"
+      ],
+      "keywords": [
+        "Riften",
+        "Mistveil Keep",
+        "Stormcloak",
+        "skooma",
+        "naive"
+      ],
+      "places": [
+        "riften",
+        "the_rift"
+      ],
+      "text": "Laila Law-Giver is Jarl of Riften and a firm Ulfric supporter. She means well and wants to clean up the city's skooma trade, but many say she is blind to the corruption in her own court.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Laila_Law-Giver"
+    },
+    {
+      "id": "brynjolf",
+      "title": "Brynjolf",
+      "scope": "person",
+      "aliases": [
+        "Brynjolf"
+      ],
+      "keywords": [
+        "Thieves Guild",
+        "Riften",
+        "marketplace",
+        "Falmer Blood Elixir",
+        "recruiter"
+      ],
+      "places": [
+        "riften"
+      ],
+      "text": "Brynjolf is a charming red-haired Nord who sells dubious elixirs in Riften's market. In truth he is a senior member of the Thieves Guild and its chief recruiter.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Brynjolf"
+    },
+    {
+      "id": "mercer_frey",
+      "title": "Mercer Frey",
+      "scope": "person",
+      "aliases": [
+        "Mercer",
+        "Mercer Frey"
+      ],
+      "keywords": [
+        "Guild Master",
+        "Thieves Guild",
+        "Riften",
+        "Riftweald Manor",
+        "betrayal",
+        "Karliah"
+      ],
+      "places": [
+        "riften"
+      ],
+      "text": "Mercer Frey is the Guild Master of the Thieves Guild, a cool and capable thief who demands loyalty and results. He tells members that a traitor named Karliah murdered the previous Guild Master, Gallus.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Mercer_Frey"
+    },
+    {
+      "id": "elenwen",
+      "title": "Elenwen",
+      "scope": "person",
+      "aliases": [
+        "Elenwen",
+        "First Emissary",
+        "Thalmor ambassador"
+      ],
+      "keywords": [
+        "Thalmor",
+        "embassy",
+        "parties",
+        "Ulfric",
+        "Great War",
+        "interrogation"
+      ],
+      "places": [
+        "haafingar",
+        "solitude"
+      ],
+      "text": "Elenwen is the First Emissary of the Thalmor in Skyrim. She hosts elegant receptions at the Thalmor Embassy while overseeing the hunt for Talos worshippers, and long ago she personally oversaw Ulfric's interrogation during the Great War.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Elenwen"
+    },
+    {
+      "id": "ondolemar",
+      "title": "Ondolemar",
+      "scope": "person",
+      "aliases": [
+        "Ondolemar"
+      ],
+      "keywords": [
+        "Thalmor",
+        "Justiciar",
+        "Markarth",
+        "Understone Keep",
+        "Talos worshippers"
+      ],
+      "places": [
+        "markarth"
+      ],
+      "text": "Ondolemar is the Thalmor Justiciar posted in Markarth's Understone Keep to make sure the Talos ban is enforced. He is arrogant and the Nords of the Reach loathe him.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Ondolemar"
+    },
+    {
+      "id": "savos_aren",
+      "title": "Savos Aren",
+      "scope": "person",
+      "aliases": [
+        "Savos Aren",
+        "Arch-Mage Savos"
+      ],
+      "keywords": [
+        "Arch-Mage",
+        "College",
+        "Dunmer",
+        "Winterhold"
+      ],
+      "places": [
+        "winterhold"
+      ],
+      "text": "Savos Aren is the Dunmer Arch-Mage of the College of Winterhold, a calm and reserved leader who seldom leaves his quarters and rarely speaks about his past.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Savos_Aren"
+    },
+    {
+      "id": "ancano",
+      "title": "Ancano",
+      "scope": "person",
+      "aliases": [
+        "Ancano"
+      ],
+      "keywords": [
+        "Thalmor",
+        "College",
+        "advisor",
+        "Eye of Magnus",
+        "Winterhold"
+      ],
+      "places": [
+        "winterhold"
+      ],
+      "text": "Ancano is the Thalmor 'advisor' to the College of Winterhold, an Altmer who lurks around the College asking pointed questions. Many mages suspect he is there to spy.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Ancano"
+    },
+    {
+      "id": "tolfdir",
+      "title": "Tolfdir",
+      "scope": "person",
+      "aliases": [
+        "Tolfdir"
+      ],
+      "keywords": [
+        "College",
+        "alteration",
+        "teacher",
+        "Saarthal",
+        "kindly"
+      ],
+      "places": [
+        "winterhold"
+      ],
+      "text": "Tolfdir is an elderly, kindly Nord teacher of alteration at the College of Winterhold, absent-minded but deeply devoted to his students.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Tolfdir"
+    },
+    {
+      "id": "korir",
+      "title": "Jarl Korir",
+      "scope": "person",
+      "aliases": [
+        "Korir",
+        "Jarl Korir",
+        "Jarl of Winterhold"
+      ],
+      "keywords": [
+        "Winterhold",
+        "Stormcloak",
+        "bitter",
+        "College",
+        "Great Collapse"
+      ],
+      "places": [
+        "winterhold"
+      ],
+      "text": "Korir is the bitter Jarl of ruined Winterhold. He blames the College for the Great Collapse, backs Ulfric, and resents any reminder of how far his hold has fallen.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Korir"
+    },
+    {
+      "id": "skald",
+      "title": "Skald the Elder",
+      "scope": "person",
+      "aliases": [
+        "Skald",
+        "Skald the Elder",
+        "Jarl of Dawnstar"
+      ],
+      "keywords": [
+        "Dawnstar",
+        "the Pale",
+        "Stormcloak",
+        "stubborn",
+        "old"
+      ],
+      "places": [
+        "dawnstar",
+        "the_pale"
+      ],
+      "text": "Skald the Elder is the stubborn old Jarl of Dawnstar and a staunch supporter of Ulfric. He distrusts outsiders and is slow to listen to anyone who disagrees with him.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Skald_the_Elder"
+    },
+    {
+      "id": "idgrod",
+      "title": "Idgrod Ravencrone",
+      "scope": "person",
+      "aliases": [
+        "Idgrod",
+        "Idgrod Ravencrone",
+        "Jarl of Morthal"
+      ],
+      "keywords": [
+        "Morthal",
+        "visions",
+        "Hjaalmarch",
+        "Imperial",
+        "seer"
+      ],
+      "places": [
+        "morthal",
+        "hjaalmarch"
+      ],
+      "text": "Idgrod Ravencrone is the Jarl of Morthal, an old woman said to have prophetic visions. Some of her people find her strange and doubt her judgment, but she sees more than she lets on.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Idgrod_Ravencrone"
+    },
+    {
+      "id": "siddgeir",
+      "title": "Jarl Siddgeir",
+      "scope": "person",
+      "aliases": [
+        "Siddgeir",
+        "Jarl Siddgeir",
+        "Jarl of Falkreath"
+      ],
+      "keywords": [
+        "Falkreath",
+        "Imperial",
+        "spoiled",
+        "young",
+        "mead"
+      ],
+      "places": [
+        "falkreath",
+        "falkreath_hold"
+      ],
+      "text": "Siddgeir is the young Jarl of Falkreath, nephew of the old Jarl Dengeir. He sides with the Empire, but most of his people say he cares more about fine mead and his own comfort than about ruling.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Siddgeir"
+    },
+    {
+      "id": "arngeir",
+      "title": "Arngeir",
+      "scope": "person",
+      "aliases": [
+        "Arngeir",
+        "Master Arngeir"
+      ],
+      "keywords": [
+        "Greybeards",
+        "High Hrothgar",
+        "spokesman",
+        "Way of the Voice"
+      ],
+      "places": [
+        "high_hrothgar"
+      ],
+      "text": "Arngeir is the only Greybeard who speaks in the common tongue, acting as the order's voice to visitors. He teaches that the Voice should be used for contemplation, never for war or politics.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Arngeir"
+    },
+    {
+      "id": "paarthurnax",
+      "title": "Paarthurnax",
+      "scope": "person",
+      "aliases": [
+        "Paarthurnax"
+      ],
+      "keywords": [
+        "dragon",
+        "Greybeards master",
+        "Throat of the World",
+        "Alduin's lieutenant",
+        "Blades want him dead"
+      ],
+      "places": [
+        "high_hrothgar"
+      ],
+      "text": "Paarthurnax is an ancient dragon who lives atop the Throat of the World and is secretly the master of the Greybeards. Once Alduin's lieutenant, he turned against him and taught mortals the Thu'um.",
+      "spoiler": true,
+      "gate": "The Throat of the World",
+      "source": "https://en.uesp.net/wiki/Skyrim:Paarthurnax"
+    },
+    {
+      "id": "delphine",
+      "title": "Delphine",
+      "scope": "person",
+      "aliases": [
+        "Delphine"
+      ],
+      "keywords": [
+        "Sleeping Giant Inn",
+        "Riverwood",
+        "innkeeper",
+        "Blades"
+      ],
+      "places": [
+        "riverwood"
+      ],
+      "text": "Delphine runs the Sleeping Giant Inn in Riverwood, a Breton woman who keeps to herself and seems unusually interested in news of dragons.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Delphine"
+    },
+    {
+      "id": "delphine_blade",
+      "title": "Delphine's secret",
+      "scope": "person",
+      "aliases": [
+        "Delphine is a Blade",
+        "Esbern"
+      ],
+      "keywords": [
+        "Blades",
+        "Thalmor hunt",
+        "Ratway",
+        "Sky Haven",
+        "dragon burial mounds"
+      ],
+      "places": [
+        "riverwood"
+      ],
+      "text": "Delphine is one of the last surviving Blades, hiding from the Thalmor as an innkeeper. With the old Blade archivist Esbern, she wants to rebuild the order to hunt dragons and serve the Dragonborn.",
+      "spoiler": true,
+      "gate": "A Blade in the Dark",
+      "source": "https://en.uesp.net/wiki/Skyrim:Delphine"
+    },
+    {
+      "id": "astrid",
+      "title": "Astrid",
+      "scope": "person",
+      "aliases": [
+        "Astrid"
+      ],
+      "keywords": [
+        "Dark Brotherhood",
+        "Falkreath sanctuary",
+        "leader",
+        "Arnbjorn"
+      ],
+      "text": "Astrid leads the remnants of the Dark Brotherhood from a hidden sanctuary near Falkreath, with her werewolf husband Arnbjorn. She runs the family her own way, ignoring the old tenets.",
+      "spoiler": true,
+      "gate": "With Friends Like These...",
+      "source": "https://en.uesp.net/wiki/Skyrim:Astrid"
+    },
+    {
+      "id": "cicero",
+      "title": "Cicero",
+      "scope": "person",
+      "aliases": [
+        "Cicero",
+        "the jester"
+      ],
+      "keywords": [
+        "Dark Brotherhood",
+        "Night Mother",
+        "coffin",
+        "Keeper",
+        "Loreius Farm",
+        "madman"
+      ],
+      "text": "Cicero is a cheerful, unhinged Imperial jester travelling Skyrim with a large coffin on a cart. He is in fact the Keeper of the Night Mother's body, bringing her to the Dark Brotherhood.",
+      "spoiler": true,
+      "gate": "The Cure for Madness",
+      "source": "https://en.uesp.net/wiki/Skyrim:Cicero"
+    },
+    {
+      "id": "isran",
+      "title": "Isran",
+      "scope": "person",
+      "aliases": [
+        "Isran"
+      ],
+      "keywords": [
+        "Dawnguard",
+        "vampire hunter",
+        "Vigilant",
+        "Fort Dawnguard",
+        "Redguard",
+        "Tolan"
+      ],
+      "places": [
+        "fort_dawnguard"
+      ],
+      "text": "Isran is a grim Redguard vampire hunter, once a Vigilant of Stendarr, who left the order because it would not take the vampire threat seriously. He has reopened Fort Dawnguard to fight them his own way.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Dawnguard:Isran"
+    },
+    {
+      "id": "serana",
+      "title": "Serana",
+      "scope": "person",
+      "aliases": [
+        "Serana"
+      ],
+      "keywords": [
+        "vampire",
+        "Volkihar",
+        "Harkon's daughter",
+        "Dimhollow Crypt",
+        "Elder Scroll"
+      ],
+      "text": "Serana is a pure-blooded vampire, daughter of Lord Harkon, who was sealed away in Dimhollow Crypt with an Elder Scroll. Sharp-witted and wary of her own family, she has been out of the world for centuries.",
+      "spoiler": true,
+      "gate": "Awakening",
+      "source": "https://en.uesp.net/wiki/Dawnguard:Serana"
+    },
+    {
+      "id": "miraak",
+      "title": "Miraak",
+      "scope": "person",
+      "aliases": [
+        "Miraak",
+        "the First Dragonborn"
+      ],
+      "keywords": [
+        "Solstheim",
+        "Apocrypha",
+        "Hermaeus Mora",
+        "dragon priest",
+        "All-Maker Stones"
+      ],
+      "text": "Miraak was a dragon priest and the first Dragonborn, who betrayed the dragons and was trapped in Apocrypha by Hermaeus Mora. Now he is reaching out to enslave the people of Solstheim and return.",
+      "spoiler": true,
+      "gate": "Dragonborn: The Temple of Miraak",
+      "source": "https://en.uesp.net/wiki/Dragonborn:Miraak"
+    },
+    {
+      "id": "brunwulf",
+      "title": "Brunwulf Free-Winter",
+      "scope": "person",
+      "aliases": [
+        "Brunwulf",
+        "Brunwulf Free-Winter"
+      ],
+      "keywords": [
+        "Windhelm",
+        "Gray Quarter",
+        "Dunmer",
+        "fair",
+        "war veteran",
+        "dark elves",
+        "Dunmer rights"
+      ],
+      "places": [
+        "windhelm"
+      ],
+      "text": "Brunwulf Free-Winter is a respected Nord veteran in Windhelm who openly defends the Dunmer of the Gray Quarter, which makes him unpopular with the city's more bigoted Nords.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Brunwulf_Free-Winter"
+    },
+    {
+      "id": "rolff_stone_fist",
+      "title": "Rolff Stone-Fist",
+      "scope": "person",
+      "aliases": [
+        "Rolff",
+        "Rolff Stone-Fist"
+      ],
+      "keywords": [
+        "Windhelm",
+        "drunk",
+        "Gray Quarter",
+        "Dunmer",
+        "Galmar's brother",
+        "bigot",
+        "Suvaris",
+        "dark elves",
+        "grey-skins"
+      ],
+      "places": [
+        "windhelm"
+      ],
+      "text": "Rolff Stone-Fist, brother of Galmar, is a drunk who stumbles around Windhelm harassing Dunmer, accusing them of being Imperial spies and shouting at the Gray Quarter's residents. Most respectable folk are embarrassed by him.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Rolff_Stone-Fist"
+    },
+    {
+      "id": "jorleif_and_wuunferth",
+      "title": "Windhelm's court",
+      "scope": "person",
+      "aliases": [
+        "Jorleif",
+        "Wuunferth",
+        "Wuunferth the Unliving"
+      ],
+      "keywords": [
+        "steward",
+        "court wizard",
+        "Windhelm",
+        "Palace of the Kings"
+      ],
+      "places": [
+        "windhelm"
+      ],
+      "text": "Jorleif is Ulfric's steward, a loyal but overworked man who keeps Windhelm running. Wuunferth the Unliving, the aging court wizard, is a gloomy figure whom some townsfolk suspect of dark magic.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Jorleif"
+    },
+    {
+      "id": "falk_firebeard",
+      "title": "Falk Firebeard",
+      "scope": "person",
+      "aliases": [
+        "Falk",
+        "Falk Firebeard",
+        "Bryling",
+        "Sybille Stentor"
+      ],
+      "keywords": [
+        "steward",
+        "Solitude",
+        "Blue Palace",
+        "Elisif",
+        "court"
+      ],
+      "places": [
+        "solitude"
+      ],
+      "text": "Falk Firebeard is Elisif's steward in Solitude and her most trusted advisor, quietly doing much of the actual work of rule. Thane Bryling and the court wizard Sybille Stentor round out the Blue Palace court.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Falk_Firebeard"
+    },
+    {
+      "id": "hadvar_ralof",
+      "title": "Hadvar and Ralof",
+      "scope": "person",
+      "aliases": [
+        "Hadvar",
+        "Ralof"
+      ],
+      "keywords": [
+        "Riverwood",
+        "Helgen",
+        "Imperial soldier",
+        "Stormcloak soldier",
+        "childhood friends",
+        "Gerdur",
+        "Alvor"
+      ],
+      "places": [
+        "riverwood"
+      ],
+      "text": "Hadvar, an Imperial soldier, and Ralof, a Stormcloak, are both Riverwood men who survived Helgen on opposite sides of the war. Hadvar's uncle Alvor is the village smith and Ralof's sister Gerdur owns the mill.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Ralof"
+    },
+    {
+      "id": "titus_mede",
+      "title": "Emperor Titus Mede II",
+      "scope": "person",
+      "aliases": [
+        "Titus Mede",
+        "Titus Mede II",
+        "the Emperor",
+        "Emperor Titus"
+      ],
+      "keywords": [
+        "Empire",
+        "Great War",
+        "Concordat",
+        "Imperial City",
+        "Penitus Oculatus",
+        "visit to Skyrim"
+      ],
+      "text": "Titus Mede II is the aging Emperor of Tamriel. He won back the Imperial City in the Great War but signed the White-Gold Concordat to save the Empire, a choice many Nords never forgave.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Titus_Mede_II"
+    },
+    {
+      "id": "grelod",
+      "title": "Grelod the Kind",
+      "scope": "person",
+      "aliases": [
+        "Grelod",
+        "Grelod the Kind",
+        "Honorhall"
+      ],
+      "keywords": [
+        "orphanage",
+        "Riften",
+        "cruel",
+        "orphans",
+        "Aventus"
+      ],
+      "places": [
+        "riften"
+      ],
+      "text": "Grelod the Kind runs Honorhall Orphanage in Riften and is anything but kind; she beats and bullies the children. Many in Riften wish someone would do something about her.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Grelod_the_Kind"
+    },
+    {
+      "id": "mjoll",
+      "title": "Mjoll the Lioness",
+      "scope": "person",
+      "aliases": [
+        "Mjoll",
+        "Mjoll the Lioness",
+        "Aerin"
+      ],
+      "keywords": [
+        "Riften",
+        "adventurer",
+        "Grimsever",
+        "justice",
+        "corruption"
+      ],
+      "places": [
+        "riften"
+      ],
+      "text": "Mjoll the Lioness is a famed Nord adventurer who settled in Riften to fight its corruption. Her companion Aerin saved her life after she lost her sword Grimsever in a Dwemer ruin.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Mjoll_the_Lioness"
+    },
+    {
+      "id": "viarmo",
+      "title": "Viarmo",
+      "scope": "person",
+      "aliases": [
+        "Viarmo"
+      ],
+      "keywords": [
+        "Bards College",
+        "headmaster",
+        "Solitude",
+        "Olaf festival",
+        "Altmer"
+      ],
+      "places": [
+        "solitude"
+      ],
+      "text": "Viarmo is the Altmer headmaster of the Bards College in Solitude, a polished diplomat who desperately wants Elisif to allow the Burning of King Olaf festival again.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Viarmo"
+    },
+    {
+      "id": "king_olaf",
+      "title": "King Olaf One-Eye",
+      "scope": "person",
+      "aliases": [
+        "Olaf One-Eye",
+        "King Olaf",
+        "Numinex"
+      ],
+      "keywords": [
+        "Dragonsreach",
+        "dragon captured",
+        "High King",
+        "Bards College festival",
+        "Balgruuf ancestor"
+      ],
+      "text": "Olaf One-Eye was a legendary High King who captured the dragon Numinex and imprisoned it in Dragonsreach. The Bards say he was also a tyrant, which is why they burned him in effigy each year.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Olaf_One-Eye"
+    },
+    {
+      "id": "jurgen_windcaller",
+      "title": "Jurgen Windcaller",
+      "scope": "person",
+      "aliases": [
+        "Jurgen Windcaller"
+      ],
+      "keywords": [
+        "Greybeards founder",
+        "Battle of Red Mountain",
+        "Way of the Voice",
+        "Red Mountain"
+      ],
+      "text": "Jurgen Windcaller was a Nord Tongue who, after a crushing defeat in battle, reflected for years and founded the Way of the Voice, teaching that the Thu'um is meant for worship of Kyne rather than war. The Greybeards follow his path.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Jurgen_Windcaller"
+    }
+  ]
+}
