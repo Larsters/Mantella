@@ -18,6 +18,7 @@ CONTEXT_FORMAT_KWARGS = {
     "player_name", "game", "player_description", "player_equipment", "name", "names", "names_w_player",
     "bio", "bios", "trust", "equipment", "location", "weather", "time", "current_day", "time_group",
     "language", "conversation_summary", "conversation_summaries", "actions", "knowledge_scope", "relationship", "lore",
+    "speech_flavor",
 }
 
 NARRATION_SETTINGS = [None, *list(NarrationHandlingEnum)]
@@ -150,7 +151,7 @@ def test_export_hotfix_works_on_servers_without_knowledge_scope():
     import configparser, json
     from src.config.config_file_writer import ConfigFileWriter
     from src.prompt_profiles.export_hotfix import config_lines, encode_ini_value
-    new_vars = {"knowledge_scope", "relationship", "lore"}  # play adds W6/W8 placeholders to the profile
+    new_vars = {"knowledge_scope", "relationship", "lore", "speech_flavor"}  # play adds W6/W8 placeholders to the profile
     upstream_allowed = [v for v in PromptDefinitions.ALLOWED_PROMPT_VARIABLES if v not in new_vars]
     upstream_radiant = [v for v in PromptDefinitions.ALLOWED_PROMPT_VARIABLES_RADIANT if v not in new_vars]
     lines = config_lines("living_npcs_v1")
@@ -182,6 +183,8 @@ def test_profile_contains_integration_placeholders():
         assert "{trust}. {player_name} {player_equipment} {player_description}\n{relationship}\n" in text
         assert "{weather}\n{lore}\n" in text
     assert "{lore}" in profile.radiant_prompt and "{relationship}" not in profile.radiant_prompt
+    for text in (profile.prompt, profile.multi_npc_prompt, profile.radiant_prompt):
+        assert "{actions}\n{speech_flavor}\n" in text
 
 
 def test_integration_placeholders_empty_when_features_off(default_config: ConfigLoader, default_context: Context):
@@ -191,6 +194,7 @@ def test_integration_placeholders_empty_when_features_off(default_config: Config
     result = default_context.generate_system_message(profile.prompt, [])
     assert "{" not in result
     assert "Relationship with the player" not in result
+    assert "German" not in result  # speech flavour off by default
     assert "Dragonborn is a stranger to Guard." in result
 
 
@@ -207,3 +211,12 @@ def test_lore_placeholder_filled_when_enabled(default_config: ConfigLoader, defa
     right_now = result[result.index("# Right now"):]
     assert SYSTEM_HEADER in right_now and "Forsworn" in right_now
     assert "{" not in result
+
+
+def test_speech_flavor_placeholder_filled_when_enabled(default_config: ConfigLoader, default_context: Context):
+    default_config.speech_flavor = "German mix"
+    default_config.speech_flavor_scope = "All NPCs"
+    profile = get_profile_prompts("living_npcs_v1")
+    result = default_context.generate_system_message(profile.prompt, [])
+    tail = result[result.index("# Right now"):]
+    assert "German" in tail and "{" not in result

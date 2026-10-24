@@ -9,6 +9,9 @@ an empty string when its feature is off):
   W5  {knowledge_scope} -> "# What you know"            (knowledge_scope_enabled)
   W6  {relationship}    -> own line after "{player_name} is {trust}." (relationship_tracking_enabled)
   W8  {lore}            -> own line after the weather line in "# Right now" (lore_enabled)
+  W10 {speech_flavor}   -> own line right before the final "Reply ..." line (speech_flavor != None).
+                           Not inside "# How to play your part": that block must stay placeholder-free
+                           and byte-identical for the prompt cache, and the flavour text varies per NPC/race.
 """
 
 # --- Voice rules -----------------------------------------------------------------------
@@ -70,6 +73,7 @@ You are {name}.
 {equipment} You are in {location}. It is {time} {time_group} on day {current_day}. {weather}
 {lore}
 {actions}
+{speech_flavor}
 Reply as {name} now, in {language}."""
 
 MULTI_RULES = """# How to play your parts
@@ -124,6 +128,7 @@ MULTI_CONTEXT = """
 {equipment} The location is {location}. It is {time} {time_group} on day {current_day}. {weather}
 {lore}
 {actions}
+{speech_flavor}
 Speak only as {names}, using their full names. Reply now in {language}."""
 
 RADIANT_RULES = """# How to play your parts
@@ -156,6 +161,7 @@ RADIANT_CONTEXT = """
 {equipment} The location is {location}. It is {time} {time_group} on day {current_day}. {weather}
 {lore}
 {actions}
+{speech_flavor}
 Speak only as {names}, using their full names. Reply now in {language}."""
 
 RADIANT_START = """Start a short exchange between them, without greetings. Pick something these people would really talk about here and now, or pick up a thread from their memories. Keep it grounded and specific to this place."""

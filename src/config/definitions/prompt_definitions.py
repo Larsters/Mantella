@@ -31,7 +31,8 @@ class PromptDefinitions:
                                 "actions",
                                 "knowledge_scope",
                                 "relationship",
-                                "lore"]
+                                "lore",
+                                "speech_flavor"]
     
     ALLOWED_PROMPT_VARIABLES_RADIANT = [
                                 "game",
@@ -50,7 +51,8 @@ class PromptDefinitions:
                                 "conversation_summaries",
                                 "actions",
                                 "knowledge_scope",
-                                "lore"]
+                                "lore",
+                                "speech_flavor"]
     
     ALLOWED_PROMPT_VARIABLES_FUNCTION_LLM = [
                                 "game"]

@@ -14,6 +14,7 @@ from src.config.definitions.game_definitions import GameEnum
 from src.knowledge_scope import build_knowledge_scope
 from src.lore import lore_hooks
 import src.transcripts.recorder as transcript_recorder
+from src import speech_flavor
 
 logger = utils.get_logger()
 
@@ -497,6 +498,7 @@ class Context:
                 knowledge_scope = build_knowledge_scope(non_player_chars, location, getattr(self.__config, 'knowledge_scope_enabled', False)),
                 relationship = relationship,
                 lore = lore_hooks.system_lore(self), # lore lookup (src/lore); "" when disabled
+                speech_flavor = speech_flavor.get_speech_flavor_text(self.__config, non_player_chars),
                 )))
             if self.__client.is_too_long(result, self.TOKEN_LIMIT_PERCENT):
                 if content[0] != "":

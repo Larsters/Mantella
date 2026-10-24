@@ -351,6 +351,11 @@ LLM parameter list must be valid JSON""")
             self.bio_generation_min_words: int = self.__definitions.get_int_value("bio_generation_min_words")
             self.bio_generation_wait_seconds: float = self.__definitions.get_float_value("bio_generation_wait_seconds")
             self.bio_generation_model: str = self.__definitions.get_string_value("bio_generation_model")
+            # Speech flavour (src/speech_flavor)
+            self.speech_flavor: str = self.__definitions.get_string_value("speech_flavor")
+            self.speech_flavor_intensity: str = self.__definitions.get_string_value("speech_flavor_intensity")
+            self.speech_flavor_scope: str = self.__definitions.get_string_value("speech_flavor_scope")
+            self.speech_flavor_tts_respell: bool = self.__definitions.get_bool_value("speech_flavor_tts_respell")
 
             #HTTP
             self.port = self.__definitions.get_int_value("port")
