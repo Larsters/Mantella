@@ -1,7 +1,10 @@
 import json
 from typing import Any, Hashable
 
+import threading
+
 from fastapi import FastAPI, Request
+from starlette.concurrency import run_in_threadpool
 from src.config.config_loader import ConfigLoader
 from src.games.fallout4 import Fallout4
 from src.games.gameable import Gameable
@@ -18,6 +21,7 @@ from src import utils
 from src.config.definitions.game_definitions import GameEnum
 from src.config.definitions.tts_definitions import TTSEnum
 from src.actions.function_manager import FunctionManager
+from src.stt import listen_control
 
 logger = utils.get_logger()
 
@@ -28,8 +32,11 @@ class mantella_route(routeable):
     Args:
         routeable (_type_): _description_
     """
+    REQUEST_LOCK_TIMEOUT: float = 60.0 # seconds a request waits for the previous one to finish
+
     def __init__(self, config: ConfigLoader, language_info: dict[Hashable, str]) -> None:
         super().__init__(config)
+        self.__request_lock = threading.Lock() # GameStateManager is not thread-safe: one game request at a time
         self.__language_info: dict[Hashable, str] = language_info
         self.__game: GameStateManager | None = None
 
@@ -41,6 +48,7 @@ class mantella_route(routeable):
     def _setup_route(self):
         if self.__game:
             self.__game.end_conversation({})
+            self.__game.stop_listening() # the next GameStateManager creates its own Transcriber
 
         game: Gameable
         game_enum = self._config.game
@@ -64,39 +72,58 @@ class mantella_route(routeable):
     def add_route_to_server(self, app: FastAPI):
         @app.post("/mantella")
         async def mantella(request: Request):
-            if not self._can_route_be_used():
-                error_message = "MantellaSoftware settings faulty. Please check MantellaSoftware's window or log."
-                logger.error(error_message)
-                return self.error_message(error_message)
-            if not self.__game:
-                error_message = "Game manager setup failed. There is most likely an issue with the config.ini."
-                logger.error(error_message)
-                return self.error_message(error_message)
-            reply = {}
             received_json: dict[str, Any] | None = await request.json()
-            if received_json:
-                logger.debug('Processing request...')
-                if self._config.show_http_debug_messages:
-                    logger.log(self._log_level_http_in, json.dumps(received_json, indent=4))
-                request_type: str = received_json[comm_consts.KEY_REQUESTTYPE]
-                match request_type:
-                    case comm_consts.KEY_REQUESTTYPE_INIT:
-                        # nothing needs to be done for this request aside from self._can_route_be_used() being triggered
-                        logger.debug('Mantella settings initialized')
-                        reply = {comm_consts.KEY_REPLYTYPE: comm_consts.KEY_REPLYTTYPE_INITCOMPLETED}
-                    case comm_consts.KEY_REQUESTTYPE_STARTCONVERSATION:
-                        reply = self.__game.start_conversation(received_json)
-                    case comm_consts.KEY_REQUESTTYPE_CONTINUECONVERSATION:
-                        reply = self.__game.continue_conversation(received_json)
-                    case comm_consts.KEY_REQUESTTYPE_PLAYERINPUT:
-                        reply = self.__game.player_input(received_json)
-                    case comm_consts.KEY_REQUESTTYPE_ENDCONVERSATION:
-                        reply = self.__game.end_conversation(received_json)
-                    case _:
-                        reply = self.error_message(f"Request type '{request_type}' was not recognized")
-            else:
-                reply = self.error_message(f"Request did not contain properly formatted json!")
+            # feat/no-hang-listen: the game only has one request in flight, so a new one supersedes
+            # (aborts) any speech wait of the previous one. The work itself (STT wait, LLM, TTS) is
+            # blocking code and runs in a worker thread so the event loop keeps serving /ui, /control, /api/*.
+            request_id = listen_control.begin_request()
+            return await run_in_threadpool(self._handle_request, request_id, received_json)
 
+    def _handle_request(self, request_id: int, received_json: dict[str, Any] | None) -> dict[str, Any]:
+        """Runs one /mantella request in a worker thread, one request at a time."""
+        with listen_control.request_scope(request_id):
+            if not self.__request_lock.acquire(timeout=self.REQUEST_LOCK_TIMEOUT):
+                error_message = "MantellaSoftware is still busy with a previous request. Please try again."
+                logger.error(error_message)
+                return self.error_message(error_message)
+            try:
+                return self._process_request(received_json)
+            finally:
+                self.__request_lock.release()
+
+    def _process_request(self, received_json: dict[str, Any] | None) -> dict[str, Any]:
+        if not self._can_route_be_used():
+            error_message = "MantellaSoftware settings faulty. Please check MantellaSoftware's window or log."
+            logger.error(error_message)
+            return self.error_message(error_message)
+        if not self.__game:
+            error_message = "Game manager setup failed. There is most likely an issue with the config.ini."
+            logger.error(error_message)
+            return self.error_message(error_message)
+        reply = {}
+        if received_json:
+            logger.debug('Processing request...')
             if self._config.show_http_debug_messages:
-                logger.log(self._log_level_http_out, json.dumps(reply, indent=4))
-            return reply
+                logger.log(self._log_level_http_in, json.dumps(received_json, indent=4))
+            request_type: str = received_json[comm_consts.KEY_REQUESTTYPE]
+            match request_type:
+                case comm_consts.KEY_REQUESTTYPE_INIT:
+                    # nothing needs to be done for this request aside from self._can_route_be_used() being triggered
+                    logger.debug('Mantella settings initialized')
+                    reply = {comm_consts.KEY_REPLYTYPE: comm_consts.KEY_REPLYTTYPE_INITCOMPLETED}
+                case comm_consts.KEY_REQUESTTYPE_STARTCONVERSATION:
+                    reply = self.__game.start_conversation(received_json)
+                case comm_consts.KEY_REQUESTTYPE_CONTINUECONVERSATION:
+                    reply = self.__game.continue_conversation(received_json)
+                case comm_consts.KEY_REQUESTTYPE_PLAYERINPUT:
+                    reply = self.__game.player_input(received_json)
+                case comm_consts.KEY_REQUESTTYPE_ENDCONVERSATION:
+                    reply = self.__game.end_conversation(received_json)
+                case _:
+                    reply = self.error_message(f"Request type '{request_type}' was not recognized")
+        else:
+            reply = self.error_message(f"Request did not contain properly formatted json!")
+
+        if self._config.show_http_debug_messages:
+            logger.log(self._log_level_http_out, json.dumps(reply, indent=4))
+        return reply

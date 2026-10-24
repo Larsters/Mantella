@@ -5,6 +5,7 @@ from src.config.config_loader import ConfigLoader
 from src.llm.client_base import ClientBase
 from src.stt.ptt_controller import PTTController
 from src.stt.fast_stt import MlxWhisper, clean_transcript
+from src.stt import listen_control
 import src.utils as utils
 import requests
 import json
@@ -56,6 +57,7 @@ class Transcriber:
         self.filter_hallucinations = config.stt_filter_hallucinations
         self.mlx_model: MlxWhisper | None = None
         self.listen_timeout = config.listen_timeout
+        self.player_speech_max_wait: float = float(getattr(config, 'player_speech_max_wait', 0) or 0) # feat/no-hang-listen
         self.external_whisper_service = config.external_whisper_service
         self.whisper_service = config.whisper_url
         self.whisper_url = self.__get_endpoint(config.whisper_url)
@@ -344,7 +346,13 @@ If you would prefer to run speech-to-text locally, please ensure the `Speech-to-
         '''Start background listening thread'''
         if self._running:
             return
-            
+
+        # Only one microphone listener per process (stacked listeners -> duplicate "Speech detected")
+        previous_listener = listen_control.claim_listener(self)
+        if previous_listener is not None and getattr(previous_listener, 'is_listening', False):
+            logger.warning('Stopping a previous microphone listener that was still running')
+            previous_listener.stop_listening()
+
         self._running = True
         self._reset_state()
         self.prompt = prompt
@@ -563,13 +571,22 @@ If you would prefer to run speech-to-text locally, please ensure the `Speech-to-
         
         Returns:
             The transcribed text, or None if silence_timeout elapsed without any speech being detected
+
+        Raises:
+            listen_control.ListenAborted: the wait was superseded, timed out (player_speech_max_wait) or the server is stopping
         """
+        wait_started = time.monotonic()
         while True:
             # Use timeout only if silence_timeout > 0 and player hasn't started speaking yet
             use_timeout = silence_timeout > 0 and not self._speech_detected
             timeout_value = silence_timeout if use_timeout else None
             
-            received_transcription = self._transcription_ready.wait(timeout=timeout_value)
+            # Interruptible wait (feat/no-hang-listen): raises listen_control.ListenAborted when the game
+            # sent a newer request, the server shuts down, or player_speech_max_wait passed in silence
+            received_transcription = listen_control.wait_for_event(
+                self._transcription_ready, timeout_value,
+                max_wait=self.player_speech_max_wait, started_at=wait_started,
+                is_speaking=lambda: self._speech_detected)
             
             if not received_transcription and use_timeout and not self._speech_detected:
                 logger.log(self.loglevel, f"Silence timeout of {silence_timeout} seconds reached without speech")
@@ -593,11 +610,13 @@ If you would prefer to run speech-to-text locally, please ensure the `Speech-to-
             self._speech_detected = False
             self._current_transcription = ''
 
+            listen_control.check_abort()
             time.sleep(0.1)
 
 
     def stop_listening(self) -> None:
         """Stop listening for speech."""
+        listen_control.release_listener(self)
         if not self._running:
             return
             
@@ -612,7 +631,7 @@ If you would prefer to run speech-to-text locally, please ensure the `Speech-to-
         
         # Wait for processing thread to finish
         if self._processing_thread:
-            self._processing_thread.join()  # timeout=1.0 Add timeout to prevent hanging
+            self._processing_thread.join(timeout=5.0)  # bounded so a stuck transcription cannot hang the server
             self._processing_thread = None
         
         # Clear queue

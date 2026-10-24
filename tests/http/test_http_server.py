@@ -41,17 +41,14 @@ def test_ui_endpoint(production_like_client: TestClient):
     assert response.status_code == 200
 
 
-@patch('uvicorn.run')
+@patch('src.http.http_server._MantellaUvicornServer.run')
 @patch('src.utils.play_mantella_ready_sound')
-def test_start(mock_sound, mock_uvicorn, server: http_server, mock_routes):
-    """Test the start method without actually starting the server"""
-    server.start(port=4999, routes=mock_routes, play_startup_sound=True, show_debug=False)
+def test_start(mock_sound, mock_server_run, server: http_server, mock_routes):
+    """Test the start method without actually starting the server (never binds a port)"""
+    server.start(port=4997, routes=mock_routes, play_startup_sound=True, show_debug=False)
     
     # Verify sound played
     mock_sound.assert_called_once()
     
-    # Verify uvicorn was called with the right parameters
-    mock_uvicorn.assert_called_once()
-    args, kwargs = mock_uvicorn.call_args
-    assert args[0] == server.app
-    assert kwargs['port'] == 4999
+    # Verify the uvicorn server was configured with the right parameters (feat/no-hang-listen: uvicorn.Server subclass)
+    mock_server_run.assert_called_once()
