@@ -2,6 +2,7 @@
     "identifier": "mantella_npc_forgiven",
     "name": "StandDown",
     "description": "Make an NPC(s) stop attacking the player / another NPC.",
+    "guided_description": "Make NPC(s) stop fighting. When the opponent yields, pays, or apologises convincingly, or the NPC gives up. List every NPC who is fighting.",
     "key": "StandDown",
     "parameters": {
         "source": {

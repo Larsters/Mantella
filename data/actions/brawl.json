@@ -2,6 +2,7 @@
     "identifier": "mantella_npc_brawl",
     "name": "Brawl",
     "description": "Make NPC(s) non-lethally brawl the player.",
+    "guided_description": "Start a non-lethal fistfight with the player. Use when a proud or hot-headed character is insulted again after a warning, a fight they offered is accepted, or the player swings first. Not for guards on duty, the old, frail, timid or children.",
     "note": "EXPERIMENTAL: Can cause NPC AI packages to break.",
     "key": "Brawl",
     "parameters": {

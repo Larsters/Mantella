@@ -71,6 +71,13 @@ class ActionDefinitions:
 
 
     @staticmethod
+    def get_guided_action_descriptions_config_value() -> ConfigValue:
+        description = """Only applies when `Advanced Actions` is enabled.
+                        If enabled, each action's tool description sent to the LLM is replaced by its 'guided_description' (data/actions/*.json): short rules on when the NPC should and should not use it (eg Brawl only for proud, hot-headed characters after a warning; Attack never for words alone).
+                        If disabled, the original one-line 'description' is used."""
+        return ConfigValueBool("guided_action_descriptions", "Guided Action Descriptions", description, False)
+
+    @staticmethod
     def get_custom_function_model_config_value() -> ConfigValue:
         description = """Whether to call a separate tool-calling-capable LLM for advanced action handling (NPC verbal responses will still use the model chosen in the `Large Language Model` tab).
                         If enabled, please configure the tool-calling-capable LLM to connect to below.

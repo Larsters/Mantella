@@ -2,6 +2,7 @@
     "identifier": "mantella_npc_unfollow",
     "name": "Unfollow",
     "description": "Make NPC(s) stop following the player.",
+    "guided_description": "Make NPC(s) stop following the player. When dismissed, or when the NPC quits in anger or fear.",
     "key": "Unfollow",
     "parameters": {
         "source": {

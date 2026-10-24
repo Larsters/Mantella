@@ -2,6 +2,7 @@
     "identifier": "mantella_npc_offended",
     "name": "Attack",
     "description": "Make NPC(s) attack another NPC / the player.",
+    "guided_description": "Start a deadly fight. Use when someone attacks or draws steel on the NPC, an arrest is resisted with violence, a bandit or enemy meets prey, or someone with a real reason to kill is pushed past breaking point. Never for insults alone (use Brawl or words) or misheard speech.",
     "key": "Attack",
     "parameters": {
         "source": {
