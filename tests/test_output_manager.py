@@ -603,3 +603,46 @@ async def test_process_response_stores_discarded_character_on_partial_response(o
     assert len(real_sentences) == 1
     assert "Thank you for your service" in real_sentences[0].content.text
     assert output_manager.discarded_character_name == "Hulda"
+
+
+class LockingStreamClient(MockAIClient):
+    """Mimics ClientBase.streaming_call: holds a (non-reentrant) generation lock across its yields
+    and keeps streaming text after yielding pre-fetched tool calls (custom_function_model = True)."""
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        import threading
+        self.lock = threading.Lock()
+        self.deadlocks = 0
+
+    async def streaming_call(self, messages=None, is_multi_npc=False, tools=None):
+        if not self.lock.acquire(timeout=1):
+            self.deadlocks += 1  # the previous, abandoned stream still holds the lock
+            raise Exception("generation lock still held by an abandoned stream")
+        try:
+            self.call_count += 1
+            if tools and self.tool_calls and self.call_count == 1:
+                yield ("tool_calls", self.tool_calls)
+            for chunk in self.response_pattern:
+                yield ("content", chunk)
+        finally:
+            self.lock.release()
+
+
+@pytest.mark.asyncio
+async def test_abandoned_stream_releases_generation_lock(output_manager: ChatManager, example_skyrim_npc_character: Character, example_characters_pc_to_npc: Characters, mock_queue: SentenceQueue, mock_messages: message_thread, mock_actions: list[Action], monkeypatch):
+    """feat/no-hang-listen: breaking out of a stream after tool calls must not deadlock the second LLM call."""
+    client = LockingStreamClient(response_pattern=["I'll ", "follow ", "you."],
+                                 tool_calls=[{"id": "call_1", "type": "function", "function": {"name": "Follow"}}])
+    output_manager._ChatManager__client = client
+
+    def parse_and_interrupt(tool_calls, characters=None, game=None):
+        output_manager._ChatManager__stop_generation.set()  # e.g. the player interrupts right after the tool decision
+        return [{"identifier": "mantella_npc_follow"}]
+    monkeypatch.setattr("src.actions.function_manager.FunctionManager.parse_function_calls", parse_and_interrupt)
+    monkeypatch.setattr("src.actions.function_manager.FunctionManager.any_action_requires_response", lambda actions: False)
+
+    await output_manager.process_response(example_skyrim_npc_character, mock_queue, mock_messages, example_characters_pc_to_npc, mock_actions, [{"type": "function", "function": {"name": "follow_npc"}}])
+
+    assert client.call_count == 2  # the second LLM call happened
+    assert client.deadlocks == 0
+    assert not client.lock.locked()

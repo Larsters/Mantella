@@ -19,6 +19,7 @@ from src.character_manager import Character
 import src.utils as utils
 from src.http.communication_constants import communication_constants as comm_consts
 from src.stt.stt import Transcriber
+from src.stt import listen_control
 from src.actions.function_manager import FunctionManager
 from src.random_llm_selector import RandomLLMSelector, LLMSelection
 from src.llm.client_base import ClientBase
@@ -143,6 +144,8 @@ class GameStateManager:
             if replyType == comm_consts.KEY_REQUESTTYPE_TTS:
                 # if player input is detected mid-response, immediately process the player input
                 reply = self.player_input({"mantella_context": {}, "mantella_player_input": "", "mantella_request_type": "mantella_player_input"})
+                if reply.get(comm_consts.KEY_REPLYTYPE) == comm_consts.KEY_REPLYTYPE_PLAYERTALK:
+                    return reply # the speech wait was aborted (feat/no-hang-listen): hand the turn back to the game
                 self.__first_line = False # since the NPC is already speaking in-game, setting this to True would just cause two voicelines to play at once
                 continue # continue conversation with new player input (ie call self.__talk.continue_conversation() again)
             elif replyType == comm_consts.KEY_REPLYTYPE_NPCACTION:
@@ -188,7 +191,10 @@ class GameStateManager:
         
         player_text: str = input_json.get(comm_consts.KEY_REQUESTTYPE_PLAYERINPUT, '')
         self.__update_context(input_json)
-        updated_player_text, update_events, player_spoken_sentence = self.__talk.process_player_input(player_text)
+        try:
+            updated_player_text, update_events, player_spoken_sentence = self.__talk.process_player_input(player_text)
+        except listen_control.ListenAborted as aborted:
+            return self.__listen_aborted_reply(aborted)
         if update_events:
             return {comm_consts.KEY_REPLYTYPE: comm_consts.KEY_REQUESTTYPE_TTS, comm_consts.KEY_TRANSCRIBE: updated_player_text}
 
@@ -241,6 +247,26 @@ class GameStateManager:
         logger.log(24, '\nWaiting for player to select an NPC...')
         return {comm_consts.KEY_REPLYTYPE: comm_consts.KEY_REPLYTYPE_ENDCONVERSATION}
     
+    def __listen_aborted_reply(self, aborted: listen_control.ListenAborted) -> dict[str, Any]:
+        """The wait for player speech ended without speech (feat/no-hang-listen).
+
+        Stops the microphone and answers with `mantella_player_talk`: the game's normal
+        "your turn" reply, so a live conversation simply asks to listen again, while an
+        abandoned one leaves the server idle instead of stuck.
+        """
+        if self.__stt:
+            self.__stt.stop_listening()
+        if aborted.reason == listen_control.ABORT_TIMEOUT:
+            logger.log(23, f'No player speech for {getattr(self.__config, "player_speech_max_wait", 0):g} s: handing the turn back to the game')
+        else:
+            logger.log(23, f'Stopped waiting for player speech ({aborted.reason})')
+        return {comm_consts.KEY_REPLYTYPE: comm_consts.KEY_REPLYTYPE_PLAYERTALK}
+
+    def stop_listening(self) -> None:
+        """Close the microphone stream if one is open."""
+        if self.__stt:
+            self.__stt.stop_listening()
+
     def process_stt_setup(self, input_json: dict[str, Any]):
         '''Process the STT setup (mic / text / push-to-talk) based on the settings passed in the input JSON'''
         if input_json[comm_consts.KEY_INPUTTYPE] in (comm_consts.KEY_INPUTTYPE_MIC, comm_consts.KEY_INPUTTYPE_PTT):

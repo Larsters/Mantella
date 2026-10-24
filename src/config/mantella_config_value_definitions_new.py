@@ -116,6 +116,7 @@ class MantellaConfigValueDefinitionsNew:
         stt_category.add_config_value(STTDefinitions.get_ptt_hotkey_config_value())
         stt_category.add_config_value(STTDefinitions.get_play_cough_sound_config_value())
         stt_category.add_config_value(STTDefinitions.get_listen_timeout_config_value())
+        stt_category.add_config_value(STTDefinitions.get_player_speech_max_wait_config_value())
         stt_category.add_config_value(STTDefinitions.get_moonshine_model_size_config_value())
         stt_category.add_config_value(STTDefinitions.get_whisper_model_size_config_value())
         stt_category.add_config_value(STTDefinitions.get_proactive_mic_mode_config_value())
