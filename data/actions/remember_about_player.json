@@ -2,6 +2,7 @@
     "identifier": "mantella_remember_about_player",
     "name": "RememberAboutPlayer",
     "description": "Save one new, lasting fact about the REAL person playing the game (not their in-game character) to your long-term notes about them. Use it when they share something personal that is worth remembering next time: their name, work, people in their life, interests, plans, preferences, or how they want you to talk. Do not use it for small talk, in-game events, or things you already know.",
+    "guided_description": "Save one lasting fact about the real person playing (their life, likes, plans), when they share it with you directly. Only for your companion role; never for in-game events or the player character's deeds.",
     "note": "Server-side tool (src/companion_profile.py via src/actions/server_tools.py): appends to about_me.txt in the Mantella user folder, never sent to the game. Offered only when companion_enabled is on and the player talks one-on-one with the companion.",
     "key": "RememberAboutPlayer",
     "parameters": {
