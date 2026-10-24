@@ -15,6 +15,7 @@ from src.character_manager import Character
 from src.remember.remembering import Remembering
 from src import utils
 from src.llm import model_capabilities
+import src.usage_logger as usage_logger
 
 logger = utils.get_logger()
 
@@ -296,6 +297,7 @@ class Summaries(Remembering):
         while True:
             try:
                 if len(npc_info.messages) >= min_messages:
+                    usage_logger.set_context(speaker=names)
                     summary = self.summarize_conversation(npc_info.messages.transform_to_dict_representation(npc_info.messages.get_talk_only()), prompt)
                     # Prepend timestamp to summary if available
                     if summary and end_timestamp is not None and self.__config.memory_prompt_datetime_prefix:
@@ -346,6 +348,7 @@ class Summaries(Remembering):
                         game=self.__game.game_name_in_filepath,
                         player_name=player_name
                     )
+                    usage_logger.set_context(speaker=npc_name)
                     long_conversation_summary = self.summarize_conversation(conversation_summaries, prompt)
                     break
                 except Exception:

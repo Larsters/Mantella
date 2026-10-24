@@ -34,6 +34,7 @@ from src.config.definitions.tts_definitions import TTSEnum
 from src.telemetry.telemetry import create_span_from_thread
 from src.games.gameable import Gameable
 from typing import Callable
+import src.usage_logger as usage_logger
 
 logger = utils.get_logger()
 
@@ -263,6 +264,7 @@ class ChatManager:
         """Stream response from LLM one sentence at a time"""
         with create_span_from_thread("process_response") as span:
             span.set_attribute("active_character.name", active_character.name)
+            usage_logger.set_context(speaker=active_character.name, npcs=[c.name for c in characters.get_non_player_characters()])
 
             raw_response: str = ''  # Track the raw response
             first_token = True
