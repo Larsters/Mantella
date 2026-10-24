@@ -2,6 +2,7 @@
     "identifier": "mantella_npc_addtoconversation",
     "name": "AddToConversation",
     "description": "Add nearby NPC(s) to the conversation.",
+    "guided_description": "Call one nearby person into this conversation: a guard when there is a threat or a crime, or someone the player asks for by name or role. Never on greetings or just because they are nearby.",
     "key": "AddToConversation",
     "parameters": {
         "source": {

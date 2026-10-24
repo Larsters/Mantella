@@ -12,6 +12,7 @@ from src.config.config_json_writer import ConfigJsonWriter
 from src.config.config_file_writer import ConfigFileWriter
 from src.config.types.config_value_string import ConfigValueString
 import src.utils as utils
+from src.prompt_profiles import apply_prompt_profile
 from pathlib import Path
 import json
 import urllib
@@ -366,6 +367,10 @@ LLM parameter list must be valid JSON""")
             self.resummarize_prompt = self.__definitions.get_string_value("resummarize_prompt")
             self.vision_prompt = self.__definitions.get_string_value("vision_prompt")
             self.function_llm_prompt = self.__definitions.get_string_value("function_llm_prompt")
+            # Prompt profiles + knowledge scope (feat/prompt-overhaul)
+            self.prompt_profile: str = self.__definitions.get_string_value("prompt_profile")
+            self.knowledge_scope_enabled: bool = self.__definitions.get_bool_value("knowledge_scope_enabled")
+            apply_prompt_profile(self)
 
             # Vision
             self.vision_enabled = self.__definitions.get_bool_value('vision_enabled')
@@ -397,6 +402,7 @@ LLM parameter list must be valid JSON""")
             # Actions
             self.advanced_actions_enabled = self.__definitions.get_bool_value("advanced_actions_enabled")
             self.disabled_actions: list[str] = self.__definitions.get_string_list_value("disabled_actions")
+            self.guided_action_descriptions: bool = self.__definitions.get_bool_value("guided_action_descriptions")
             self.custom_function_model = self.__definitions.get_bool_value("custom_function_model")
             self.function_llm_api = self.__definitions.get_string_value("function_llm_api")
             self.function_llm = self.__definitions.get_string_value("function_llm")

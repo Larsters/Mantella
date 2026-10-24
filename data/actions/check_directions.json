@@ -2,6 +2,7 @@
     "identifier": "mantella_npc_givedirections",
     "name": "CheckDirections",
     "description": "Returns directions on how to reach a specified location.",
+    "guided_description": "Look up the way to a place. When asked for directions to a specific place the NPC would know.",
     "note": "NPCs can sometimes choose incompatible locations to check directions to. Known locations are an exhaustive list of game locations that have a map marker.",
     "key": "CheckDirections",
     "parameters": {

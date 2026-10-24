@@ -2,6 +2,7 @@
     "identifier": "mantella_npc_shareconversation",
     "name": "ShareConversation",
     "description": "Share this conversation with an NPC who is not present once the conversation ends. They will remember what was discussed.",
+    "guided_description": "Make an NPC tell someone absent about this conversation later. When the NPC promises or threatens to pass it on (eg tell the Jarl, warn family).",
     "key": "ShareConversation",
     "parameters": {
         "source": {

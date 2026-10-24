@@ -4,6 +4,7 @@ from src.config.types.config_value import ConfigValue
 from src.config.types.config_value_int import ConfigValueInt
 from src.config.types.config_value_string import ConfigValueString
 from src.config.types.config_value_bool import ConfigValueBool
+from src.config.types.config_value_selection import ConfigValueSelection
 from src.config.config_value_constraint import ConfigValueConstraint, ConfigValueConstraintResult
 
 
@@ -27,7 +28,8 @@ class PromptDefinitions:
                                 "language", 
                                 "conversation_summary",
                                 "conversation_summaries",
-                                "actions"]
+                                "actions",
+                                "knowledge_scope"]
     
     ALLOWED_PROMPT_VARIABLES_RADIANT = [
                                 "game",
@@ -44,7 +46,8 @@ class PromptDefinitions:
                                 "language", 
                                 "conversation_summary",
                                 "conversation_summaries",
-                                "actions"]
+                                "actions",
+                                "knowledge_scope"]
     
     ALLOWED_PROMPT_VARIABLES_FUNCTION_LLM = [
                                 "game"]
@@ -67,7 +70,8 @@ class PromptDefinitions:
                                 player_description = a description of the player character (needs to be added in game or using the config value)
                                 player_equipment = a basic description of the equipment the player character carries
                                 equipment = a basic description of the equipment the NPCs carry
-                                actions = instructions for the LLM how to trigger actions (if advanced actions are disabled, otherwise action instructions are already passed to the LLM as tools via the 'description' field)"""
+                                actions = instructions for the LLM how to trigger actions (if advanced actions are disabled, otherwise action instructions are already passed to the LLM as tools via the 'description' field)
+                                knowledge_scope = 1-3 sentences per NPC on what they plausibly know and how they speak, derived from role, race and hold (empty if 'Knowledge Scope' is disabled)"""
     
     BASE_RADIANT_DESCRIPTION = """The starting prompt sent to the LLM when a radiant conversation is started.
                                 The following are dynamic variables that need to be contained in curly brackets {}:
@@ -82,7 +86,8 @@ class PromptDefinitions:
                                 language = the selected language
                                 conversation_summary = reads the latest conversation summaries for the NPCs stored in data/conversations/NPC_Name/NPC_Name_summary_X.txt
                                 equipment = a basic description of the equipment the NPCs carry
-                                actions = instructions for the LLM to trigger actions (if advanced actions are disabled, otherwise action instructions are already passed to the LLM as tools via the 'description' field)"""
+                                actions = instructions for the LLM to trigger actions (if advanced actions are disabled, otherwise action instructions are already passed to the LLM as tools via the 'description' field)
+                                knowledge_scope = 1-3 sentences per NPC on what they plausibly know and how they speak (empty if 'Knowledge Scope' is disabled)"""
 
         
     class PromptChecker(ConfigValueConstraint[str]):
@@ -341,3 +346,19 @@ Please summarize the conversation into a single paragraph in {language}."""
                                 Based on the recent dialogue, call the appropriate functions to execute actions. 
                                 If no actions are needed, do not call any functions."""
         return ConfigValueString("function_llm_prompt","Tool Calling LLM Prompt",description,function_llm_prompt,[PromptDefinitions.PromptChecker(PromptDefinitions.ALLOWED_PROMPT_VARIABLES_FUNCTION_LLM)])
+
+    @staticmethod
+    def get_prompt_profile_config_value() -> ConfigValue:
+        from src.prompt_profiles import PROFILE_NAMES, DEFAULT_PROFILE
+        description = """Selects a built-in set of Skyrim prompts (single NPC, multi-NPC, radiant, radiant start/end).
+                            'default' uses the prompts configured on this tab, exactly as before.
+                            'living_npcs_v1' replaces them with prompts where NPCs act like Skyrim people instead of assistants: real emotions and grudges, clear rules for when to use actions, knowledge limited by role and hold, and voice rules for text-to-speech.
+                            Prompts edited on this tab are ignored while a non-default profile is selected (Skyrim only)."""
+        return ConfigValueSelection("prompt_profile", "Prompt Profile", description, DEFAULT_PROFILE, PROFILE_NAMES)
+
+    @staticmethod
+    def get_knowledge_scope_enabled_config_value() -> ConfigValue:
+        description = """Fills the {knowledge_scope} prompt variable: 1-3 rule-based sentences per NPC describing what that person plausibly knows and how they talk, based on their role (name, bio, voice type, equipment), race and hold.
+                            Has no effect unless the prompt contains {knowledge_scope}. No extra LLM call."""
+        return ConfigValueBool("knowledge_scope_enabled", "Knowledge Scope", description, True)
+

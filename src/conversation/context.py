@@ -10,6 +10,7 @@ from src.character_manager import Character
 from src.config.config_loader import ConfigLoader
 from src.llm.llm_client import LLMClient
 from src.config.definitions.game_definitions import GameEnum
+from src.knowledge_scope import build_knowledge_scope
 
 logger = utils.get_logger()
 
@@ -468,6 +469,7 @@ class Context:
         for content in removal_content:
             result = prompt.format(
                 player_name = player_name,
+                game = self.__game.display_name,  # {game} is an allowed prompt variable but was never passed (KeyError)
                 player_description = player_description,
                 player_equipment = player_equipment,
                 name=name,
@@ -485,7 +487,8 @@ class Context:
                 language=self.__language['language'], 
                 conversation_summary=content[1],
                 conversation_summaries=content[1],
-                actions = actions
+                actions = actions,
+                knowledge_scope = build_knowledge_scope(non_player_chars, location, getattr(self.__config, 'knowledge_scope_enabled', False)),
                 )
             if self.__client.is_too_long(result, self.TOKEN_LIMIT_PERCENT):
                 if content[0] != "":
