@@ -142,8 +142,16 @@ class STTDefinitions:
 
     @staticmethod
     def get_process_device_config_value() -> ConfigValue:
-        description = "Whether to run Whisper on your CPU or NVIDIA GPU (with CUDA installed) (only impacts faster_whisper option, no impact on whispercpp, which is controlled by your server)."
-        return ConfigValueSelection("process_device", "Whisper Process Device", description,"cpu",["cpu","cuda"], tags=[ConfigValueTag.advanced])
+        description = """Whether to run Whisper on your CPU, NVIDIA GPU (with CUDA installed) or Apple Silicon GPU (`mlx`, requires the mlx-whisper package) (only impacts faster_whisper option, no impact on whispercpp, which is controlled by your server).
+                        With `mlx`, `Whisper Model` sizes such as `small` or `large-v3-turbo` map to mlx-community models; any other value is used as a Hugging Face repo id."""
+        return ConfigValueSelection("process_device", "Whisper Process Device", description,"cpu",["cpu","cuda","mlx"], tags=[ConfigValueTag.advanced])
+
+    @staticmethod
+    def get_stt_filter_hallucinations_config_value() -> ConfigValue:
+        description = """Drop transcripts that are typical Whisper failures instead of player speech: the transcription prompt echoed back
+                        (eg a list of the NPC names in the conversation), the same word repeated over and over, or text in another script than the selected language.
+                        These usually come from silence or background noise."""
+        return ConfigValueBool("stt_filter_hallucinations", "Filter Whisper Hallucinations", description, False, tags=[ConfigValueTag.advanced])
     
     @staticmethod
     def get_moonshine_folder_config_value(is_hidden: bool = False) -> ConfigValue:

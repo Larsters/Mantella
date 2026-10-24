@@ -4,6 +4,7 @@ from faster_whisper import WhisperModel
 from src.config.config_loader import ConfigLoader
 from src.llm.client_base import ClientBase
 from src.stt.ptt_controller import PTTController
+from src.stt.fast_stt import MlxWhisper, clean_transcript
 import src.utils as utils
 import requests
 import json
@@ -52,6 +53,8 @@ class Transcriber:
         self.moonshine_model_path = os.path.join(self.moonshine_folder, self.full_moonshine_model)
         self.whisper_model = config.whisper_model
         self.process_device = config.whisper_process_device
+        self.filter_hallucinations = config.stt_filter_hallucinations
+        self.mlx_model: MlxWhisper | None = None
         self.listen_timeout = config.listen_timeout
         self.external_whisper_service = config.external_whisper_service
         self.whisper_service = config.whisper_url
@@ -101,7 +104,13 @@ class Transcriber:
             if self.stt_service != 'whisper':
                 logger.error("Moonshine selected but moonshine not installed, trying whisper")
 
-            if not self.external_whisper_service:
+            if not self.external_whisper_service and self.process_device == 'mlx':
+                try:
+                    self.mlx_model = MlxWhisper(self.whisper_model)
+                except Exception as e:
+                    logger.error(f'Could not run Whisper on the Apple GPU ({e}). Falling back to the CPU.')
+                    self.process_device = 'cpu'
+            if not self.external_whisper_service and self.process_device != 'mlx':
                 if self.process_device == 'cuda':
                     logger.error(f'''Depending on your NVIDIA CUDA version, setting the Whisper process device to `cuda` may cause errors! For more information, see here: https://github.com/SYSTRAN/faster-whisper#gpu''')
                     try:
@@ -177,13 +186,11 @@ class Transcriber:
 
     @utils.time_it
     def __generate_sync_client(self):
-        if self.__initial_client:
-            client = self.__initial_client
-            self.__initial_client = None # do not reuse the same client
-        else:
-            client = OpenAI(api_key=self.__api_key, base_url=self.whisper_url)
-
-        return client
+        # Keep one client (and its HTTP keep-alive connection) for the whole conversation:
+        # a new client per phrase pays a fresh TLS handshake every time
+        if not self.__initial_client:
+            self.__initial_client = OpenAI(api_key=self.__api_key, base_url=self.whisper_url, timeout=15, max_retries=1)
+        return self.__initial_client
     
 
     @utils.time_it
@@ -243,6 +250,17 @@ If you would prefer to run speech-to-text locally, please ensure the `Speech-to-
 
     @utils.time_it
     def whisper_transcribe(self, audio: np.ndarray, prompt: str):
+        text = self.__whisper_transcribe(audio, prompt)
+        if text and self.filter_hallucinations:
+            text = clean_transcript(text, prompt, self.language)
+        return text
+
+    def __whisper_transcribe(self, audio: np.ndarray, prompt: str):
+        if self.mlx_model: # local model on the Apple Silicon GPU
+            result_text = self.mlx_model.transcribe(audio, language=self.language, task=self.task, prompt=prompt)
+            if utils.clean_text(result_text) in self.__ignore_list: # common phrases hallucinated by Whisper
+                return ''
+            return result_text
         if self.transcribe_model: # local model
             segments, _ = self.transcribe_model.transcribe(audio, task=self.task, language=self.language, beam_size=5, vad_filter=False, initial_prompt=prompt)
             result_text = ' '.join(segment.text for segment in segments)
@@ -268,17 +286,18 @@ If you would prefer to run speech-to-text locally, please ensure the `Speech-to-
                 response_data = client.audio.transcriptions.create(model=self.whisper_model, language=self.language, file=audio_file, prompt=prompt)
             except Exception as e:
                 utils.play_error_sound()
-                if e.code in [404, 'model_not_found']:
+                if getattr(e, 'code', None) in [404, 'model_not_found']:
                     if self.whisper_service == 'OpenAI':
                         logger.error(f"Selected Whisper model '{self.whisper_model}' does not exist in the OpenAI service. Try changing 'Speech-to-Text'->'Model Size' to 'whisper-1' in the Mantella UI")
                     elif self.whisper_service == 'Groq':
                         logger.error(f"Selected Whisper model '{self.whisper_model}' does not exist in the Groq service. Try changing 'Speech-to-Text'->'Model Size' to one of the following models in the Mantella UI: https://console.groq.com/docs/speech-text#supported-models")
                     else:
                         logger.error(f"Selected Whisper model '{self.whisper_model}' does not exist in the selected service {self.whisper_service}. Try changing 'Speech-to-Text'->'Model Size' to a compatible model in the Mantella UI")
+                    input("Press Enter to exit.")
                 else:
+                    # a network hiccup must not freeze the server: drop this phrase and keep listening
                     logger.error(f'STT error: {e}')
-                input("Press Enter to exit.")
-            client.close()
+                return ''
             if utils.clean_text(response_data.text) in self.__ignore_list: # common phrases hallucinated by Whisper
                 return ''
             return response_data.text.strip()
