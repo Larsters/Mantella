@@ -216,6 +216,7 @@ class MantellaConfigValueDefinitionsNew:
         other_category.add_config_value(OtherDefinitions.get_port_config_value())
         other_category.add_config_value(OtherDefinitions.get_show_http_debug_messages_config_value())
         other_category.add_config_value(OtherDefinitions.get_advanced_logs_config_value())
+        other_category.add_config_value(OtherDefinitions.get_save_conversation_transcripts_config_value())
         other_category.add_config_value(OtherDefinitions.get_enable_telemetry_config_value())
         other_category.add_config_value(OtherDefinitions.get_telemetry_otlp_endpoint_config_value())
         other_category.add_config_value(OtherDefinitions.get_telemetry_protocol_config_value())

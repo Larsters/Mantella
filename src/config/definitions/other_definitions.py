@@ -100,6 +100,13 @@ class OtherDefinitions:
                         Useful for troubleshooting issues."""
         return ConfigValueBool("advanced_logs", "Advanced Logs", description, False, tags=[ConfigValueTag.advanced])
 
+    @staticmethod
+    def get_save_conversation_transcripts_config_value() -> ConfigValue:
+        description = """Save the full request (prompt, history, tools, parameters) and response (text, tool calls, timing, tokens) of every dialogue LLM call
+                        to My Games/Mantella/data/transcripts/<conversation id>.jsonl. Used by the offline model evals (python -m src.evals).
+                        Screenshots are never saved. Files contain everything said in conversations, so they can grow large."""
+        return ConfigValueBool("save_conversation_transcripts", "Save Conversation Transcripts", description, False, tags=[ConfigValueTag.advanced])
+
     #Telemetry
     @staticmethod
     def get_enable_telemetry_config_value() -> ConfigValue:

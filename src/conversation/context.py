@@ -13,6 +13,7 @@ from src.llm.llm_client import LLMClient
 from src.config.definitions.game_definitions import GameEnum
 from src.knowledge_scope import build_knowledge_scope
 from src.lore import lore_hooks
+import src.transcripts.recorder as transcript_recorder
 
 logger = utils.get_logger()
 
@@ -472,7 +473,7 @@ class Context:
         have_summaries_been_dropped = False
         logger.log(23, f'Maximum size of prompt is {self.__client.token_limit} x {self.TOKEN_LIMIT_PERCENT} = {int(round(self.__client.token_limit * self.TOKEN_LIMIT_PERCENT, 0))} tokens.')
         for content in removal_content:
-            result = prompt.format(
+            result = prompt.format(**transcript_recorder.capture_prompt_vars(dict( # W9: prompt vars into transcripts (no-op when off)
                 player_name = player_name,
                 game = self.__game.display_name,  # {game} is an allowed prompt variable but was never passed (KeyError)
                 player_description = player_description,
@@ -496,7 +497,7 @@ class Context:
                 knowledge_scope = build_knowledge_scope(non_player_chars, location, getattr(self.__config, 'knowledge_scope_enabled', False)),
                 relationship = relationship,
                 lore = lore_hooks.system_lore(self), # lore lookup (src/lore); "" when disabled
-                )
+                )))
             if self.__client.is_too_long(result, self.TOKEN_LIMIT_PERCENT):
                 if content[0] != "":
                     have_summaries_been_dropped = True
