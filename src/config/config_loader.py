@@ -242,6 +242,8 @@ class ConfigLoader:
                     self.moonshine_folder = ''
             self.whisper_model = self.__definitions.get_string_value("whisper_model_size")
             self.whisper_process_device = self.__definitions.get_string_value("process_device")
+            self.stt_filter_hallucinations = self.__definitions.get_bool_value("stt_filter_hallucinations")
+            self.piper_native = self.__definitions.get_bool_value("piper_native")
             self.stt_language = self.__definitions.get_string_value("stt_language")
             if (self.stt_language == 'default'):
                 self.stt_language = self.language
