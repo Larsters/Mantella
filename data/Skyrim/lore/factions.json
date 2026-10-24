@@ -1,0 +1,776 @@
+{
+  "attribution": "Notes paraphrased in our own words from the Unofficial Elder Scrolls Pages (UESP, https://en.uesp.net), licensed CC BY-SA 2.5. Each note lists the page it was drawn from in 'source'.",
+  "notes": [
+    {
+      "id": "companions",
+      "title": "The Companions",
+      "scope": "faction",
+      "aliases": [
+        "Companions",
+        "the Circle",
+        "Harbinger"
+      ],
+      "keywords": [
+        "Jorrvaskr",
+        "Ysgramor",
+        "warriors",
+        "mercenaries",
+        "honor",
+        "Kodlak",
+        "Aela",
+        "Vilkas",
+        "Farkas",
+        "Skjor",
+        "shield-brother",
+        "shield-sister",
+        "whelp"
+      ],
+      "places": [
+        "whiterun"
+      ],
+      "text": "The Companions are an old warrior guild based in Jorrvaskr in Whiterun, said to descend from Ysgramor's Five Hundred. They hire out their swords for honest work, have no leader in name, and are guided by the Harbinger, Kodlak Whitemane, and an inner Circle of veterans.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Companions"
+    },
+    {
+      "id": "companions_werewolves",
+      "title": "The Circle's secret",
+      "scope": "faction",
+      "aliases": [
+        "werewolves in Jorrvaskr",
+        "beast blood",
+        "Circle werewolves"
+      ],
+      "keywords": [
+        "lycanthropy",
+        "Hircine",
+        "Companions",
+        "blood",
+        "Underforge",
+        "cure"
+      ],
+      "places": [
+        "whiterun"
+      ],
+      "text": "The inner Circle of the Companions carries the blood of the beast: they are werewolves, a gift-turned-curse from a long-ago bargain with Hircine. Kodlak wants to cure himself and his brothers before they die, so their souls go to Sovngarde.",
+      "spoiler": true,
+      "gate": "Proving Honor",
+      "source": "https://en.uesp.net/wiki/Skyrim:Companions"
+    },
+    {
+      "id": "college_of_winterhold",
+      "title": "The College of Winterhold",
+      "scope": "faction",
+      "aliases": [
+        "College of Winterhold",
+        "the College",
+        "Arch-Mage",
+        "mages of Winterhold"
+      ],
+      "keywords": [
+        "magic",
+        "mages",
+        "Savos Aren",
+        "Tolfdir",
+        "Mirabelle",
+        "Ancano",
+        "Faralda",
+        "students",
+        "Eye of Magnus",
+        "Saarthal"
+      ],
+      "places": [
+        "winterhold"
+      ],
+      "text": "The College of Winterhold is Skyrim's school of magic, led by the Arch-Mage Savos Aren. Most Nords distrust it, and many in Winterhold blame it for the Great Collapse. A Thalmor advisor named Ancano has recently been placed at the College, which makes some members uneasy.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:College_of_Winterhold"
+    },
+    {
+      "id": "thieves_guild",
+      "title": "The Thieves Guild",
+      "scope": "faction",
+      "aliases": [
+        "Thieves Guild",
+        "the Guild",
+        "Ragged Flagon",
+        "Nightingales"
+      ],
+      "keywords": [
+        "thief",
+        "thieves",
+        "Brynjolf",
+        "Mercer Frey",
+        "Delvin",
+        "Vex",
+        "fence",
+        "Riften",
+        "Nocturnal",
+        "shadowmarks",
+        "bad luck"
+      ],
+      "places": [
+        "riften"
+      ],
+      "text": "The Thieves Guild works out of the Ragged Flagon beneath Riften, led by Mercer Frey, with Brynjolf as its smooth recruiter. Its fortunes have slipped badly in recent years and members joke that the Guild is cursed; it survives thanks to a quiet arrangement with Maven Black-Briar.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Thieves_Guild"
+    },
+    {
+      "id": "nightingales",
+      "title": "The Nightingales",
+      "scope": "faction",
+      "aliases": [
+        "Nightingale",
+        "Nightingales",
+        "Twilight Sepulcher"
+      ],
+      "keywords": [
+        "Nocturnal",
+        "Karliah",
+        "Gallus",
+        "Mercer betrayal",
+        "Skeleton Key"
+      ],
+      "places": [
+        "riften"
+      ],
+      "text": "The Nightingales are a secret trio of thieves sworn to the Daedric Prince Nocturnal, guarding her Twilight Sepulcher. Mercer Frey was one of them and betrayed them, murdering Gallus and stealing the Skeleton Key, which is the true cause of the Guild's bad luck.",
+      "spoiler": true,
+      "gate": "Trinity Restored",
+      "source": "https://en.uesp.net/wiki/Skyrim:Nightingales"
+    },
+    {
+      "id": "dark_brotherhood",
+      "title": "The Dark Brotherhood",
+      "scope": "faction",
+      "aliases": [
+        "Dark Brotherhood",
+        "the Brotherhood",
+        "Black Sacrament",
+        "Night Mother",
+        "Listener"
+      ],
+      "keywords": [
+        "assassins",
+        "Sithis",
+        "contract",
+        "murder",
+        "Astrid",
+        "Falkreath sanctuary",
+        "Dawnstar sanctuary",
+        "Aventus Aretino"
+      ],
+      "text": "The Dark Brotherhood is a guild of assassins who serve Sithis and the Night Mother. Anyone wanting someone dead can perform the Black Sacrament and pray they come. Most people think the Brotherhood was nearly wiped out years ago, and mentioning it aloud makes folk nervous.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Dark_Brotherhood"
+    },
+    {
+      "id": "stormcloaks",
+      "title": "The Stormcloaks",
+      "scope": "faction",
+      "aliases": [
+        "Stormcloaks",
+        "Stormcloak",
+        "rebels",
+        "rebellion",
+        "Skyrim for the Nords",
+        "Sons of Skyrim"
+      ],
+      "keywords": [
+        "Ulfric",
+        "Galmar",
+        "Windhelm",
+        "independence",
+        "Talos",
+        "blue",
+        "secession",
+        "uprising"
+      ],
+      "places": [
+        "windhelm",
+        "eastmarch"
+      ],
+      "text": "The Stormcloaks are the rebels following Ulfric Stormcloak, fighting to free Skyrim from the Empire and restore the worship of Talos. Supporters see them as patriots defending Nord ways; critics call them traitors and point to Windhelm's harsh treatment of Dunmer and Argonians.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Stormcloaks"
+    },
+    {
+      "id": "imperial_legion",
+      "title": "The Imperial Legion",
+      "scope": "faction",
+      "aliases": [
+        "Imperial Legion",
+        "the Legion",
+        "Imperial army",
+        "legionnaire",
+        "Legate"
+      ],
+      "keywords": [
+        "Tullius",
+        "Rikke",
+        "Hadvar",
+        "Castle Dour",
+        "Empire",
+        "Solitude",
+        "red",
+        "order",
+        "law",
+        "Imperials"
+      ],
+      "places": [
+        "solitude",
+        "haafingar"
+      ],
+      "text": "The Imperial Legion is the Empire's army, sent into Skyrim under General Tullius to crush the Stormcloak rebellion and keep the province in the Empire. Its supporters argue a united Empire is the only hope against the Thalmor, even if that means enduring the Talos ban for now.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Imperial_Legion"
+    },
+    {
+      "id": "empire",
+      "title": "The Empire",
+      "scope": "faction",
+      "aliases": [
+        "the Empire",
+        "Third Empire",
+        "Mede Empire",
+        "Emperor",
+        "Titus Mede II"
+      ],
+      "keywords": [
+        "Imperial",
+        "Cyrodiil",
+        "Mede",
+        "provinces",
+        "Septim",
+        "taxes"
+      ],
+      "text": "The Empire is ruled from the Imperial City in Cyrodiil by Emperor Titus Mede II of the Mede dynasty, which took the throne after the Septim line ended. Weakened by the Great War, it has already lost Hammerfell, Black Marsh and Elsweyr, and is fighting to keep Skyrim.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Third_Empire"
+    },
+    {
+      "id": "thalmor",
+      "title": "The Thalmor",
+      "scope": "faction",
+      "aliases": [
+        "Thalmor",
+        "Thalmor Justiciar",
+        "Justiciars",
+        "Aldmeri Dominion",
+        "the Dominion"
+      ],
+      "keywords": [
+        "High Elves",
+        "Altmer",
+        "Elenwen",
+        "Ondolemar",
+        "Talos ban",
+        "inquisitors",
+        "elves",
+        "Summerset",
+        "embassy",
+        "arrest",
+        "Talos",
+        "Talos worshippers"
+      ],
+      "text": "The Thalmor are the Altmer rulers of the Aldmeri Dominion, the elven empire that fought the Great War. Under the White-Gold Concordat their Justiciars roam Skyrim freely, arresting and 'questioning' anyone caught worshipping Talos. Nords of every side hate them.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Thalmor"
+    },
+    {
+      "id": "dawnguard",
+      "title": "The Dawnguard",
+      "scope": "faction",
+      "aliases": [
+        "Dawnguard",
+        "vampire hunters"
+      ],
+      "keywords": [
+        "Isran",
+        "Fort Dawnguard",
+        "crossbow",
+        "Vigilants",
+        "vampires",
+        "Sorine",
+        "Gunmar",
+        "Durak"
+      ],
+      "places": [
+        "the_rift"
+      ],
+      "text": "The Dawnguard is an old order of vampire hunters that Isran, a former Vigilant of Stendarr, has revived at Fort Dawnguard near Riften. With vampire attacks rising across Skyrim, he is calling for anyone who can fight, and favors crossbows over magic.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Dawnguard:Dawnguard"
+    },
+    {
+      "id": "volkihar",
+      "title": "Volkihar vampires",
+      "scope": "faction",
+      "aliases": [
+        "Volkihar",
+        "Volkihar clan",
+        "vampire lord",
+        "Lord Harkon"
+      ],
+      "keywords": [
+        "vampires",
+        "Castle Volkihar",
+        "Serana",
+        "Molag Bal",
+        "Tyranny of the Sun",
+        "prophecy"
+      ],
+      "text": "The Volkihar are an ancient clan of pure-blooded vampires led by Lord Harkon from Castle Volkihar. Harkon seeks an Elder Scroll prophecy to blot out the sun, so vampires need never fear daylight again.",
+      "spoiler": true,
+      "gate": "Dawnguard: Awakening",
+      "source": "https://en.uesp.net/wiki/Dawnguard:Volkihar_Clan"
+    },
+    {
+      "id": "greybeards",
+      "title": "The Greybeards",
+      "scope": "faction",
+      "aliases": [
+        "Greybeards",
+        "Grey Beards",
+        "Way of the Voice",
+        "Arngeir"
+      ],
+      "keywords": [
+        "High Hrothgar",
+        "Thu'um",
+        "shout",
+        "silence",
+        "Dragonborn",
+        "monks",
+        "meditation",
+        "Jurgen Windcaller"
+      ],
+      "places": [
+        "high_hrothgar"
+      ],
+      "text": "The Greybeards are monks of the Way of the Voice who live in silence at High Hrothgar, because their shouts are so powerful that speaking can kill. They teach that the Thu'um is for worship, not war. When they summon someone with a shout, all of Skyrim hears it.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Greybeards"
+    },
+    {
+      "id": "blades",
+      "title": "The Blades",
+      "scope": "faction",
+      "aliases": [
+        "Blades",
+        "Dragonguard",
+        "the Blades"
+      ],
+      "keywords": [
+        "Akaviri",
+        "katana",
+        "Emperor's bodyguards",
+        "dragon hunters",
+        "Thalmor hunted",
+        "Delphine",
+        "Esbern"
+      ],
+      "text": "The Blades were once the Emperors' bodyguards and spymasters, descended from the Akaviri Dragonguard who served the Dragonborn. The Thalmor hunted them nearly to extinction during and after the Great War, and most believe none survive.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Blades"
+    },
+    {
+      "id": "forsworn",
+      "title": "The Forsworn",
+      "scope": "faction",
+      "aliases": [
+        "Forsworn",
+        "Reachmen rebels",
+        "King in Rags",
+        "Madanach",
+        "briarheart"
+      ],
+      "keywords": [
+        "Reach",
+        "Markarth",
+        "Reachmen",
+        "hagravens",
+        "ambush",
+        "Old Gods",
+        "Markarth Incident",
+        "feathers",
+        "bone armor"
+      ],
+      "places": [
+        "markarth",
+        "the_reach"
+      ],
+      "text": "The Forsworn are Reachmen who reject Nord rule. They held Markarth until Ulfric drove them out, and now raid roads and farms from hilltop camps, clad in hide and bone and aided by hagravens. Markarth's Nords fear and hate them.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Forsworn"
+    },
+    {
+      "id": "forsworn_conspiracy",
+      "title": "The Forsworn Conspiracy",
+      "scope": "faction",
+      "aliases": [
+        "Forsworn Conspiracy",
+        "Madanach's orders"
+      ],
+      "keywords": [
+        "Cidhna Mine",
+        "Thonar",
+        "Silver-Blood",
+        "Madanach",
+        "murders",
+        "Weylin",
+        "Eltrys"
+      ],
+      "places": [
+        "markarth"
+      ],
+      "text": "The Forsworn attacks in Markarth are directed from inside Cidhna Mine by Madanach, the King in Rags. Thonar Silver-Blood keeps Madanach alive in exchange for a cut of control, so Markarth's richest family and its worst enemies are secretly bound together.",
+      "spoiler": true,
+      "gate": "The Forsworn Conspiracy",
+      "source": "https://en.uesp.net/wiki/Skyrim:The_Forsworn_Conspiracy"
+    },
+    {
+      "id": "silver_blood_family",
+      "title": "The Silver-Blood family",
+      "scope": "faction",
+      "aliases": [
+        "Silver-Blood",
+        "Silver-Bloods",
+        "Thonar",
+        "Thongvor",
+        "Betrid Silver-Blood",
+        "Treasury House"
+      ],
+      "keywords": [
+        "Markarth",
+        "silver mines",
+        "Cidhna Mine",
+        "money",
+        "power",
+        "corruption",
+        "Silver-Blood Inn"
+      ],
+      "places": [
+        "markarth"
+      ],
+      "text": "The Silver-Blood family owns Cidhna Mine, the Silver-Blood Inn and much of Markarth; sooner or later everyone there answers to them. Thonar runs the business, while his brother Thongvor loudly backs the Stormcloaks.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Silver-Blood_Family"
+    },
+    {
+      "id": "battle_born",
+      "title": "The Battle-Born clan",
+      "scope": "faction",
+      "aliases": [
+        "Battle-Born",
+        "Battle-Borns",
+        "Olfrid Battle-Born",
+        "Idolaf",
+        "Jon Battle-Born",
+        "Alfhild",
+        "Bergritte"
+      ],
+      "keywords": [
+        "Whiterun",
+        "Imperial supporters",
+        "feud",
+        "Gray-Mane",
+        "Battle-Born Farm",
+        "old money"
+      ],
+      "places": [
+        "whiterun"
+      ],
+      "text": "The Battle-Born are one of Whiterun's two oldest and richest clans, led by Olfrid Battle-Born. They loudly back the Empire and have a bitter, generations-long feud with the Gray-Manes that the civil war has made worse.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Battle-Born_Family"
+    },
+    {
+      "id": "gray_mane",
+      "title": "The Gray-Mane clan",
+      "scope": "faction",
+      "aliases": [
+        "Gray-Mane",
+        "Gray-Manes",
+        "Grey-Mane",
+        "Eorlund",
+        "Avulstein",
+        "Fralia",
+        "Olfina",
+        "Thorald"
+      ],
+      "keywords": [
+        "Whiterun",
+        "Stormcloak supporters",
+        "feud",
+        "Battle-Born",
+        "Skyforge",
+        "Thalmor prisoner"
+      ],
+      "places": [
+        "whiterun"
+      ],
+      "text": "The Gray-Manes are the other great clan of Whiterun, Stormcloak sympathizers who feud with the Battle-Borns. Eorlund Gray-Mane works the Skyforge, and the family believes their son Thorald, who went to fight for Ulfric, was taken alive by the Thalmor.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Gray-Mane_Family"
+    },
+    {
+      "id": "black_briar_family",
+      "title": "The Black-Briar family",
+      "scope": "faction",
+      "aliases": [
+        "Black-Briar",
+        "Black-Briars",
+        "Maven",
+        "Black-Briar Meadery",
+        "Hemming",
+        "Sibbi",
+        "Ingun"
+      ],
+      "keywords": [
+        "Riften",
+        "mead",
+        "Honningbrew",
+        "Dark Brotherhood",
+        "Thieves Guild",
+        "power",
+        "rivals"
+      ],
+      "places": [
+        "riften",
+        "the_rift"
+      ],
+      "text": "The Black-Briars of Riften make the most famous mead in Skyrim, and their matriarch Maven Black-Briar is the real power in the Rift. She has friends in the Thieves Guild and, rumor says, the Dark Brotherhood, and few people dare cross her openly.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Black-Briar_Family"
+    },
+    {
+      "id": "east_empire_company",
+      "title": "The East Empire Company",
+      "scope": "faction",
+      "aliases": [
+        "East Empire Company",
+        "EEC",
+        "East Empire Trading Company",
+        "Solitude warehouse",
+        "Windhelm docks"
+      ],
+      "keywords": [
+        "trade",
+        "shipping",
+        "Vittoria Vici",
+        "Orthus Endario",
+        "Raven Rock",
+        "pirates",
+        "Blood Horkers"
+      ],
+      "text": "The East Empire Company is the great Imperial trading company whose ships link Skyrim's ports with the rest of Tamriel. It keeps warehouses in Solitude, Windhelm and Dawnstar and runs the mine at Raven Rock; pirates like the Blood Horkers prey on its cargo.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:East_Empire_Company"
+    },
+    {
+      "id": "bards_college",
+      "title": "The Bards College",
+      "scope": "faction",
+      "aliases": [
+        "Bards College",
+        "Bard's College",
+        "Viarmo",
+        "Burning of King Olaf"
+      ],
+      "keywords": [
+        "Solitude",
+        "music",
+        "songs",
+        "lute",
+        "students",
+        "festival"
+      ],
+      "places": [
+        "solitude"
+      ],
+      "text": "The Bards College in Solitude trains the musicians, poets and storytellers of Skyrim under headmaster Viarmo. It used to burn King Olaf in effigy each year, but Elisif has banned the festival since Torygg's death.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Bards_College"
+    },
+    {
+      "id": "penitus_oculatus",
+      "title": "Penitus Oculatus",
+      "scope": "faction",
+      "aliases": [
+        "Penitus Oculatus",
+        "Emperor's Eye",
+        "Commander Maro"
+      ],
+      "keywords": [
+        "Emperor's bodyguards",
+        "intelligence",
+        "Dragon Bridge",
+        "Imperial agents"
+      ],
+      "text": "The Penitus Oculatus are the Emperor's bodyguards and intelligence agents, who replaced the Blades. Commander Maro leads them from an outpost at Dragon Bridge, and they take any threat against the Emperor very seriously.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Penitus_Oculatus"
+    },
+    {
+      "id": "vigilants_of_stendarr",
+      "title": "Vigilants of Stendarr",
+      "scope": "faction",
+      "aliases": [
+        "Vigilant",
+        "Vigilants",
+        "Vigilants of Stendarr",
+        "Hall of the Vigilant"
+      ],
+      "keywords": [
+        "daedra hunters",
+        "Stendarr",
+        "vampires",
+        "werewolves",
+        "witches",
+        "zealots",
+        "Daedric artifacts"
+      ],
+      "text": "The Vigilants of Stendarr are a militant order that hunts Daedra worshippers, vampires, werewolves and witches across Skyrim from the Hall of the Vigilant near Dawnstar. They are respected by many, but some find them zealous and quick to judge.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Vigilants_of_Stendarr"
+    },
+    {
+      "id": "silver_hand",
+      "title": "The Silver Hand",
+      "scope": "faction",
+      "aliases": [
+        "Silver Hand",
+        "werewolf hunters"
+      ],
+      "keywords": [
+        "werewolves",
+        "Companions",
+        "Fragments of Wuuthrad",
+        "Gallows Rock",
+        "Krev the Skinner"
+      ],
+      "text": "The Silver Hand are brutal werewolf hunters who operate from old forts across Skyrim. They hate the Companions above all and are little better than bandits to most people.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Silver_Hand"
+    },
+    {
+      "id": "jarls_and_courts",
+      "title": "Jarls, thanes and housecarls",
+      "scope": "topic",
+      "aliases": [
+        "Jarl",
+        "thane",
+        "housecarl",
+        "steward",
+        "court wizard",
+        "Moot"
+      ],
+      "keywords": [
+        "hold",
+        "rule",
+        "honor",
+        "sworn",
+        "carry your burdens",
+        "nobility",
+        "title",
+        "rules",
+        "ruler",
+        "in charge",
+        "lord"
+      ],
+      "text": "Each hold is ruled by a Jarl, advised by a steward, a court wizard and a sworn housecarl who guards them. A Jarl may name trusted heroes as thanes, who are given their own housecarl, a sworn bodyguard who protects them with their life.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Thane"
+    },
+    {
+      "id": "bandits",
+      "title": "Bandits",
+      "scope": "faction",
+      "aliases": [
+        "bandit",
+        "bandits",
+        "highwaymen"
+      ],
+      "keywords": [
+        "robbers",
+        "toll",
+        "camps",
+        "forts",
+        "bounty",
+        "raiders",
+        "outlaws"
+      ],
+      "text": "With the Legion and the Stormcloaks busy fighting each other, bandits have spread across Skyrim, holding old forts, mines and barrows and robbing travellers on the roads. Jarls post bounties on the worst gangs.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Bandits"
+    },
+    {
+      "id": "khajiit_caravans",
+      "title": "Khajiit caravans",
+      "scope": "faction",
+      "aliases": [
+        "Khajiit caravan",
+        "caravans",
+        "Ri'saad",
+        "Ahkari",
+        "Ma'dran"
+      ],
+      "keywords": [
+        "traders",
+        "not allowed in cities",
+        "skooma",
+        "moon sugar",
+        "Khajiit"
+      ],
+      "text": "Khajiit traders travel Skyrim in caravans led by Ri'saad, Ahkari and Ma'dran, camping outside the major cities because most Nord Jarls will not let them inside the walls. Many Nords suspect them of thievery and skooma smuggling.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Khajiit_Caravans"
+    },
+    {
+      "id": "psijic_order",
+      "title": "The Psijic Order",
+      "scope": "faction",
+      "aliases": [
+        "Psijic",
+        "Psijics",
+        "Psijic Order",
+        "Artaeum",
+        "Quaranir"
+      ],
+      "keywords": [
+        "monks",
+        "magic",
+        "Eye of Magnus",
+        "visions",
+        "mysterious"
+      ],
+      "text": "The Psijic Order is an ancient and secretive brotherhood of mystics from the vanished isle of Artaeum. They appear only rarely in history, usually when some great magical danger is stirring.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Psijic_Order"
+    },
+    {
+      "id": "dragon_cult",
+      "title": "The Dragon Cult",
+      "scope": "faction",
+      "aliases": [
+        "Dragon Cult",
+        "dragon priest",
+        "dragon priests",
+        "Konahrik"
+      ],
+      "keywords": [
+        "masks",
+        "ancient Nords",
+        "worship dragons",
+        "Labyrinthian",
+        "Forelhost",
+        "Bromjunaar"
+      ],
+      "text": "In the Merethic Era the ancient Nords worshipped the dragons as gods, and dragon priests ruled in their name. After the people rebelled and the dragons fell, the priests were entombed in the barrows, where their masked corpses are said to still guard their lairs.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Dragon_Cult"
+    }
+  ]
+}

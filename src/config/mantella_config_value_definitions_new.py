@@ -9,6 +9,7 @@ from src.config.definitions.language_definitions import LanguageDefinitions
 from src.config.definitions.llm_definitions import LLMDefinitions
 from src.config.definitions.other_definitions import OtherDefinitions
 from src.config.definitions.bio_generation_definitions import BioGenerationDefinitions
+from src.config.definitions.lore_definitions import LoreDefinitions
 from src.config.definitions.startup_definitions import StartupDefinitions
 from src.config.definitions.prompt_definitions import PromptDefinitions
 from src.config.definitions.stt_definitions import STTDefinitions
@@ -218,6 +219,11 @@ class MantellaConfigValueDefinitionsNew:
         other_category.add_config_value(OtherDefinitions.get_enable_telemetry_config_value())
         other_category.add_config_value(OtherDefinitions.get_telemetry_otlp_endpoint_config_value())
         other_category.add_config_value(OtherDefinitions.get_telemetry_protocol_config_value())
+        other_category.add_config_value(LoreDefinitions.get_lore_enabled_config_value())
+        other_category.add_config_value(LoreDefinitions.get_lore_per_turn_config_value())
+        other_category.add_config_value(LoreDefinitions.get_lore_max_notes_config_value())
+        other_category.add_config_value(LoreDefinitions.get_lore_max_tokens_config_value())
+        other_category.add_config_value(LoreDefinitions.get_lore_allow_spoilers_config_value())
         # other_category.add_config_value(OtherDefinitions.get_debugging_config_value())
         # other_category.add_config_value(OtherDefinitions.get_play_audio_from_script_config_value())
         # other_category.add_config_value(OtherDefinitions.get_debugging_npc_config_value())
