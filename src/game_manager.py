@@ -20,6 +20,7 @@ from src.stt.stt import Transcriber
 from src.actions.function_manager import FunctionManager
 from src.random_llm_selector import RandomLLMSelector, LLMSelection
 from src.llm.client_base import ClientBase
+from src.bio_generation import create_bio_generator, location_from_request
 
 logger = utils.get_logger()
 
@@ -51,6 +52,7 @@ class GameStateManager:
         self.__should_reload: bool = False
         self.__chat_manager.clear_per_character_client_cache()
         self.__random_selector = RandomLLMSelector()
+        self.__bio_generator = create_bio_generator(game, config, summary_client or client) # W7: None unless bio_generation_enabled
 
 
     @utils.time_it
@@ -288,6 +290,8 @@ class GameStateManager:
                         actor: Character | None = self.load_character(actorJson)                
                         if actor:
                             actors_in_json.append(actor)
+                if self.__bio_generator: # W7: generated bios for NPCs with missing / weak / shared bios
+                    self.__bio_generator.apply(actors_in_json, self.__talk.context.world_id, location_from_request(json, self.__talk.context.location))
                 self.__talk.add_or_update_character(actors_in_json)
             
             location = None
