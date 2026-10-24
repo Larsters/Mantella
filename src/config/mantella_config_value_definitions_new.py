@@ -15,6 +15,7 @@ from src.config.definitions.tts_definitions import TTSDefinitions
 from src.config.definitions.vision_definitions import VisionDefinitions
 from src.config.definitions.action_definitions import ActionDefinitions
 from src.config.definitions.model_profile_definitions import ModelProfileDefinitions
+from src.config.definitions.companion_definitions import CompanionDefinitions
 import sys
 
 
@@ -175,6 +176,13 @@ class MantellaConfigValueDefinitionsNew:
         startup_category.add_config_value(StartupDefinitions.get_play_startup_sound_config_value())
         startup_category.add_config_value(StartupDefinitions.get_remove_mei_folders_config_value())
         result.add_base_group(startup_category)
+
+        companion_category = ConfigValueGroup("Companion", "Companion", "Opt-in self-aware companion (eg Lydia) who knows the real player from about_me.txt.", on_value_change_callback)
+        companion_category.add_config_value(CompanionDefinitions.get_companion_enabled_config_value())
+        companion_category.add_config_value(CompanionDefinitions.get_companion_names_config_value())
+        companion_category.add_config_value(CompanionDefinitions.get_companion_about_me_path_config_value())
+        companion_category.add_config_value(CompanionDefinitions.get_companion_group_memories_config_value())
+        result.add_base_group(companion_category)
 
         profile_category = ConfigValueGroup("Profiles", "Profiles", "Profile settings.", on_value_change_callback)
         profile_category.add_config_value(ModelProfileDefinitions.get_apply_model_profiles_config_value())

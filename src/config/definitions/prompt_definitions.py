@@ -27,7 +27,8 @@ class PromptDefinitions:
                                 "language", 
                                 "conversation_summary",
                                 "conversation_summaries",
-                                "actions"]
+                                "actions",
+                                "about_player"]
     
     ALLOWED_PROMPT_VARIABLES_RADIANT = [
                                 "game",

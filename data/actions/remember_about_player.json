@@ -1,0 +1,26 @@
+{
+    "identifier": "mantella_remember_about_player",
+    "name": "RememberAboutPlayer",
+    "description": "Save one new, lasting fact about the REAL person playing the game (not their in-game character) to your long-term notes about them. Use it when they share something personal that is worth remembering next time: their name, work, people in their life, interests, plans, preferences, or how they want you to talk. Do not use it for small talk, in-game events, or things you already know.",
+    "note": "Server-side tool (src/companion_profile.py via src/actions/server_tools.py): appends to about_me.txt in the Mantella user folder, never sent to the game. Offered only when companion_enabled is on and the player talks one-on-one with the companion.",
+    "key": "RememberAboutPlayer",
+    "parameters": {
+        "fact": {
+            "type": "string",
+            "description": "One short third-person line using their name or 'they' (never guess gender), e.g. 'Works night shifts as a nurse.' or 'Has a sister called Mia in Hamburg.'"
+        }
+    },
+    "required": [
+        "fact"
+    ],
+    "allowed_games": [
+        "skyrim",
+        "Fallout4"
+    ],
+    "requires_response": false,
+    "is-interrupting": false,
+    "allow_repeat": true,
+    "one-on-one": true,
+    "multi-npc": false,
+    "radiant": false
+}

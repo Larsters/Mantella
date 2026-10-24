@@ -10,6 +10,7 @@ from src.character_manager import Character
 from src.config.config_loader import ConfigLoader
 from src.llm.llm_client import LLMClient
 from src.config.definitions.game_definitions import GameEnum
+from src import companion_profile
 
 logger = utils.get_logger()
 
@@ -39,6 +40,7 @@ class Context:
         self.__have_actors_changed: bool = False
         self.__game: GameEnum = config.game
         self.__prev_nearby_npc_names: list[str] = []  # Cache for nearby NPC names
+        companion_profile.configure(config)  # [companion]
 
         self.__prev_location: str | None = None
         if self.__game.base_game == GameEnum.FALLOUT4:
@@ -456,7 +458,11 @@ class Context:
         else:
             self.__prev_game_time = None, time_group
         non_player_chars = self.__npcs_in_conversation.get_non_player_characters()
-        conversation_summaries = self.__rememberer.get_prompt_text(non_player_chars, self.__world_id)
+        # [companion] Opt-in self-aware companion: own one-on-one prompt + {about_player} (private, one-on-one only);
+        # shared group/radiant prompts leave out the companion's private memory summaries.
+        prompt = companion_profile.select_prompt(prompt, self.__npcs_in_conversation, self.__game)
+        about_player = companion_profile.about_player_text(self.__npcs_in_conversation)
+        conversation_summaries = self.__rememberer.get_prompt_text(companion_profile.characters_for_shared_memories(non_player_chars), self.__world_id)
         
         # Only include legacy action prompts if advanced actions are disabled
         actions = self.__get_action_texts(actions_for_prompt) if not self.__config.advanced_actions_enabled else ""
@@ -485,7 +491,8 @@ class Context:
                 language=self.__language['language'], 
                 conversation_summary=content[1],
                 conversation_summaries=content[1],
-                actions = actions
+                actions = actions,
+                about_player = about_player,
                 )
             if self.__client.is_too_long(result, self.TOKEN_LIMIT_PERCENT):
                 if content[0] != "":
