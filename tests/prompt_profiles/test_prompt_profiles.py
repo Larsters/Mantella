@@ -18,7 +18,7 @@ CONTEXT_FORMAT_KWARGS = {
     "player_name", "game", "player_description", "player_equipment", "name", "names", "names_w_player",
     "bio", "bios", "trust", "equipment", "location", "weather", "time", "current_day", "time_group",
     "language", "conversation_summary", "conversation_summaries", "actions", "knowledge_scope", "relationship", "lore",
-    "speech_flavor",
+    "speech_flavor", "about_player",
 }
 
 NARRATION_SETTINGS = [None, *list(NarrationHandlingEnum)]

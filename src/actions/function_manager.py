@@ -6,6 +6,8 @@ from src.characters_manager import Characters
 from src.conversation.action import Action
 from src.games.gameable import Gameable
 from src import utils
+from src.actions import server_tools
+import src.companion_profile  # noqa: F401  registers the RememberAboutPlayer server tool
 
 logger = utils.get_logger()
 
@@ -119,6 +121,12 @@ class FunctionManager:
                                         logger.warning(f"Skipping action '{identifier}' - could not resolve '{param_value}' to {resolve_type} ID")
                                         validated_args = None
                                         break
+
+                    # [server tools] Executed by the server (eg RememberAboutPlayer), never sent to the game
+                    if server_tools.is_server_tool(identifier):
+                        if validated_args is not None:
+                            server_tools.run(identifier, validated_args, characters, tool_call.get('id', ''))
+                        continue
 
                     # Only add the parsed tool if validation didn't fail
                     if validated_args is not None:
@@ -307,6 +315,10 @@ class FunctionManager:
             else:
                 if not action.get('one_on_one', action.get('one-on-one', False)):
                     continue
+
+            # [server tools] Server-side tools decide per conversation whether they are offered
+            if not server_tools.is_available(action['identifier'], context):
+                continue
 
             # Create OpenAI tool definition
             tool = {

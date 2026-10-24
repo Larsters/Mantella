@@ -32,7 +32,8 @@ class PromptDefinitions:
                                 "knowledge_scope",
                                 "relationship",
                                 "lore",
-                                "speech_flavor"]
+                                "speech_flavor",
+                                "about_player"]
     
     ALLOWED_PROMPT_VARIABLES_RADIANT = [
                                 "game",
