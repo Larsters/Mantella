@@ -18,6 +18,7 @@ from src.telemetry.telemetry import create_span_from_thread
 from src.actions.function_manager import FunctionManager
 from src.llm.claude_cache_connector import ClaudeCacheConnector
 import src.usage_logger as usage_logger
+import src.transcripts.recorder as transcript_recorder
 
 logger = utils.get_logger()
 
@@ -260,6 +261,7 @@ class ClientBase(AIClient):
                 usage_content = ''
                 accumulated_tool_calls = {}
                 openai_messages = []
+                transcript = transcript_recorder.NULL_TURN
                 try:
                     # Prepare the messages including the image if provided
                     vision_hints = ''
@@ -313,6 +315,7 @@ class ClientBase(AIClient):
                         request_params["stream_options"] = {"include_usage": True}
                     usage_start_time = time.time()
                     usage_content = ''
+                    transcript = transcript_recorder.start_turn(self, self.model_name, self._base_url, openai_messages, request_params, is_multi_npc)
 
                     async for chunk in await async_client.chat.completions.create(
                         model=self.model_name, 
@@ -325,7 +328,8 @@ class ClientBase(AIClient):
                         try:
                             if chunk and chunk.choices and chunk.choices[0].delta:
                                 delta = chunk.choices[0].delta
-                                
+                                if delta.content or delta.tool_calls:
+                                    transcript.mark_first_token()
                                 # Handle regular content
                                 if delta.content:
                                     usage_content += delta.content
@@ -357,11 +361,13 @@ class ClientBase(AIClient):
                             logger.error(f"LLM API Connection Error: {e}")
                             break
                     
+                    transcript.completed = True
                     # After streaming completes, yield any accumulated tool calls
                     if accumulated_tool_calls:
                         tool_calls_list = [accumulated_tool_calls[i] for i in sorted(accumulated_tool_calls.keys())]
                         yield ("tool_calls", tool_calls_list)
                 except Exception as e:
+                    transcript.fail(e)
                     utils.play_error_sound()
                     if isinstance(e, APIConnectionError):
                         if e.code in [401, 'invalid_api_key']: # incorrect API key
@@ -391,6 +397,7 @@ class ClientBase(AIClient):
                                          time.time() - usage_start_time, estimated=estimated,
                                          vision=any(isinstance(m, dict) and isinstance(m.get('content'), list) and any(isinstance(part, dict) and part.get('type') == 'image_url' for part in m['content']) for m in openai_messages),
                                          tool_calls=[t['function']['name'] for t in accumulated_tool_calls.values()] or None)
+                        transcript.finish(usage_content, [accumulated_tool_calls[i] for i in sorted(accumulated_tool_calls)], usage, estimated)
                     if async_client:
                         await async_client.close()
 

@@ -12,6 +12,7 @@ from src.config.config_json_writer import ConfigJsonWriter
 from src.config.config_file_writer import ConfigFileWriter
 from src.config.types.config_value_string import ConfigValueString
 import src.utils as utils
+import src.transcripts.recorder as transcript_recorder
 from pathlib import Path
 import json
 import urllib
@@ -340,6 +341,8 @@ LLM parameter list must be valid JSON""")
             self.show_http_debug_messages: bool = self.__definitions.get_bool_value("show_http_debug_messages")
 
             self.advanced_logs = self.__definitions.get_bool_value("advanced_logs")
+            self.save_conversation_transcripts: bool = self.__definitions.get_bool_value("save_conversation_transcripts")
+            transcript_recorder.configure(self.save_conversation_transcripts, self.save_folder)
 
             self.save_audio_data_to_character_folder = self.__definitions.get_bool_value("save_audio_data_to_character_folder")
 
