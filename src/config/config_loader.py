@@ -334,6 +334,12 @@ LLM parameter list must be valid JSON""")
             self.player_voice_model: str = self.__definitions.get_string_value("player_voice_model")
             self.conversation_summary_enabled = self.__definitions.get_bool_value("conversation_summary_enabled")
             self.enable_character_tag_reading: bool = self.__definitions.get_bool_value("enable_character_tag_reading")
+            # Generated bios (src/bio_generation)
+            self.bio_generation_enabled: bool = self.__definitions.get_bool_value("bio_generation_enabled")
+            self.bio_generation_scope: str = self.__definitions.get_string_value("bio_generation_scope")
+            self.bio_generation_min_words: int = self.__definitions.get_int_value("bio_generation_min_words")
+            self.bio_generation_wait_seconds: float = self.__definitions.get_float_value("bio_generation_wait_seconds")
+            self.bio_generation_model: str = self.__definitions.get_string_value("bio_generation_model")
 
             #HTTP
             self.port = self.__definitions.get_int_value("port")
