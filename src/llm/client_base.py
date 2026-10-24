@@ -19,6 +19,7 @@ from src.actions.function_manager import FunctionManager
 from src.llm.claude_cache_connector import ClaudeCacheConnector
 import src.usage_logger as usage_logger
 from src.llm import model_capabilities
+import src.runtime_settings as runtime_settings
 
 logger = utils.get_logger()
 
@@ -100,6 +101,8 @@ class ClientBase(AIClient):
 
     def _should_enable_vision(self) -> bool:
         """Determine if vision should be enabled for this LLM call"""
+        if runtime_settings.prepare_vision(self) is False: # Control Center live vision toggle
+            return False
         # Vision in always-on mode (Vision enabled and vision action is inactive)
         if self._vision_mode == VisionMode.ALWAYS_ON:
             return True
@@ -192,6 +195,7 @@ class ClientBase(AIClient):
                 request_params = self._request_params
             else:
                 request_params: dict[str, Any] = {}
+            model_name, request_params = runtime_settings.resolve_request(usage_logger.call_type_for(self), self.model_name, request_params) # Control Center live overrides
 
             # Apply Claude cache breakpoint after all message transformations
             if self._caching_enabled and self._claude_cache.is_applicable(self._base_url, self._model_name):
@@ -200,15 +204,15 @@ class ClientBase(AIClient):
                 except Exception as e:
                     logger.debug(f"Claude caching transform failed: {e}")
 
-            request_params = model_capabilities.adapt_request_params(self.model_name, request_params, self._base_url)
+            request_params = model_capabilities.adapt_request_params(model_name, request_params, self._base_url) # W3 adapter, after W4 live overrides (model may be overridden)
             try:
                 start_time = time.time()
                 chat_completion = sync_client.chat.completions.create(
-                    model=self.model_name,
+                    model=model_name,
                     messages=openai_messages,
                     **request_params,
                 )
-                usage_logger.log(usage_logger.call_type_for(self), self.model_name, self._base_url,
+                usage_logger.log(usage_logger.call_type_for(self), model_name, self._base_url,
                                  getattr(chat_completion, 'usage', None), time.time() - start_time)
             except RateLimitError:
                 logger.warning('Could not connect to LLM API, retrying in 5 seconds...')
@@ -254,8 +258,9 @@ class ClientBase(AIClient):
                     request_params = self._request_params.copy() # copy of self._request_params to allow temporary override
                 else:
                     request_params: dict[str, Any] = {}
+                model_name, request_params = runtime_settings.resolve_request(usage_logger.call_type_for(self), self.model_name, request_params) # Control Center live overrides
                 if is_multi_npc: # override max_tokens to be at least 250 in radiant / multi-NPC conversations
-                    request_params["max_tokens"] = max(self.max_tokens_param, 250)
+                    request_params["max_tokens"] = max(request_params.get("max_tokens", 250), 250)
                 async_client = None
                 usage = None
                 usage_start_time = None
@@ -313,12 +318,12 @@ class ClientBase(AIClient):
 
                     if not self._is_local:
                         request_params["stream_options"] = {"include_usage": True}
-                    request_params = model_capabilities.adapt_request_params(self.model_name, request_params, self._base_url)
+                    request_params = model_capabilities.adapt_request_params(model_name, request_params, self._base_url) # W3 adapter, after W4 live overrides (model may be overridden)
                     usage_start_time = time.time()
                     usage_content = ''
 
                     async for chunk in await async_client.chat.completions.create(
-                        model=self.model_name, 
+                        model=model_name, 
                         messages=openai_messages, 
                         stream=True,
                         **request_params,
@@ -390,7 +395,7 @@ class ClientBase(AIClient):
                                 usage = {'prompt_tokens': self.get_count_tokens(messages), 'completion_tokens': self.get_count_tokens(usage_content) if usage_content else 0}
                             except Exception:
                                 usage = None
-                        usage_logger.log(usage_logger.call_type_for(self), self.model_name, self._base_url, usage,
+                        usage_logger.log(usage_logger.call_type_for(self), model_name, self._base_url, usage,
                                          time.time() - usage_start_time, estimated=estimated,
                                          vision=any(isinstance(m, dict) and isinstance(m.get('content'), list) and any(isinstance(part, dict) and part.get('type') == 'image_url' for part in m['content']) for m in openai_messages),
                                          tool_calls=[t['function']['name'] for t in accumulated_tool_calls.values()] or None)

@@ -35,6 +35,7 @@ from src.telemetry.telemetry import create_span_from_thread
 from src.games.gameable import Gameable
 from typing import Callable
 import src.usage_logger as usage_logger
+import src.runtime_settings as runtime_settings
 
 logger = utils.get_logger()
 
@@ -273,6 +274,7 @@ class ChatManager:
             self.__is_first_sentence = True
             is_multi_npc = characters.contains_multiple_npcs()
             max_response_sentences = self.__config.max_response_sentences_single if not is_multi_npc else self.__config.max_response_sentences_multi
+            max_response_sentences = runtime_settings.max_response_sentences(is_multi_npc, max_response_sentences, active_character.name) # Control Center live override
             max_retries = 5
             retries = 0
 

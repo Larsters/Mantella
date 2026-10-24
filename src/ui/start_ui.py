@@ -29,6 +29,7 @@ class StartUI(routeable):
                 gr.HTML("""
                     <div class="custom-footer">
                         <a href="https://art-from-the-machine.github.io/Mantella/" target="_blank">Mantella Installation Guide</a>
+                        &nbsp;·&nbsp; <a href="/control" target="_blank">Control Center (live tuning &amp; spend)</a>
                     </div>
                 """)
         return main_block
