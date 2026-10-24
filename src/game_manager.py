@@ -9,6 +9,7 @@ from src.output_manager import ChatManager
 from src.remember.remembering import Remembering
 from src.remember.summaries import Summaries
 from src import relationships
+from src import memory_checkpoint
 from src.config.config_loader import ConfigLoader
 from src.llm.llm_client import LLMClient
 from src.llm.summary_client import SummaryLLMClient
@@ -44,6 +45,7 @@ class GameStateManager:
         self.__chat_manager: ChatManager = chat_manager
         self.__rememberer: Remembering = Summaries(game, config, client, language_info['language'], summary_client)
         self.__rememberer = relationships.create_rememberer(self.__rememberer, game, config, summary_client or client, language_info['language'])  # NPC relationships (off by default)
+        self.__rememberer = memory_checkpoint.create_rememberer(self.__rememberer, game, config)  # crash-safe memory checkpoints (off by default)
         self.__talk: Conversation | None = None
         self.__mic_input: bool = False
         self.__mic_ptt: bool = False # push-to-talk

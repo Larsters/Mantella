@@ -21,6 +21,7 @@ from src.config.definitions.action_definitions import ActionDefinitions
 from src.config.definitions.model_profile_definitions import ModelProfileDefinitions
 from src.config.definitions.relationship_definitions import RelationshipDefinitions
 from src.config.definitions.trust_definitions import TrustDefinitions
+from src.config.definitions.memory_checkpoint_definitions import MemoryCheckpointDefinitions
 from src.config.definitions.companion_definitions import CompanionDefinitions
 import sys
 
@@ -222,6 +223,10 @@ class MantellaConfigValueDefinitionsNew:
         other_category.add_config_value(RelationshipDefinitions.get_relationship_bystander_records_config_value())
         other_category.add_config_value(TrustDefinitions.get_trust_and_honesty_enabled_config_value())
         other_category.add_config_value(TrustDefinitions.get_trust_tool_model_context_config_value())
+        other_category.add_config_value(MemoryCheckpointDefinitions.get_memory_checkpoint_enabled_config_value())
+        other_category.add_config_value(MemoryCheckpointDefinitions.get_memory_checkpoint_every_n_turns_config_value())
+        other_category.add_config_value(MemoryCheckpointDefinitions.get_memory_checkpoint_idle_minutes_config_value())
+        other_category.add_config_value(MemoryCheckpointDefinitions.get_memory_checkpoint_recover_on_startup_config_value())
         other_category.add_config_value(OtherDefinitions.get_enable_character_tag_reading_config_value())
         other_category.add_config_value(BioGenerationDefinitions.get_bio_generation_enabled_config_value())
         other_category.add_config_value(BioGenerationDefinitions.get_bio_generation_scope_config_value())
