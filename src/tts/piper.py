@@ -1,3 +1,4 @@
+import platform
 from src.config.config_loader import ConfigLoader
 from src.tts.ttsable import TTSable
 import subprocess
@@ -222,10 +223,17 @@ class Piper(TTSable):
     def _run_piper(self):
         try:
             command = self.__piper_path / 'piper.exe'
+            popen_env = None
+            if platform.system() != "Windows":
+                # macOS/Linux: run Mantella's Windows Piper build through Wine, in a dedicated prefix
+                wine = os.environ.get('MANTELLA_WINE', os.path.expanduser('~/Games/skyrim/wine/bin/wine'))
+                popen_env = dict(os.environ, WINEPREFIX=os.environ.get('MANTELLA_WINEPREFIX', os.path.expanduser('~/Games/mantella-wine')), WINEDEBUG='-all')
+                command = [wine, str(command)]
 
             self.process = subprocess.Popen(
                 command, 
                 cwd=self._voiceline_folder, 
+                env=popen_env, 
                 stdin=subprocess.PIPE, 
                 stdout=subprocess.PIPE, 
                 stderr=subprocess.PIPE, 
