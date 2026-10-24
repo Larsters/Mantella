@@ -15,6 +15,7 @@ from src.config.definitions.tts_definitions import TTSDefinitions
 from src.config.definitions.vision_definitions import VisionDefinitions
 from src.config.definitions.action_definitions import ActionDefinitions
 from src.config.definitions.model_profile_definitions import ModelProfileDefinitions
+from src.config.definitions.relationship_definitions import RelationshipDefinitions
 import sys
 
 
@@ -168,6 +169,7 @@ class MantellaConfigValueDefinitionsNew:
         prompts_category.add_config_value(PromptDefinitions.get_memory_prompt_config_value())
         prompts_category.add_config_value(PromptDefinitions.get_memory_prompt_datetime_prefix_config_value())
         prompts_category.add_config_value(PromptDefinitions.get_resummarize_prompt_config_value())
+        prompts_category.add_config_value(RelationshipDefinitions.get_relationship_update_prompt_config_value())
         prompts_category.add_config_value(PromptDefinitions.get_vision_prompt_config_value())
         prompts_category.add_config_value(PromptDefinitions.get_function_llm_prompt_config_value())
         prompts_category.add_config_value(PromptDefinitions.get_radiant_start_prompt_config_value())
@@ -198,6 +200,10 @@ class MantellaConfigValueDefinitionsNew:
         other_category.add_config_value(OtherDefinitions.get_voice_player_input())
         other_category.add_config_value(OtherDefinitions.get_player_voice_model())
         other_category.add_config_value(OtherDefinitions.get_conversation_summary_enabled_config_value())
+        other_category.add_config_value(RelationshipDefinitions.get_relationship_tracking_enabled_config_value())
+        other_category.add_config_value(RelationshipDefinitions.get_relationship_affects_trust_config_value())
+        other_category.add_config_value(RelationshipDefinitions.get_relationship_token_budget_config_value())
+        other_category.add_config_value(RelationshipDefinitions.get_relationship_opinion_decay_config_value())
         other_category.add_config_value(OtherDefinitions.get_enable_character_tag_reading_config_value())
         other_category.add_config_value(OtherDefinitions.get_save_audio_data_to_character_folder_config_value())
         other_category.add_config_value(OtherDefinitions.get_port_config_value())
