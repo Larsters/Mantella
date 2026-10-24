@@ -13,7 +13,9 @@ from __future__ import annotations
 
 import copy
 import json
+import os
 import threading
+from datetime import datetime
 from typing import Any, Callable
 
 import src.utils as utils
@@ -31,6 +33,10 @@ LLM_KEYS = ('model', 'temperature', 'top_p', 'max_tokens', 'frequency_penalty', 
 REASONING_EFFORTS = ('none', 'minimal', 'low', 'medium', 'high', 'xhigh')
 GENERAL_KEYS = ('max_response_sentences_single', 'max_response_sentences_multi', 'vision_enabled', 'disabled_actions')
 NPC_KEYS = LLM_KEYS + ('max_response_sentences_single', 'max_response_sentences_multi')
+
+# Live overrides survive restarts when config `control_center_persist_overrides` is on (per-NPC ones never do)
+PERSIST_RELATIVE_PATH = os.path.join('data', 'control_center', 'live_overrides.json')
+PERSIST_SCHEMA_VERSION = 1
 
 # Clients that are not in usage_logger's call-type map (per-character ClientBase instances) count as dialogue
 _CALL_TYPE_ALIASES = {'ClientBase': 'dialogue'}
@@ -105,11 +111,97 @@ class RuntimeSettings:
         self._config: Any = None
         self._image_client: Any = None
         self.version = 0  # bumped on every change; lets the UI notice changes from elsewhere
+        self._persist_error: str | None = None
+        self._loaded_from_file: str | None = None
 
     # ---------- setup ----------
     def attach_config(self, config: Any) -> None:
         with self._lock:
             self._config = config
+        self.load_persisted()
+
+    # ---------- persistence (dialogue/memory/general only; per-NPC stays live-only) ----------
+    def persist_enabled(self) -> bool:
+        return bool(getattr(self._config, 'control_center_persist_overrides', False)) and self.persist_path() is not None
+
+    def persist_path(self) -> str | None:
+        folder = getattr(self._config, 'save_folder', None)
+        if not isinstance(folder, str) or not folder:
+            return None
+        return os.path.join(folder, PERSIST_RELATIVE_PATH)
+
+    def _persist(self) -> None:
+        """Write the current dialogue/memory/general overrides (or delete the file when there are none)."""
+        if not self.persist_enabled():
+            return
+        path = self.persist_path()
+        with self._lock:
+            llm = {k: dict(v) for k, v in self._llm.items() if v}
+            general = copy.deepcopy(self._general)
+        try:
+            if not llm and not general:
+                if os.path.exists(path):
+                    os.remove(path)
+            else:
+                os.makedirs(os.path.dirname(path), exist_ok=True)
+                tmp = path + '.tmp'
+                with open(tmp, 'w', encoding='utf-8') as f:
+                    json.dump({'schema_version': PERSIST_SCHEMA_VERSION, 'saved_at': datetime.now().isoformat(timespec='seconds'),
+                               'llm': llm, 'general': general}, f, indent=2)
+                os.replace(tmp, path)
+            self._persist_error = None
+        except OSError as e:
+            self._persist_error = str(e)
+            logger.error(f'Control Center: could not save live overrides to {path}: {e}')
+
+    def load_persisted(self) -> bool:
+        """Load overrides saved by an earlier session. Invalid entries are skipped (logged). Returns True if any were loaded."""
+        if not self.persist_enabled():
+            return False
+        path = self.persist_path()
+        if not os.path.exists(path):
+            return False
+        try:
+            with open(path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            if not isinstance(data, dict):
+                raise ValueError('not a JSON object')
+        except (OSError, ValueError) as e:
+            logger.error(f'Control Center: could not read saved live overrides {path} ({e}); ignoring them')
+            self._persist_error = str(e)
+            return False
+        llm: dict[str, dict[str, Any]] = {}
+        for call_type, values in (data.get('llm') or {}).items():
+            if call_type in LLM_CALL_TYPES and isinstance(values, dict):
+                llm[call_type] = self._validated_lenient(values, LLM_KEYS)
+        general = self._validated_lenient(data.get('general') or {}, GENERAL_KEYS) if isinstance(data.get('general'), dict) else {}
+        with self._lock:
+            self._llm = {k: v for k, v in llm.items() if v}
+            self._general = general
+            self.version += 1
+            self._loaded_from_file = path
+        if 'disabled_actions' in general:
+            self._reload_actions()
+        if self._llm or self._general:
+            logger.log(24, f'Control Center: restored live overrides from {path}: {json.dumps({"llm": self._llm, "general": self._general})}')
+        return bool(self._llm or self._general)
+
+    def _validated_lenient(self, values: dict[str, Any], allowed: tuple[str, ...]) -> dict[str, Any]:
+        out: dict[str, Any] = {}
+        for key, value in values.items():
+            if key not in allowed or value is None or value == '':
+                continue
+            try:
+                out[key] = VALIDATORS[key](value)
+            except ValidationError as e:
+                logger.warning(f'Control Center: ignoring saved override {key}={value!r} ({e})')
+        return out
+
+    def persist_state(self) -> dict[str, Any]:
+        path = self.persist_path()
+        enabled = self.persist_enabled()
+        return {'enabled': enabled, 'path': path, 'file_exists': bool(enabled and path and os.path.exists(path)),
+                'error': self._persist_error, 'restored_from': self._loaded_from_file}
 
     @property
     def config(self) -> Any:
@@ -149,6 +241,7 @@ class RuntimeSettings:
         with self._lock:
             self._merge_into(self._llm.setdefault(call_type, {}), clean)
             self.version += 1
+        self._persist()
         logger.info(f'Control Center: live {call_type} overrides now {self._llm.get(call_type)}')
 
     def set_npc(self, npc_name: str, values: dict[str, Any]) -> None:
@@ -172,6 +265,7 @@ class RuntimeSettings:
             self._merge_into(self._general, clean)
             self.version += 1
             actions_changed = 'disabled_actions' in clean and self._general.get('disabled_actions') != old_disabled
+        self._persist()
         logger.info(f'Control Center: live general overrides now {self._general}')
         if actions_changed:
             self._reload_actions()
@@ -195,6 +289,7 @@ class RuntimeSettings:
                 raise ValidationError(f'unknown scope {scope!r}')
             self.version += 1
             actions_changed = had_actions and 'disabled_actions' not in self._general
+        self._persist()  # 'Reset to config' (scope all) deletes the file
         if actions_changed:
             self._reload_actions()
 
@@ -335,7 +430,7 @@ class RuntimeSettings:
         for call_type in LLM_CALL_TYPES:
             effective[call_type] = {**config.get(call_type, {}), **live['llm'].get(call_type, {})}
         effective['general'] = {**config.get('general', {}), **live['general']}
-        return {'version': version, 'config': config, 'live': live, 'effective': effective}
+        return {'version': version, 'config': config, 'live': live, 'effective': effective, 'persist': self.persist_state()}
 
     # ---------- save ----------
     def save_to_config(self) -> list[str]:
@@ -385,6 +480,7 @@ class RuntimeSettings:
                 self._llm.pop(call_type, None)
             self._general.clear()
             self.version += 1
+        self._persist()  # now in config.ini, so no longer an override
         if written:
             logger.log(24, f'Control Center saved to config.ini: {", ".join(written)}')
         return written
