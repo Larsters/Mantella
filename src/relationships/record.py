@@ -32,6 +32,8 @@ SCHEMA_VERSION = 1
 OPINION_MIN = -100
 OPINION_MAX = 100
 MAX_OPINION_CHANGE_PER_CONVERSATION = 40
+MAX_BYSTANDER_OPINION_CHANGE = 15  # NPCs who only overheard the conversation
+MAX_BYSTANDER_GRUDGE_SEVERITY = 2
 
 CAPS: dict[str, int] = {
     "facts": 12,
@@ -85,6 +87,7 @@ def new_record(npc_name: str, npc_ref_id: str = "", player_name: str = "") -> di
         "first_met_day": None,
         "last_seen_day": None,
         "conversation_count": 0,
+        "overheard_count": 0,
         "facts": [],
         "grudges": [],
         "favours": [],
@@ -139,6 +142,10 @@ def normalize_record(raw: Any, npc_name: str = "", npc_ref_id: str = "", player_
         record["conversation_count"] = max(0, int(raw.get("conversation_count", 0)))
     except (TypeError, ValueError):
         record["conversation_count"] = 0
+    try:
+        record["overheard_count"] = max(0, int(raw.get("overheard_count", 0)))
+    except (TypeError, ValueError):
+        record["overheard_count"] = 0
     record["updated_at"] = raw.get("updated_at")
 
     for key in ("facts", "grudges", "favours", "promises"):
@@ -177,6 +184,8 @@ def _sanitize_item(key: str, item: dict[str, Any], default_day: Any) -> dict[str
     if isinstance(day, float):
         day = int(day)
     clean: dict[str, Any] = {"text": text, "day": day}
+    if key in ("facts", "grudges") and item.get("overheard"):
+        clean["overheard"] = True
     if key == "grudges":
         try:
             severity = int(item.get("severity", 1))
@@ -206,6 +215,8 @@ def _add_item(record: dict[str, Any], key: str, item: dict[str, Any], default_da
             existing["text"] = clean["text"]
             if clean.get("day") is not None:
                 existing["day"] = clean["day"]
+            if not clean.get("overheard"):
+                existing.pop("overheard", None)  # now experienced first-hand
             if key == "grudges":
                 existing["severity"] = max(existing.get("severity", 1), clean["severity"])
                 witnesses = existing.get("witnesses", [])
@@ -283,8 +294,40 @@ def decayed_opinion(record: dict[str, Any], current_day: float | None, decay_per
     return decayed
 
 
+def has_met(record: dict[str, Any]) -> bool:
+    """True once the NPC talked to or overheard the player at least once."""
+    return int(record.get("conversation_count", 0) or 0) > 0 or int(record.get("overheard_count", 0) or 0) > 0
+
+
+def bystander_update(update: dict[str, Any]) -> dict[str, Any]:
+    """Restrict an update for an NPC who only overheard the conversation: smaller opinion change,
+    facts and grudges marked as overheard, no favours or promises (those need the NPC to take part)."""
+    result: dict[str, Any] = {}
+    try:
+        change = int(round(float(update.get("opinion_change", 0) or 0)))
+    except (TypeError, ValueError):
+        change = 0
+    result["opinion_change"] = max(-MAX_BYSTANDER_OPINION_CHANGE, min(MAX_BYSTANDER_OPINION_CHANGE, change))
+    reason = _clean_text(update.get("reason", ""), MAX_TEXT_LENGTH)
+    result["reason"] = f"overheard: {reason}" if reason and not reason.lower().startswith("overheard") else reason
+    result["attitude"] = update.get("attitude", "")
+    result["new_facts"] = [{**(f if isinstance(f, dict) else {"text": f}), "overheard": True} for f in update.get("new_facts") or []]
+    grudges = []
+    for g in update.get("new_grudges") or []:
+        g = dict(g) if isinstance(g, dict) else {"text": g}
+        try:
+            g["severity"] = min(MAX_BYSTANDER_GRUDGE_SEVERITY, int(g.get("severity", 1)))
+        except (TypeError, ValueError):
+            g["severity"] = 1
+        g["overheard"] = True
+        grudges.append(g)
+    result["new_grudges"] = grudges
+    result["resolved_grudges"] = update.get("resolved_grudges") or []
+    return result
+
+
 def apply_update(record: dict[str, Any], update: dict[str, Any], game_day: float | None,
-                 decay_per_day: float = 0.0, now: datetime | None = None) -> dict[str, Any]:
+                 decay_per_day: float = 0.0, now: datetime | None = None, bystander: bool = False) -> dict[str, Any]:
     """Merge an LLM-produced update (delta) into a copy of `record` and return it.
 
     Update format (all keys optional)::
@@ -295,6 +338,8 @@ def apply_update(record: dict[str, Any], update: dict[str, Any], game_day: float
          "settled_favours": ["d1"], "new_promises": [{"text": "...", "by": "player"}],
          "resolved_promises": [{"id": "p1", "status": "kept"}]}
     """
+    if bystander:
+        update = bystander_update(update)
     result = copy.deepcopy(record)
     day = int(game_day) if isinstance(game_day, (int, float)) and not isinstance(game_day, bool) else None
 
@@ -336,7 +381,8 @@ def apply_update(record: dict[str, Any], update: dict[str, Any], game_day: float
         if result.get("first_met_day") is None:
             result["first_met_day"] = day
         result["last_seen_day"] = round(float(game_day), 2)
-    result["conversation_count"] = int(result.get("conversation_count", 0)) + 1
+    counter = "overheard_count" if bystander else "conversation_count"
+    result[counter] = int(result.get(counter, 0) or 0) + 1
     result["updated_at"] = (now or datetime.now()).isoformat(timespec="seconds")
     result["schema_version"] = SCHEMA_VERSION
     _enforce_caps(result)

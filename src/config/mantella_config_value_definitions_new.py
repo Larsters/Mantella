@@ -207,6 +207,7 @@ class MantellaConfigValueDefinitionsNew:
         other_category.add_config_value(RelationshipDefinitions.get_relationship_affects_trust_config_value())
         other_category.add_config_value(RelationshipDefinitions.get_relationship_token_budget_config_value())
         other_category.add_config_value(RelationshipDefinitions.get_relationship_opinion_decay_config_value())
+        other_category.add_config_value(RelationshipDefinitions.get_relationship_bystander_records_config_value())
         other_category.add_config_value(OtherDefinitions.get_enable_character_tag_reading_config_value())
         other_category.add_config_value(BioGenerationDefinitions.get_bio_generation_enabled_config_value())
         other_category.add_config_value(BioGenerationDefinitions.get_bio_generation_scope_config_value())

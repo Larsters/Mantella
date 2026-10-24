@@ -35,6 +35,13 @@ class RelationshipDefinitions:
         return ConfigValueInt("relationship_opinion_decay_per_day", "Relationship Opinion Decay per Day", description, 0, 0, 100, tags=[ConfigValueTag.advanced, ConfigValueTag.share_row])
 
     @staticmethod
+    def get_relationship_bystander_records_config_value() -> ConfigValue:
+        description = """If NPC Relationships are enabled, NPCs who were only nearby (not in the conversation) and overheard it also get or update their own record of the player (eg Alfhild hears you insult Lydia and thinks less of you).
+                        Done in the same end-of-conversation call (no extra call). Bystanders change their opinion by at most 15 points per conversation, their facts and grudges are marked as overheard, and they get no favours or promises.
+                        Only NPCs whose name can be matched to one specific NPC are recorded (generic NPCs like guards are skipped unless you have talked to exactly one of them before)."""
+        return ConfigValueBool("relationship_bystander_records", "Relationship Records for Bystanders", description, False, tags=[ConfigValueTag.advanced, ConfigValueTag.share_row])
+
+    @staticmethod
     def get_relationship_update_prompt_config_value() -> ConfigValue:
         description = """The instructions sent to the summary LLM at the end of a conversation to update the NPC relationship records (only used if NPC Relationships are enabled). The reply must be JSON.
                         The following are dynamic variables that need to be contained in curly brackets {}:

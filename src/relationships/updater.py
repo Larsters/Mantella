@@ -100,22 +100,39 @@ def record_for_prompt(record: dict[str, Any]) -> str:
     return json.dumps(view, ensure_ascii=False)
 
 
+BYSTANDER_INSTRUCTIONS = """Bystanders ({bystanders}) were nearby and only overheard the conversation; they did not take part. Also return one entry in "npcs" for each of them, using the exact name. For a bystander: opinion_change from -15 to 15 and only if what they overheard would plausibly change how they see {player_name} (0 for small talk); new_facts only what they overheard; new_grudges only for things that hurt them or people they care about (severity 1 or 2); leave favours and promises empty."""
+
+
+def _npc_section(name: str, bio: str, record: dict[str, Any], heading_suffix: str = "") -> str:
+    bio_text = (bio or "").strip().replace("\n", " ")
+    if len(bio_text) > MAX_BIO_CHARS:
+        bio_text = bio_text[:MAX_BIO_CHARS] + "…"
+    return f"\n## {name}{heading_suffix}\nBio: {bio_text or 'unknown'}\nCurrent record: {record_for_prompt(record)}"
+
+
 def build_messages(prompt_template: str, game: str, language: str, player_name: str,
                    npcs: list[tuple[str, str, dict[str, Any]]], witnesses: list[str],
-                   transcript: str, game_day: float | None) -> tuple[str, str]:
-    """Returns (system_prompt, user_content). `npcs` is a list of (name, bio, record)."""
+                   transcript: str, game_day: float | None,
+                   bystanders: list[tuple[str, str, dict[str, Any]]] | None = None) -> tuple[str, str]:
+    """Returns (system_prompt, user_content). `npcs` and `bystanders` are lists of (name, bio, record).
+    Bystanders (nearby NPCs who only overheard) are updated in the same call; their instructions go into the
+    user message so that custom update prompts keep working."""
+    bystanders = bystanders or []
     names = ", ".join(name for name, _, _ in npcs)
     system_prompt = prompt_template.format(game=game, language=language, player_name=player_name, names=names)
     lines = [f"Characters to update: {names}"]
+    if bystanders:
+        bystander_names = ", ".join(name for name, _, _ in bystanders)
+        lines.append(f"Bystanders to update (overheard only): {bystander_names}")
+        lines.append(BYSTANDER_INSTRUCTIONS.format(bystanders=bystander_names, player_name=player_name))
     if witnesses:
         lines.append(f"Other people present or nearby (possible witnesses): {', '.join(witnesses)}")
     if isinstance(game_day, (int, float)):
         lines.append(f"Current in-game day: {int(game_day)}")
     for name, bio, record in npcs:
-        bio_text = (bio or "").strip().replace("\n", " ")
-        if len(bio_text) > MAX_BIO_CHARS:
-            bio_text = bio_text[:MAX_BIO_CHARS] + "…"
-        lines.append(f"\n## {name}\nBio: {bio_text or 'unknown'}\nCurrent record: {record_for_prompt(record)}")
+        lines.append(_npc_section(name, bio, record))
+    for name, bio, record in bystanders:
+        lines.append(_npc_section(name, bio, record, " (bystander, overheard only)"))
     lines.append(f"\n## Conversation transcript\n{transcript.strip()}")
     return system_prompt, "\n".join(lines)
 
