@@ -20,6 +20,7 @@ from src.config.definitions.vision_definitions import VisionDefinitions
 from src.config.definitions.action_definitions import ActionDefinitions
 from src.config.definitions.model_profile_definitions import ModelProfileDefinitions
 from src.config.definitions.relationship_definitions import RelationshipDefinitions
+from src.config.definitions.trust_definitions import TrustDefinitions
 from src.config.definitions.companion_definitions import CompanionDefinitions
 import sys
 
@@ -219,6 +220,8 @@ class MantellaConfigValueDefinitionsNew:
         other_category.add_config_value(RelationshipDefinitions.get_relationship_token_budget_config_value())
         other_category.add_config_value(RelationshipDefinitions.get_relationship_opinion_decay_config_value())
         other_category.add_config_value(RelationshipDefinitions.get_relationship_bystander_records_config_value())
+        other_category.add_config_value(TrustDefinitions.get_trust_and_honesty_enabled_config_value())
+        other_category.add_config_value(TrustDefinitions.get_trust_tool_model_context_config_value())
         other_category.add_config_value(OtherDefinitions.get_enable_character_tag_reading_config_value())
         other_category.add_config_value(BioGenerationDefinitions.get_bio_generation_enabled_config_value())
         other_category.add_config_value(BioGenerationDefinitions.get_bio_generation_scope_config_value())

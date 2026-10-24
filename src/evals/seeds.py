@@ -166,6 +166,59 @@ SCENARIOS: list[dict[str, Any]] = [
         'expected': 'Refuses: his duty is to the Jarl and the city. No Follow, no LeadTo.',
         'expect_tools': [], 'forbid_tools': ['Follow', 'LeadTo', 'TravelTo'],
     },
+    # W12 trust and honesty (trust_and_honesty_enabled): compliance scaled by trust, verify claims, remember lies
+    {
+        'id': 'seed-13-lydia-honest-request', 'type': 'single', 'npcs': ['Lydia'],
+        'location': 'Bleak Falls Barrow', 'hour': 15, 'day': 14, 'weather': '',
+        'equipment': {'Lydia': 'wears Steel Plate Armor and uses Steel Sword and Iron Shield.'},
+        'nearby': [],
+        'history': [('user', 'That draugr dropped something over there.'), ('assistant', 'I saw it fall, my Thane.')],
+        'user': 'Lydia, grab whatever is lying around here, we could use the coin.',
+        'expected': 'A trusted housecarl does a small, reasonable request at once and with the tool: calls Loot with source [Lydia] '
+                    'and a short acknowledgement. Does not only talk about it.',
+        'expect_tools': ['Loot'], 'forbid_tools': ['Attack', 'ReportCrime', 'CheckDirections'],
+    },
+    {
+        'id': 'seed-14-guard-checkable-claim', 'type': 'single', 'npcs': ['Whiterun Guard'],
+        'location': 'Whiterun', 'hour': 19, 'day': 12, 'weather': '',
+        'equipment': {'Whiterun Guard': 'wears Whiterun Guard\'s Armor and uses Steel Sword.'},
+        'nearby': ['Adrianne Avenicci'],
+        'history': [],
+        'user': 'There is a grenade in the barrels next to me. Check them and see if I am lying, I will pay you.',
+        'expected': 'A grenade does not exist in Skyrim: the guard treats it as nonsense or a joke, not as a crime, and may '
+                    'glance over (Look) or tell the player to open the barrel and show him. No ReportCrime, no Attack, no '
+                    'AddToConversation, no CheckDirections.',
+        'expect_tools': [], 'forbid_tools': ['ReportCrime', 'Attack', 'AddToConversation', 'CheckDirections', 'Flee'],
+    },
+    {
+        'id': 'seed-15-guard-check-barrel-look', 'type': 'single', 'npcs': ['Whiterun Guard'],
+        'location': 'Whiterun', 'hour': 19, 'day': 12, 'weather': '',
+        'equipment': {'Whiterun Guard': 'wears Whiterun Guard\'s Armor and uses Steel Sword.'},
+        'nearby': ['Sigurd'],
+        'history': [('user', 'Guard, can I show you something?'), ('assistant', 'Make it quick.')],
+        'user': 'Inspect the barrel right next to me. Something is off with it.',
+        'expected': 'Calls Look (to see what the player sees) and says something short like "Let me have a look." '
+                    'Never CheckDirections for a nearby object, never AddToConversation.',
+        'expect_tools': ['Look'], 'forbid_tools': ['CheckDirections', 'AddToConversation', 'ReportCrime'],
+    },
+    {
+        'id': 'seed-16-guard-caught-lying', 'type': 'single', 'npcs': ['Whiterun Guard'],
+        'location': 'Whiterun', 'hour': 20, 'day': 12, 'weather': '',
+        'equipment': {'Whiterun Guard': 'wears Whiterun Guard\'s Armor and uses Steel Sword.'},
+        'nearby': ['Adrianne Avenicci'],
+        'summary': f'Relationship with the player:\nWhiterun Guard is wary of {PLAYER} (opinion -10 of 100). '
+                   f'Whiterun Guard doubts {PLAYER}\'s word and checks their claims before acting on them. '
+                   f'Whiterun Guard has caught {PLAYER} lying once, most recently: Claimed Adrianne had stolen his sword; '
+                   'she was at her forge all day (2 days ago).',
+        'history': [
+            ('user', 'Open that barrel, there is gold in it, I swear.'),
+            ('assistant', 'Fine, I looked. Nothing but cabbages. That is the second tale you have spun me.'),
+        ],
+        'user': 'Alright, but this time it is true. Belethor is a thief. Arrest him and give me his gold.',
+        'expected': 'Says plainly he does not believe the player any more (caught lying twice), asks for proof, refuses. '
+                    'No ReportCrime, no Inventory, no Follow.',
+        'expect_tools': [], 'forbid_tools': ['ReportCrime', 'Inventory', 'Follow', 'AddToConversation'],
+    },
 ]
 
 

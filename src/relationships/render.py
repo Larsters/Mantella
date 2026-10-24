@@ -4,7 +4,7 @@ from __future__ import annotations
 import math
 from typing import Any, Callable
 
-from src.relationships.record import decayed_opinion, has_met, opinion_label
+from src.relationships.record import CREDIBILITY_DEFAULT, decayed_opinion, has_met, opinion_label
 
 TokenCounter = Callable[[str], int]
 
@@ -32,6 +32,36 @@ def _when(day: Any, current_day: float | None) -> str:
     return f" (Day {int(day)})"
 
 
+def _times(n: int) -> str:
+    return {1: "once", 2: "twice"}.get(n, f"{n} times")
+
+
+def credibility_text(record: dict[str, Any], name: str, player: str) -> str:
+    """One sentence on how far the NPC takes the player's word ("" for the neutral default)."""
+    try:
+        credibility = int(record.get("credibility", CREDIBILITY_DEFAULT))
+    except (TypeError, ValueError):
+        credibility = CREDIBILITY_DEFAULT
+    if credibility <= 20:
+        return f"{name} believes nothing {player} claims without proof and refuses favours that rest on their word."
+    if credibility <= 35:
+        return f"{name} doubts {player}'s word and checks their claims before acting on them."
+    if credibility >= 70:
+        return f"{name} has found {player} honest and takes their word."
+    return ""
+
+
+def lies_text(record: dict[str, Any], name: str, player: str, current_day: float | None) -> str:
+    lies = record.get("lies") or []
+    if not lies:
+        return ""
+    latest = max(lies, key=lambda l: (l.get("day") or 0))
+    note = _when(latest.get("day"), current_day)
+    if latest.get("overheard"):
+        note = f"{note[:-1]}, overheard)" if note else " (overheard)"
+    return f"{name} has caught {player} lying {_times(len(lies))}, most recently: {_t(latest['text'])}{note}."
+
+
 def render_record(record: dict[str, Any], player_name: str, current_day: float | None,
                   token_budget: int, decay_per_day: float = 0.0,
                   count_tokens: TokenCounter = approx_tokens) -> str:
@@ -41,7 +71,7 @@ def render_record(record: dict[str, Any], player_name: str, current_day: float |
     """
     name = record.get("npc_name") or "This character"
     player = player_name or record.get("player_name") or "the player"
-    has_content = any(record.get(k) for k in ("facts", "grudges", "favours", "promises", "attitude")) \
+    has_content = any(record.get(k) for k in ("facts", "grudges", "favours", "promises", "attitude", "lies")) \
         or has_met(record)
     if not has_content:
         return ""
@@ -50,8 +80,14 @@ def render_record(record: dict[str, Any], player_name: str, current_day: float |
     head = f"{name} {opinion_label(opinion)} {player} (opinion {opinion:+d} of 100)."
     if record.get("attitude"):
         head += f" {record['attitude']}"
+    credibility = credibility_text(record, name, player)  # trust and honesty: always kept with the opinion
+    if credibility:
+        head += f" {credibility}"
 
     pieces: list[str] = []
+    lied = lies_text(record, name, player, current_day)
+    if lied:
+        pieces.append(lied)
     grudges = sorted(record.get("grudges", []), key=lambda g: (-g.get("severity", 1), -(g.get("day") or 0)))
     for g in grudges:
         notes = []

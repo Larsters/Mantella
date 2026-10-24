@@ -32,6 +32,7 @@ def create_rememberer(inner: Any, game: Any, config: Any, client: Any, language_
             bystander_records=bool(getattr(config, "relationship_bystander_records", False)),
             resolve_ref_id=getattr(game, "resolve_npc_refid_by_name", None),
             lookup_bio=lambda name: _bio_from_character_db(game, name),
+            track_lies=bool(getattr(config, "trust_and_honesty_enabled", False)),  # src/trust
         )
         logger.info("NPC relationship tracking enabled.")
         return RelationshipRememberer(inner, tracker)

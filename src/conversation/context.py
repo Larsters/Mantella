@@ -5,6 +5,7 @@ from src.conversation.conversation_log import conversation_log
 from src.characters_manager import Characters
 from src.remember.remembering import Remembering
 from src import relationships
+from src import trust as trust_honesty
 from src import utils
 from src.utils import get_time_group
 from src.character_manager import Character
@@ -469,6 +470,7 @@ class Context:
         about_player = companion_profile.about_player_text(self.__npcs_in_conversation)
         conversation_summaries = self.__rememberer.get_prompt_text(companion_profile.characters_for_shared_memories(non_player_chars), self.__world_id)
         relationship = relationships.prompt_text(self.__rememberer, non_player_chars, self.__world_id, player_name, self.__game_days)
+        trust_honesty.publish_scene(self.__config, non_player_chars, player_name, trusts, relationship)  # tool-model scene (no-op when off)
         if relationship and '{relationship}' not in prompt:  # prompts without the placeholder get it after the summaries
             conversation_summaries = f"{conversation_summaries}\n\n{relationship}".strip()
         

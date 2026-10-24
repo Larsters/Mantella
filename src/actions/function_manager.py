@@ -7,6 +7,7 @@ from src.conversation.action import Action
 from src.games.gameable import Gameable
 from src import utils
 from src.actions import server_tools
+from src import trust
 import src.companion_profile  # noqa: F401  registers the RememberAboutPlayer server tool
 
 logger = utils.get_logger()
@@ -325,7 +326,7 @@ class FunctionManager:
                 'type': 'function',
                 'function': {
                     'name': action['name'],
-                    'description': action.get('guided_description') if getattr(context.config, 'guided_action_descriptions', False) and action.get('guided_description') else action['description']
+                    'description': trust.tool_description(action, context.config)  # trust > guided > upstream description
                 }
             }
 
