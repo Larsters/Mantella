@@ -269,3 +269,92 @@ def test_save_to_config_writes_through_definitions(rs, tmp_path):
     snap = rs.snapshot()
     assert snap['live']['llm'] == {} and snap['live']['general'] == {}
     assert snap['live']['npc'] == {'Lydia': {'temperature': 0.2}}, 'per-NPC stays live-only'
+
+
+# ---------- persistence across restarts (control_center_persist_overrides) ----------
+
+def _persist_config(tmp_path, enabled=True, **extra):
+    return SimpleNamespace(save_folder=str(tmp_path), control_center_persist_overrides=enabled, disabled_actions=['Brawl'], **extra)
+
+
+def _no_action_reload(monkeypatch):
+    calls = []
+    from src.actions.function_manager import FunctionManager
+    monkeypatch.setattr(FunctionManager, 'load_all_actions', staticmethod(lambda disabled_actions=None: calls.append(disabled_actions)))
+    return calls
+
+
+def test_persisted_overrides_roundtrip_through_a_restart(rs, tmp_path, monkeypatch):
+    calls = _no_action_reload(monkeypatch)
+    rs.attach_config(_persist_config(tmp_path))
+    rs.set_llm('dialogue', {'model': 'gpt-5.6-luna', 'temperature': 0.8})
+    rs.set_llm('memory', {'max_tokens': 400})
+    rs.set_general({'max_response_sentences_single': 2, 'disabled_actions': ['Loot', 'Teleport']})
+    rs.set_npc('Lydia', {'temperature': 0.1})
+    path = tmp_path / 'data' / 'control_center' / 'live_overrides.json'
+    saved = json.loads(path.read_text(encoding='utf-8'))
+    assert saved['llm'] == {'dialogue': {'model': 'gpt-5.6-luna', 'temperature': 0.8}, 'memory': {'max_tokens': 400}}
+    assert saved['general'] == {'max_response_sentences_single': 2, 'disabled_actions': ['Loot', 'Teleport']}
+    assert 'npc' not in saved and 'Lydia' not in path.read_text(), 'per-NPC overrides are never persisted'
+    assert rs.snapshot()['persist']['enabled'] is True and rs.snapshot()['persist']['file_exists'] is True
+
+    # "Restart": a brand-new RuntimeSettings attached to the same user folder
+    calls.clear()
+    restarted = runtime_settings.RuntimeSettings()
+    restarted.attach_config(_persist_config(tmp_path))
+    model, params = restarted.resolve_request('dialogue', 'gpt-4.1-mini', {'temperature': 0.5, 'max_tokens': 250})
+    assert model == 'gpt-5.6-luna' and params == {'temperature': 0.8, 'max_tokens': 250}
+    assert restarted.resolve_request('memory', 'gpt-4.1-mini', {})[1] == {'max_tokens': 400}
+    assert restarted.max_response_sentences(False, 4) == 2
+    assert calls == [['Loot', 'Teleport']], 'restored action list is applied at startup'
+    assert restarted.snapshot()['live']['npc'] == {}
+    assert restarted.snapshot()['persist']['restored_from'] == str(path)
+
+    # Reset to config clears the file
+    restarted.reset('all')
+    assert not path.exists()
+    assert calls[-1] == ['Brawl']
+
+
+def test_persistence_off_by_default_and_when_disabled(rs, tmp_path, monkeypatch):
+    _no_action_reload(monkeypatch)
+    rs.attach_config(_persist_config(tmp_path, enabled=False))
+    rs.set_llm('dialogue', {'temperature': 0.8})
+    assert not (tmp_path / 'data').exists()
+    assert rs.snapshot()['persist']['enabled'] is False
+    # A file left from an earlier session is ignored while the setting is off
+    path = tmp_path / 'data' / 'control_center' / 'live_overrides.json'
+    path.parent.mkdir(parents=True)
+    path.write_text(json.dumps({'llm': {'dialogue': {'temperature': 1.5}}}), encoding='utf-8')
+    fresh = runtime_settings.RuntimeSettings()
+    fresh.attach_config(_persist_config(tmp_path, enabled=False))
+    assert fresh.llm_overrides('dialogue') == {}
+
+
+def test_persisted_file_with_bad_values_is_loaded_leniently(rs, tmp_path, monkeypatch):
+    _no_action_reload(monkeypatch)
+    path = tmp_path / 'data' / 'control_center' / 'live_overrides.json'
+    path.parent.mkdir(parents=True)
+    path.write_text(json.dumps({'llm': {'dialogue': {'temperature': 9, 'top_p': 0.5, 'bogus': 1}, 'radiant': {'temperature': 1}},
+                                'general': {'vision_enabled': 'yes', 'max_response_sentences_multi': 3}}), encoding='utf-8')
+    rs.attach_config(_persist_config(tmp_path))
+    assert rs.llm_overrides('dialogue') == {'top_p': 0.5}
+    assert rs.snapshot()['live']['general'] == {'max_response_sentences_multi': 3}
+    path.write_text('{broken', encoding='utf-8')
+    fresh = runtime_settings.RuntimeSettings()
+    fresh.attach_config(_persist_config(tmp_path))
+    assert fresh.llm_overrides('dialogue') == {} and fresh.snapshot()['persist']['error']
+
+
+def test_save_to_config_clears_persisted_file(rs, tmp_path, monkeypatch):
+    from src.config.config_loader import ConfigLoader
+    from src.config.definitions.game_definitions import GameEnum
+    config = ConfigLoader(mygame_folder_path=str(tmp_path), game_override=GameEnum.SKYRIM)
+    assert config.control_center_persist_overrides is False  # upstream default
+    config.control_center_persist_overrides = True
+    rs.attach_config(config)
+    rs.set_llm('dialogue', {'temperature': 0.9})
+    path = tmp_path / 'data' / 'control_center' / 'live_overrides.json'
+    assert path.exists()
+    rs.save_to_config()
+    assert not path.exists(), 'values now live in config.ini'

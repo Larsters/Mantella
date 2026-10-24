@@ -361,6 +361,7 @@ LLM parameter list must be valid JSON""")
             #HTTP
             self.port = self.__definitions.get_int_value("port")
             self.show_http_debug_messages: bool = self.__definitions.get_bool_value("show_http_debug_messages")
+            self.control_center_persist_overrides: bool = self.__definitions.get_bool_value("control_center_persist_overrides")
 
             self.advanced_logs = self.__definitions.get_bool_value("advanced_logs")
             self.save_conversation_transcripts: bool = self.__definitions.get_bool_value("save_conversation_transcripts")

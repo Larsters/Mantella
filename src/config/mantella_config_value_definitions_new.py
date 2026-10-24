@@ -11,6 +11,7 @@ from src.config.definitions.other_definitions import OtherDefinitions
 from src.config.definitions.bio_generation_definitions import BioGenerationDefinitions
 from src.config.definitions.lore_definitions import LoreDefinitions
 from src.config.definitions.speech_flavor_definitions import SpeechFlavorDefinitions
+from src.config.definitions.control_center_definitions import ControlCenterDefinitions
 from src.config.definitions.startup_definitions import StartupDefinitions
 from src.config.definitions.prompt_definitions import PromptDefinitions
 from src.config.definitions.stt_definitions import STTDefinitions
@@ -221,6 +222,7 @@ class MantellaConfigValueDefinitionsNew:
         other_category.add_config_value(OtherDefinitions.get_save_audio_data_to_character_folder_config_value())
         other_category.add_config_value(OtherDefinitions.get_port_config_value())
         other_category.add_config_value(OtherDefinitions.get_show_http_debug_messages_config_value())
+        other_category.add_config_value(ControlCenterDefinitions.get_control_center_persist_overrides_config_value())
         other_category.add_config_value(OtherDefinitions.get_advanced_logs_config_value())
         other_category.add_config_value(OtherDefinitions.get_save_conversation_transcripts_config_value())
         other_category.add_config_value(OtherDefinitions.get_enable_telemetry_config_value())

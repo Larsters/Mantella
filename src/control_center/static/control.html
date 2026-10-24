@@ -204,7 +204,7 @@ input:focus-visible, select:focus-visible, button:focus-visible { outline: 2px s
         <section class="card">
           <div class="card-head">
             <div><h2>Language model</h2>
-              <div class="desc">Changes apply to the <b>next</b> LLM call, no restart. Values marked <span class="tag live-tag">live</span> override config.ini until reset or restart.</div></div>
+              <div class="desc">Changes apply to the <b>next</b> LLM call, no restart. Values marked <span class="tag live-tag">live</span> override config.ini until reset or restart (they survive restarts if "Keep Control Center Changes" is on).</div></div>
             <div class="seg" id="scopeSeg" role="group" aria-label="Scope">
               <button data-scope="dialogue">NPC dialogue</button>
               <button data-scope="memory">Memory summaries</button>
@@ -466,8 +466,17 @@ function renderTuning() {
   const savable = nLlm + nGen;
   $('saveNote').innerHTML = (savable || nNpc ? `<b style="color:var(--text-primary)">${savable} live change${savable === 1 ? '' : 's'}</b>${nNpc ? ` + ${nNpc} NPC override${nNpc === 1 ? '' : 's'} (live only)` : ''}. `
     : 'Everything matches config.ini. ') +
-    'Live values are lost when Mantella restarts. Saving writes them through Mantella\'s own config writer; Mantella then rebuilds its clients on the next request, which ends a running conversation, so save between conversations.';
+    persistText(c.persist, savable) + ' Saving writes them through Mantella\'s own config writer; Mantella then rebuilds its clients on the next request, which ends a running conversation, so save between conversations.';
   $('saveBtn').disabled = !savable; $('resetAll').disabled = !(savable || nNpc);
+}
+
+function persistText(p, savable) {
+  if (p && p.enabled) {
+    const where = p.path ? ` <code title="${esc(p.path)}">data/control_center/live_overrides.json</code>` : '';
+    const err = p.error ? ` <span style="color:var(--warn)">Could not save: ${esc(p.error)}</span>` : '';
+    return `<span class="tag live-tag" title="control_center_persist_overrides = True">persisted</span> Live values (except per-NPC ones) survive Mantella restarts${savable ? ` (stored in${where})` : ''}; "Reset everything to config" clears them.${err}`;
+  }
+  return 'Live values are lost when Mantella restarts (enable "Keep Control Center Changes" in the Mantella settings to keep them).';
 }
 
 function renderTuneTiles() {
