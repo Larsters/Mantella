@@ -2,6 +2,7 @@
     "identifier": "mantella_npc_brawl",
     "name": "Brawl",
     "description": "Make NPC(s) non-lethally brawl the player.",
+    "guided_description": "Start a non-lethal fistfight with the player. Use when a proud or hot-headed character (Nord warriors, Companions, Battle-Borns, Gray-Manes, drunks) is insulted after one warning, at once if their family or honour is insulted, when a fight they offered is accepted, or when the player swings first. Not for guards on duty, jarls, the old, frail, timid or children.",
     "note": "EXPERIMENTAL: Can cause NPC AI packages to break.",
     "key": "Brawl",
     "parameters": {
@@ -17,7 +18,7 @@
     "allowed_games": ["skyrim"],
     "requires_response": false,
     "is-interrupting": false,
-    "allow_repeat": false,
+    "allow_repeat": true,
     "one-on-one": true,
     "multi-npc": true,
     "radiant": false

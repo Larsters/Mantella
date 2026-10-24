@@ -1,0 +1,500 @@
+{
+  "attribution": "Notes paraphrased in our own words from the Unofficial Elder Scrolls Pages (UESP, https://en.uesp.net), licensed CC BY-SA 2.5. Each note lists the page it was drawn from in 'source'.",
+  "notes": [
+    {
+      "id": "dragons",
+      "title": "Dragons",
+      "scope": "topic",
+      "aliases": [
+        "dragon",
+        "dragons",
+        "dov",
+        "dovah"
+      ],
+      "keywords": [
+        "wings",
+        "fire",
+        "frost breath",
+        "Thu'um",
+        "burial mound",
+        "dragon bones",
+        "dragon scales",
+        "legend"
+      ],
+      "text": "Dragons are immortal, intelligent beasts that speak in Thu'um, the language of power. Until recently Nords thought them only legends from the Merethic Era, and the dragon skull in Dragonsreach was the closest most people came to seeing one.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Dragon"
+    },
+    {
+      "id": "dragonborn",
+      "title": "The Dragonborn",
+      "scope": "topic",
+      "aliases": [
+        "Dragonborn",
+        "Dovahkiin",
+        "dragon blood",
+        "Last Dragonborn"
+      ],
+      "keywords": [
+        "prophecy",
+        "absorb souls",
+        "Thu'um",
+        "Greybeards",
+        "Tiber Septim",
+        "emperors",
+        "legend"
+      ],
+      "text": "The Dragonborn are rare mortals born with the soul of a dragon, able to absorb the souls of slain dragons and learn shouts with ease. Tiber Septim and the old Septim emperors were Dragonborn, and an old prophecy speaks of a last one who will appear when the World-Eater wakes.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Dragonborn"
+    },
+    {
+      "id": "thuum",
+      "title": "The Thu'um (shouting)",
+      "scope": "topic",
+      "aliases": [
+        "Thu'um",
+        "Thuum",
+        "the Voice",
+        "shout",
+        "shouts",
+        "Words of Power",
+        "Word Wall",
+        "Fus Ro Dah",
+        "Unrelenting Force"
+      ],
+      "keywords": [
+        "dragon language",
+        "Greybeards",
+        "Ulfric",
+        "Tongues",
+        "power",
+        "word"
+      ],
+      "text": "The Thu'um is the art of shouting words in the dragon tongue to unleash their power. Mortals need years of study with the Greybeards to master even one shout, and ancient Word Walls in old ruins hold forgotten words. Ulfric's use of it to kill the High King is still argued over.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Thu%27um"
+    },
+    {
+      "id": "alduin_legend",
+      "title": "Alduin the World-Eater",
+      "scope": "topic",
+      "aliases": [
+        "Alduin",
+        "World-Eater",
+        "Worldeater",
+        "Nordic end of the world"
+      ],
+      "keywords": [
+        "prophecy",
+        "end times",
+        "Akatosh",
+        "eat the world",
+        "black dragon",
+        "Alduin's Wall"
+      ],
+      "text": "In Nord legend Alduin is the World-Eater, the first and mightiest dragon, who ruled the dragons during the ancient Dragon War and is destined to return at the end of time to devour the world. Most people know him only from old sagas and doomsayers.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Alduin"
+    },
+    {
+      "id": "elder_scrolls",
+      "title": "The Elder Scrolls",
+      "scope": "topic",
+      "aliases": [
+        "Elder Scroll",
+        "Elder Scrolls",
+        "Moth Priest",
+        "Moth Priests"
+      ],
+      "keywords": [
+        "prophecy",
+        "blindness",
+        "Imperial Library",
+        "fate",
+        "artifact"
+      ],
+      "text": "The Elder Scrolls are mysterious artifacts that record the past and future. Reading one can grant visions but slowly blinds the reader; only the Moth Priests of the Imperial City are trained to do it.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Elder_Scrolls"
+    },
+    {
+      "id": "draugr",
+      "title": "Draugr",
+      "scope": "topic",
+      "aliases": [
+        "draugr",
+        "draugrs",
+        "deathlord",
+        "restless dead"
+      ],
+      "keywords": [
+        "undead",
+        "barrows",
+        "ancient Nords",
+        "tombs",
+        "walking corpses",
+        "Dragon Cult"
+      ],
+      "text": "Draugr are undead ancient Nords who guard the old barrows, shambling corpses still clad in the armor of their age. Some are said to have been servants of the dragon priests, cursed to rise and protect their masters forever.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Draugr"
+    },
+    {
+      "id": "giants_mammoths",
+      "title": "Giants and mammoths",
+      "scope": "topic",
+      "aliases": [
+        "giant",
+        "giants",
+        "mammoth",
+        "mammoths",
+        "giant camp"
+      ],
+      "keywords": [
+        "tundra",
+        "cheese",
+        "clubs",
+        "sent flying",
+        "herders",
+        "Whiterun Hold"
+      ],
+      "text": "Giants roam Skyrim's tundra herding mammoths and making mammoth cheese. They are peaceful if left alone but will smash anyone who comes too close, and farmers often hire sellswords when a giant wanders onto their land.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Giant"
+    },
+    {
+      "id": "vampires",
+      "title": "Vampires",
+      "scope": "topic",
+      "aliases": [
+        "vampire",
+        "vampires",
+        "vampirism",
+        "Sanguinare Vampiris",
+        "bloodsucker"
+      ],
+      "keywords": [
+        "blood",
+        "sunlight",
+        "undead",
+        "Molag Bal",
+        "Dawnguard",
+        "Vigilants",
+        "attacks",
+        "cure"
+      ],
+      "text": "Vampires are undead blood-drinkers who shun sunlight, a curse said to come from Molag Bal. Lately vampire attacks have grown bolder across Skyrim, even on towns, and the Vigilants of Stendarr and the Dawnguard are hunting them.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Vampirism"
+    },
+    {
+      "id": "werewolves",
+      "title": "Werewolves",
+      "scope": "topic",
+      "aliases": [
+        "werewolf",
+        "werewolves",
+        "lycanthropy",
+        "beast form",
+        "lycanthrope"
+      ],
+      "keywords": [
+        "Hircine",
+        "moon",
+        "curse",
+        "Silver Hand",
+        "transform",
+        "beast blood"
+      ],
+      "text": "Werewolves are people cursed, or blessed, by Hircine with the power to turn into a hulking wolf-beast. They are feared and hunted across Skyrim, and the Silver Hand hunts them with silver weapons.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Lycanthropy"
+    },
+    {
+      "id": "necromancy",
+      "title": "Necromancers",
+      "scope": "topic",
+      "aliases": [
+        "necromancer",
+        "necromancers",
+        "necromancy",
+        "raise the dead",
+        "reanimate"
+      ],
+      "keywords": [
+        "conjuration",
+        "undead",
+        "Arkay",
+        "forbidden",
+        "Mannimarco",
+        "corpses",
+        "Worm King"
+      ],
+      "text": "Necromancers raise and bind the dead with conjuration magic. Priests of Arkay call it an abomination and most Nords simply call it evil, so necromancers hide in caves and ruins far from honest folk.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Necromancy"
+    },
+    {
+      "id": "magic_attitudes",
+      "title": "Magic in Skyrim",
+      "scope": "topic",
+      "aliases": [
+        "distrust of magic",
+        "Nords and magic"
+      ],
+      "keywords": [
+        "College",
+        "distrust",
+        "Nords",
+        "milk-drinker",
+        "court wizard",
+        "Winterhold",
+        "magic",
+        "mage",
+        "mages",
+        "wizard",
+        "wizards",
+        "sorcery",
+        "spells"
+      ],
+      "text": "Nords traditionally distrust magic as the weapon of elves and cowards; a real Nord fights with axe and shield. Still, every Jarl keeps a court wizard, and the College of Winterhold trains mages despite the suspicion.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:College_of_Winterhold"
+    },
+    {
+      "id": "skooma",
+      "title": "Skooma and moon sugar",
+      "scope": "topic",
+      "aliases": [
+        "skooma",
+        "moon sugar",
+        "sugar"
+      ],
+      "keywords": [
+        "drug",
+        "addict",
+        "Khajiit",
+        "illegal",
+        "Elsweyr",
+        "Redwater"
+      ],
+      "text": "Skooma is an addictive narcotic refined from moon sugar, which comes from Elsweyr. It is illegal in Skyrim, but dealers and addicts are common in Riften's Ratway and around the Khajiit caravans.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Skooma"
+    },
+    {
+      "id": "mead",
+      "title": "Mead and drinking",
+      "scope": "topic",
+      "aliases": [
+        "mead",
+        "Honningbrew",
+        "Black-Briar Mead",
+        "Nord mead",
+        "ale"
+      ],
+      "keywords": [
+        "drink",
+        "tavern",
+        "inn",
+        "honey",
+        "drunk",
+        "brewery",
+        "Whiterun",
+        "Riften"
+      ],
+      "text": "Mead is the drink of Skyrim. Black-Briar Mead from Riften is the most famous brand, and the Honningbrew Meadery near Whiterun is its main rival. Nords drink it at every feast, funeral and argument.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Honningbrew_Meadery"
+    },
+    {
+      "id": "septims_money",
+      "title": "Money and prices",
+      "scope": "topic",
+      "aliases": [
+        "septim",
+        "septims"
+      ],
+      "keywords": [
+        "money",
+        "trade",
+        "taxes",
+        "war prices",
+        "shortages",
+        "merchants",
+        "gold",
+        "coin",
+        "coins",
+        "prices"
+      ],
+      "text": "The coin of the Empire is the gold septim, stamped with an emperor's face. The war has disrupted trade and doubled the price of many goods, so merchants complain constantly and farmers struggle.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Septim"
+    },
+    {
+      "id": "trolls_and_beasts",
+      "title": "Wild dangers",
+      "scope": "topic",
+      "aliases": [
+        "troll",
+        "trolls",
+        "sabre cat",
+        "saber cat",
+        "frostbite spider",
+        "spriggan",
+        "chaurus",
+        "skeever",
+        "ice wraith",
+        "hagraven"
+      ],
+      "keywords": [
+        "wilderness",
+        "danger",
+        "roads",
+        "hunting",
+        "caves",
+        "travel",
+        "bear",
+        "wolves"
+      ],
+      "text": "Skyrim's wilds are dangerous: wolves and bears in the forests, sabre cats on the tundra, trolls in the mountains, giant frostbite spiders in caves, and spriggans guarding the old groves. Travellers who stay on the roads are wise.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Creatures"
+    },
+    {
+      "id": "atronachs_daedra",
+      "title": "Daedra in Skyrim",
+      "scope": "topic",
+      "aliases": [
+        "atronach",
+        "atronachs",
+        "dremora",
+        "Daedroth"
+      ],
+      "keywords": [
+        "summon",
+        "conjuration",
+        "Oblivion",
+        "flame atronach",
+        "storm atronach"
+      ],
+      "text": "Lesser Daedra like dremora and elemental atronachs are summoned from Oblivion by conjurers. Ordinary folk find them unsettling at best, and seeing one in the wild usually means a mage or cultist is nearby.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Daedra"
+    },
+    {
+      "id": "moons",
+      "title": "Masser and Secunda",
+      "scope": "topic",
+      "aliases": [
+        "Masser",
+        "Secunda",
+        "the moons",
+        "two moons",
+        "Jone and Jode"
+      ],
+      "keywords": [
+        "night",
+        "sky",
+        "Khajiit",
+        "lunar",
+        "werewolves"
+      ],
+      "text": "Tamriel has two moons, the large reddish Masser and the smaller silvery Secunda. Khajiit hold them sacred, and their phases are said to shape the form a Khajiit is born into.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Moons"
+    },
+    {
+      "id": "aurora_weather",
+      "title": "Skyrim's sky and seasons",
+      "scope": "topic",
+      "aliases": [
+        "aurora",
+        "northern lights",
+        "Sea of Ghosts"
+      ],
+      "keywords": [
+        "cold",
+        "snow",
+        "storm",
+        "ice",
+        "frost",
+        "blizzard",
+        "winter"
+      ],
+      "text": "Skyrim is a land of long winters, with snowstorms in the mountains and drift ice on the Sea of Ghosts along the north coast. On clear nights the aurora dances across the sky, a sight Nords say is a sign of the gods' favor.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Skyrim"
+    },
+    {
+      "id": "hall_of_the_dead",
+      "title": "Burial customs",
+      "scope": "topic",
+      "aliases": [
+        "catacombs",
+        "burial urn"
+      ],
+      "keywords": [
+        "Arkay",
+        "dead",
+        "ashes",
+        "Hall of the Dead",
+        "priest",
+        "tomb",
+        "burial",
+        "funeral",
+        "graveyard"
+      ],
+      "text": "Each major city keeps a Hall of the Dead tended by a priest of Arkay, with catacombs and burial urns for the departed. Disturbing the dead is taken very seriously, and many Nords would rather fall in battle than die in bed.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Hall_of_the_Dead"
+    },
+    {
+      "id": "crime_and_bounty",
+      "title": "Crime and the law",
+      "scope": "topic",
+      "aliases": [
+        "bounty"
+      ],
+      "keywords": [
+        "crime",
+        "law",
+        "fine",
+        "steal",
+        "Jarl's justice",
+        "hold guards",
+        "stop right there",
+        "jail",
+        "prison",
+        "guards",
+        "arrest",
+        "thief"
+      ],
+      "text": "Each hold enforces its own laws through the Jarl's guards. Criminals carry a bounty in that hold and can pay a fine, go to jail, or resist arrest, and word of a reputation travels between towns.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Crime"
+    },
+    {
+      "id": "lydia_housecarl",
+      "title": "Lydia",
+      "scope": "person",
+      "aliases": [
+        "Lydia"
+      ],
+      "keywords": [
+        "housecarl",
+        "Whiterun",
+        "sworn",
+        "carry your burdens",
+        "Breezehome"
+      ],
+      "places": [
+        "whiterun"
+      ],
+      "text": "Lydia is a Nord warrior of Dragonsreach whom Jarl Balgruuf assigns as housecarl to the new Thane of Whiterun. She is sworn to protect her Thane and, famously, to carry their burdens.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Lydia"
+    }
+  ]
+}

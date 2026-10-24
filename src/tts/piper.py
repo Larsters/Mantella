@@ -1,6 +1,7 @@
 import platform
 from src.config.config_loader import ConfigLoader
 from src.tts.ttsable import TTSable
+from src import speech_flavor
 import subprocess
 import os
 import time
@@ -10,6 +11,7 @@ import sys
 from threading import Thread
 from queue import Queue, Empty
 from src.tts.synthesization_options import SynthesizationOptions
+from src.tts import piper_native
 from src.games.gameable import Gameable
 from pathlib import Path
 
@@ -32,6 +34,8 @@ class TTSServiceFailure(Exception):
 class Piper(TTSable):
     """Piper TTS handler
     """
+    __native: piper_native.NativePiper | None = None # set in __init__ when native Piper is enabled
+
     @utils.time_it
     def __init__(self, config: ConfigLoader, game: Gameable) -> None:
         super().__init__(config)
@@ -45,8 +49,17 @@ class Piper(TTSable):
         self._current_actor_gender = None
         self._current_actor_race = None
 
-        logger.log(self._loglevel, f'Connecting to Piper...')
-        self._check_if_piper_is_running()
+        self.__native: piper_native.NativePiper | None = None
+        if config.piper_native:
+            if piper_native.is_available():
+                self.__native = piper_native.NativePiper(self.__models_path)
+                logger.log(self._loglevel, 'Using native Piper (piper-tts)')
+            else:
+                logger.warning('Native Piper is enabled but the piper-tts package is not installed. Using piper.exe instead')
+
+        if not self.__native:
+            logger.log(self._loglevel, f'Connecting to Piper...')
+            self._check_if_piper_is_running()
 
         self.__available_models = self.get_available_models(self.__models_path)
 
@@ -83,6 +96,20 @@ class Piper(TTSable):
             voiceline = voiceline.replace('.','!')
         voiceline = voiceline.replace('*','') # Drop *. Piper reads them aloud. "*She waves.*" -> "Asterisk She waves. Asterisk"
         voiceline = voiceline.replace('\n', ' ').replace('\r', ' ')
+        voiceline = speech_flavor.prepare_for_tts(voiceline, getattr(self, '_config', None)) # German words -> English-voice respelling (no-op unless enabled)
+
+        if self.__native:
+            try:
+                self.__native.synthesize(voiceline, final_voiceline_file)
+                return
+            except Exception as e:
+                logger.error(f'Native Piper failed ({e}). Falling back to piper.exe')
+                self.__native = None
+                self._run_piper()
+                if self.__selected_voice:
+                    self.__write_to_stdin(f"load_model {self.__models_path / f'{self.__selected_voice}.onnx'}\n")
+                    self.__waiting_for_voice_load = True
+                    self._check_voice_changed()
 
         attempts = 0
         max_attempts = 5
@@ -210,6 +237,11 @@ class Piper(TTSable):
             logger.log(self._loglevel, 'Loading voice model...')
 
             self.__selected_voice = self._select_voice_type(voice, in_game_voice, csv_in_game_voice, advanced_voice_model, self._current_actor_gender, self._current_actor_race)
+            if self.__native:
+                self.__native.load_voice(self.__selected_voice)
+                self._last_voice = self.__selected_voice
+                logger.log(self._loglevel, f'Model {self.__selected_voice} loaded')
+                return
             model_path = self.__models_path / f'{self.__selected_voice}.onnx'
 
             self.__write_to_stdin(f"load_model {model_path}\n")

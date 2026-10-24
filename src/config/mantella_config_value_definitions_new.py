@@ -8,6 +8,10 @@ from src.config.definitions.game_definitions import GameDefinitions
 from src.config.definitions.language_definitions import LanguageDefinitions
 from src.config.definitions.llm_definitions import LLMDefinitions
 from src.config.definitions.other_definitions import OtherDefinitions
+from src.config.definitions.bio_generation_definitions import BioGenerationDefinitions
+from src.config.definitions.lore_definitions import LoreDefinitions
+from src.config.definitions.speech_flavor_definitions import SpeechFlavorDefinitions
+from src.config.definitions.control_center_definitions import ControlCenterDefinitions
 from src.config.definitions.startup_definitions import StartupDefinitions
 from src.config.definitions.prompt_definitions import PromptDefinitions
 from src.config.definitions.stt_definitions import STTDefinitions
@@ -15,6 +19,10 @@ from src.config.definitions.tts_definitions import TTSDefinitions
 from src.config.definitions.vision_definitions import VisionDefinitions
 from src.config.definitions.action_definitions import ActionDefinitions
 from src.config.definitions.model_profile_definitions import ModelProfileDefinitions
+from src.config.definitions.relationship_definitions import RelationshipDefinitions
+from src.config.definitions.trust_definitions import TrustDefinitions
+from src.config.definitions.memory_checkpoint_definitions import MemoryCheckpointDefinitions
+from src.config.definitions.companion_definitions import CompanionDefinitions
 import sys
 
 
@@ -49,6 +57,9 @@ class MantellaConfigValueDefinitionsNew:
         llm_category.add_config_value(LLMDefinitions.get_wait_time_buffer_config_value())
         # llm_category.add_config_value(LLMDefinitions.get_try_filter_narration())
         llm_category.add_config_value(LLMDefinitions.get_llm_params_config_value())
+        llm_category.add_config_value(LLMDefinitions.get_reasoning_effort_config_value())
+        llm_category.add_config_value(LLMDefinitions.get_verbosity_config_value())
+        llm_category.add_config_value(LLMDefinitions.get_summary_condense_token_limit_config_value())
         # llm_category.add_config_value(LLMDefinitions.get_stop_llm_generation_on_assist_keyword())
         llm_category.add_config_value(LLMDefinitions.get_narration_handling())
         llm_category.add_config_value(LLMDefinitions.get_narrator_voice())
@@ -73,6 +84,7 @@ class MantellaConfigValueDefinitionsNew:
         tts_category.add_config_value(TTSDefinitions.get_xvasynth_folder_config_value())
         tts_category.add_config_value(TTSDefinitions.get_xtts_folder_config_value())
         tts_category.add_config_value(TTSDefinitions.get_piper_folder_config_value(is_integrated))
+        tts_category.add_config_value(TTSDefinitions.get_piper_native_config_value())
         tts_category.add_config_value(TTSDefinitions.get_lipgen_folder_config_value(is_integrated))
         tts_category.add_config_value(TTSDefinitions.get_facefx_folder_config_value(is_integrated))
         tts_category.add_config_value(TTSDefinitions.get_number_words_tts_config_value())
@@ -104,6 +116,7 @@ class MantellaConfigValueDefinitionsNew:
         stt_category.add_config_value(STTDefinitions.get_ptt_hotkey_config_value())
         stt_category.add_config_value(STTDefinitions.get_play_cough_sound_config_value())
         stt_category.add_config_value(STTDefinitions.get_listen_timeout_config_value())
+        stt_category.add_config_value(STTDefinitions.get_player_speech_max_wait_config_value())
         stt_category.add_config_value(STTDefinitions.get_moonshine_model_size_config_value())
         stt_category.add_config_value(STTDefinitions.get_whisper_model_size_config_value())
         stt_category.add_config_value(STTDefinitions.get_proactive_mic_mode_config_value())
@@ -113,6 +126,7 @@ class MantellaConfigValueDefinitionsNew:
         stt_category.add_config_value(STTDefinitions.get_stt_language_config_value())
         stt_category.add_config_value(STTDefinitions.get_stt_translate_config_value())
         stt_category.add_config_value(STTDefinitions.get_process_device_config_value())
+        stt_category.add_config_value(STTDefinitions.get_stt_filter_hallucinations_config_value())
         stt_category.add_config_value(STTDefinitions.get_moonshine_folder_config_value(is_integrated))
         stt_category.add_config_value(STTDefinitions.get_silence_auto_response_enabled_config_value())
         stt_category.add_config_value(STTDefinitions.get_silence_auto_response_timeout_config_value())
@@ -138,6 +152,7 @@ class MantellaConfigValueDefinitionsNew:
         actions_category = ConfigValueGroup("Actions", "Actions", "Settings for in-game actions.", on_value_change_callback)
         actions_category.add_config_value(ActionDefinitions.get_advanced_actions_enabled_config_value())
         actions_category.add_config_value(ActionDefinitions.get_disabled_actions_config_value())
+        actions_category.add_config_value(ActionDefinitions.get_guided_action_descriptions_config_value())
         actions_category.add_config_value(ActionDefinitions.get_custom_function_model_config_value())
         actions_category.add_config_value(ActionDefinitions.get_function_llm_api_config_value())
         actions_category.add_config_value(ActionDefinitions.get_function_llm_model_config_value())
@@ -153,6 +168,8 @@ class MantellaConfigValueDefinitionsNew:
         result.add_base_group(language_category)
 
         prompts_category = ConfigValueGroup("Prompts", "Prompts", "Change the basic prompts used by Mantella.", on_value_change_callback)
+        prompts_category.add_config_value(PromptDefinitions.get_prompt_profile_config_value())
+        prompts_category.add_config_value(PromptDefinitions.get_knowledge_scope_enabled_config_value())
         prompts_category.add_config_value(PromptDefinitions.get_skyrim_prompt_config_value())
         prompts_category.add_config_value(PromptDefinitions.get_skyrim_multi_npc_prompt_config_value())
         prompts_category.add_config_value(PromptDefinitions.get_skyrim_radiant_prompt_config_value())
@@ -162,6 +179,7 @@ class MantellaConfigValueDefinitionsNew:
         prompts_category.add_config_value(PromptDefinitions.get_memory_prompt_config_value())
         prompts_category.add_config_value(PromptDefinitions.get_memory_prompt_datetime_prefix_config_value())
         prompts_category.add_config_value(PromptDefinitions.get_resummarize_prompt_config_value())
+        prompts_category.add_config_value(RelationshipDefinitions.get_relationship_update_prompt_config_value())
         prompts_category.add_config_value(PromptDefinitions.get_vision_prompt_config_value())
         prompts_category.add_config_value(PromptDefinitions.get_function_llm_prompt_config_value())
         prompts_category.add_config_value(PromptDefinitions.get_radiant_start_prompt_config_value())
@@ -175,6 +193,13 @@ class MantellaConfigValueDefinitionsNew:
         startup_category.add_config_value(StartupDefinitions.get_play_startup_sound_config_value())
         startup_category.add_config_value(StartupDefinitions.get_remove_mei_folders_config_value())
         result.add_base_group(startup_category)
+
+        companion_category = ConfigValueGroup("Companion", "Companion", "Opt-in self-aware companion (eg Lydia) who knows the real player from about_me.txt.", on_value_change_callback)
+        companion_category.add_config_value(CompanionDefinitions.get_companion_enabled_config_value())
+        companion_category.add_config_value(CompanionDefinitions.get_companion_names_config_value())
+        companion_category.add_config_value(CompanionDefinitions.get_companion_about_me_path_config_value())
+        companion_category.add_config_value(CompanionDefinitions.get_companion_group_memories_config_value())
+        result.add_base_group(companion_category)
 
         profile_category = ConfigValueGroup("Profiles", "Profiles", "Profile settings.", on_value_change_callback)
         profile_category.add_config_value(ModelProfileDefinitions.get_apply_model_profiles_config_value())
@@ -192,14 +217,41 @@ class MantellaConfigValueDefinitionsNew:
         other_category.add_config_value(OtherDefinitions.get_voice_player_input())
         other_category.add_config_value(OtherDefinitions.get_player_voice_model())
         other_category.add_config_value(OtherDefinitions.get_conversation_summary_enabled_config_value())
+        other_category.add_config_value(RelationshipDefinitions.get_relationship_tracking_enabled_config_value())
+        other_category.add_config_value(RelationshipDefinitions.get_relationship_affects_trust_config_value())
+        other_category.add_config_value(RelationshipDefinitions.get_relationship_token_budget_config_value())
+        other_category.add_config_value(RelationshipDefinitions.get_relationship_opinion_decay_config_value())
+        other_category.add_config_value(RelationshipDefinitions.get_relationship_bystander_records_config_value())
+        other_category.add_config_value(TrustDefinitions.get_trust_and_honesty_enabled_config_value())
+        other_category.add_config_value(TrustDefinitions.get_trust_tool_model_context_config_value())
+        other_category.add_config_value(MemoryCheckpointDefinitions.get_memory_checkpoint_enabled_config_value())
+        other_category.add_config_value(MemoryCheckpointDefinitions.get_memory_checkpoint_every_n_turns_config_value())
+        other_category.add_config_value(MemoryCheckpointDefinitions.get_memory_checkpoint_idle_minutes_config_value())
+        other_category.add_config_value(MemoryCheckpointDefinitions.get_memory_checkpoint_recover_on_startup_config_value())
         other_category.add_config_value(OtherDefinitions.get_enable_character_tag_reading_config_value())
+        other_category.add_config_value(BioGenerationDefinitions.get_bio_generation_enabled_config_value())
+        other_category.add_config_value(BioGenerationDefinitions.get_bio_generation_scope_config_value())
+        other_category.add_config_value(BioGenerationDefinitions.get_bio_generation_min_words_config_value())
+        other_category.add_config_value(BioGenerationDefinitions.get_bio_generation_wait_seconds_config_value())
+        other_category.add_config_value(BioGenerationDefinitions.get_bio_generation_model_config_value())
+        other_category.add_config_value(SpeechFlavorDefinitions.get_speech_flavor_config_value())
+        other_category.add_config_value(SpeechFlavorDefinitions.get_speech_flavor_intensity_config_value())
+        other_category.add_config_value(SpeechFlavorDefinitions.get_speech_flavor_scope_config_value())
+        other_category.add_config_value(SpeechFlavorDefinitions.get_speech_flavor_tts_respell_config_value())
         other_category.add_config_value(OtherDefinitions.get_save_audio_data_to_character_folder_config_value())
         other_category.add_config_value(OtherDefinitions.get_port_config_value())
         other_category.add_config_value(OtherDefinitions.get_show_http_debug_messages_config_value())
+        other_category.add_config_value(ControlCenterDefinitions.get_control_center_persist_overrides_config_value())
         other_category.add_config_value(OtherDefinitions.get_advanced_logs_config_value())
+        other_category.add_config_value(OtherDefinitions.get_save_conversation_transcripts_config_value())
         other_category.add_config_value(OtherDefinitions.get_enable_telemetry_config_value())
         other_category.add_config_value(OtherDefinitions.get_telemetry_otlp_endpoint_config_value())
         other_category.add_config_value(OtherDefinitions.get_telemetry_protocol_config_value())
+        other_category.add_config_value(LoreDefinitions.get_lore_enabled_config_value())
+        other_category.add_config_value(LoreDefinitions.get_lore_per_turn_config_value())
+        other_category.add_config_value(LoreDefinitions.get_lore_max_notes_config_value())
+        other_category.add_config_value(LoreDefinitions.get_lore_max_tokens_config_value())
+        other_category.add_config_value(LoreDefinitions.get_lore_allow_spoilers_config_value())
         # other_category.add_config_value(OtherDefinitions.get_debugging_config_value())
         # other_category.add_config_value(OtherDefinitions.get_play_audio_from_script_config_value())
         # other_category.add_config_value(OtherDefinitions.get_debugging_npc_config_value())

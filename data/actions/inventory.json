@@ -2,6 +2,8 @@
     "identifier": "mantella_npc_inventory",
     "name": "Inventory",
     "description": "Open inventory to give / take items with the player.",
+    "guided_description": "Open a give/take window with the player. When the NPC agrees to hand over or receive items: a gift, payment, or a follower carrying gear.",
+    "trust_description": "Open a give/take window with the player. When the NPC agrees to hand over or receive items: a gift, payment, a fair request from someone they trust, or a follower carrying gear. Not for someone they distrust.",
     "key": "Inventory",
     "parameters": {
         "source": {

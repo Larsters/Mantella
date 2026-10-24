@@ -12,6 +12,9 @@ from src.config.config_json_writer import ConfigJsonWriter
 from src.config.config_file_writer import ConfigFileWriter
 from src.config.types.config_value_string import ConfigValueString
 import src.utils as utils
+from src.prompt_profiles import apply_prompt_profile
+from src import trust
+import src.transcripts.recorder as transcript_recorder
 from pathlib import Path
 import json
 import urllib
@@ -242,6 +245,8 @@ class ConfigLoader:
                     self.moonshine_folder = ''
             self.whisper_model = self.__definitions.get_string_value("whisper_model_size")
             self.whisper_process_device = self.__definitions.get_string_value("process_device")
+            self.stt_filter_hallucinations = self.__definitions.get_bool_value("stt_filter_hallucinations")
+            self.piper_native = self.__definitions.get_bool_value("piper_native")
             self.stt_language = self.__definitions.get_string_value("stt_language")
             if (self.stt_language == 'default'):
                 self.stt_language = self.language
@@ -256,6 +261,7 @@ class ConfigLoader:
             self.save_mic_input = self.__definitions.get_bool_value("save_mic_input")
             self.pause_threshold = self.__definitions.get_float_value("pause_threshold")
             self.listen_timeout = self.__definitions.get_int_value("listen_timeout")
+            self.player_speech_max_wait = self.__definitions.get_float_value("player_speech_max_wait")
             self.external_whisper_service = self.__definitions.get_bool_value("external_whisper_service")
             self.whisper_url = self.__definitions.get_string_value("whisper_url")
             self.silence_auto_response_enabled = self.__definitions.get_bool_value("silence_auto_response_enabled")
@@ -280,6 +286,10 @@ class ConfigLoader:
                 logger.error(f"""Error in parsing LLM parameter list: {e}
 LLM parameter list must be valid JSON""")
                 self.llm_params = None
+
+            self.reasoning_effort: str = self.__definitions.get_string_value("reasoning_effort")
+            self.verbosity: str = self.__definitions.get_string_value("verbosity")
+            self.summary_condense_token_limit: int = self.__definitions.get_int_value("summary_condense_token_limit")
 
             # self.stop_llm_generation_on_assist_keyword: bool = self.__definitions.get_bool_value("stop_llm_generation_on_assist_keyword")
             
@@ -333,13 +343,41 @@ LLM parameter list must be valid JSON""")
             self.voice_player_input: bool = self.__definitions.get_bool_value("voice_player_input")
             self.player_voice_model: str = self.__definitions.get_string_value("player_voice_model")
             self.conversation_summary_enabled = self.__definitions.get_bool_value("conversation_summary_enabled")
+            # NPC relationships (opinion of the player that persists)
+            self.relationship_tracking_enabled: bool = self.__definitions.get_bool_value("relationship_tracking_enabled")
+            self.relationship_affects_trust: bool = self.__definitions.get_bool_value("relationship_affects_trust")
+            self.relationship_token_budget: int = self.__definitions.get_int_value("relationship_token_budget")
+            self.relationship_opinion_decay_per_day: int = self.__definitions.get_int_value("relationship_opinion_decay_per_day")
+            self.relationship_bystander_records: bool = self.__definitions.get_bool_value("relationship_bystander_records")
+            # Trust and honesty (src/trust)
+            self.trust_and_honesty_enabled: bool = self.__definitions.get_bool_value("trust_and_honesty_enabled")
+            self.trust_tool_model_context: bool = self.__definitions.get_bool_value("trust_tool_model_context")
+            # Crash-safe memory checkpoints (src/memory_checkpoint)
+            self.memory_checkpoint_enabled: bool = self.__definitions.get_bool_value("memory_checkpoint_enabled")
+            self.memory_checkpoint_every_n_turns: int = self.__definitions.get_int_value("memory_checkpoint_every_n_turns")
+            self.memory_checkpoint_idle_minutes: int = self.__definitions.get_int_value("memory_checkpoint_idle_minutes")
+            self.memory_checkpoint_recover_on_startup: bool = self.__definitions.get_bool_value("memory_checkpoint_recover_on_startup")
             self.enable_character_tag_reading: bool = self.__definitions.get_bool_value("enable_character_tag_reading")
+            # Generated bios (src/bio_generation)
+            self.bio_generation_enabled: bool = self.__definitions.get_bool_value("bio_generation_enabled")
+            self.bio_generation_scope: str = self.__definitions.get_string_value("bio_generation_scope")
+            self.bio_generation_min_words: int = self.__definitions.get_int_value("bio_generation_min_words")
+            self.bio_generation_wait_seconds: float = self.__definitions.get_float_value("bio_generation_wait_seconds")
+            self.bio_generation_model: str = self.__definitions.get_string_value("bio_generation_model")
+            # Speech flavour (src/speech_flavor)
+            self.speech_flavor: str = self.__definitions.get_string_value("speech_flavor")
+            self.speech_flavor_intensity: str = self.__definitions.get_string_value("speech_flavor_intensity")
+            self.speech_flavor_scope: str = self.__definitions.get_string_value("speech_flavor_scope")
+            self.speech_flavor_tts_respell: bool = self.__definitions.get_bool_value("speech_flavor_tts_respell")
 
             #HTTP
             self.port = self.__definitions.get_int_value("port")
             self.show_http_debug_messages: bool = self.__definitions.get_bool_value("show_http_debug_messages")
+            self.control_center_persist_overrides: bool = self.__definitions.get_bool_value("control_center_persist_overrides")
 
             self.advanced_logs = self.__definitions.get_bool_value("advanced_logs")
+            self.save_conversation_transcripts: bool = self.__definitions.get_bool_value("save_conversation_transcripts")
+            transcript_recorder.configure(self.save_conversation_transcripts, self.save_folder)
 
             self.save_audio_data_to_character_folder = self.__definitions.get_bool_value("save_audio_data_to_character_folder")
 
@@ -360,8 +398,14 @@ LLM parameter list must be valid JSON""")
             self.memory_prompt = self.__definitions.get_string_value("memory_prompt")
             self.memory_prompt_datetime_prefix = self.__definitions.get_bool_value("memory_prompt_datetime_prefix")
             self.resummarize_prompt = self.__definitions.get_string_value("resummarize_prompt")
+            self.relationship_update_prompt = self.__definitions.get_string_value("relationship_update_prompt")
             self.vision_prompt = self.__definitions.get_string_value("vision_prompt")
             self.function_llm_prompt = self.__definitions.get_string_value("function_llm_prompt")
+            # Prompt profiles + knowledge scope (feat/prompt-overhaul)
+            self.prompt_profile: str = self.__definitions.get_string_value("prompt_profile")
+            self.knowledge_scope_enabled: bool = self.__definitions.get_bool_value("knowledge_scope_enabled")
+            apply_prompt_profile(self)
+            trust.apply_prompt_rules(self)  # trust and honesty rule blocks (no-op when off)
 
             # Vision
             self.vision_enabled = self.__definitions.get_bool_value('vision_enabled')
@@ -389,10 +433,18 @@ LLM parameter list must be valid JSON""")
             self.enable_telemetry = self.__definitions.get_bool_value("enable_telemetry")
             self.telemetry_otlp_endpoint = self.__definitions.get_string_value("telemetry_otlp_endpoint")
             self.telemetry_protocol = self.__definitions.get_string_value("telemetry_protocol")
+
+            # Lore lookup (src/lore)
+            self.lore_enabled: bool = self.__definitions.get_bool_value("lore_enabled")
+            self.lore_per_turn: bool = self.__definitions.get_bool_value("lore_per_turn")
+            self.lore_max_notes: int = self.__definitions.get_int_value("lore_max_notes")
+            self.lore_max_tokens: int = self.__definitions.get_int_value("lore_max_tokens")
+            self.lore_allow_spoilers: bool = self.__definitions.get_bool_value("lore_allow_spoilers")
             
             # Actions
             self.advanced_actions_enabled = self.__definitions.get_bool_value("advanced_actions_enabled")
             self.disabled_actions: list[str] = self.__definitions.get_string_list_value("disabled_actions")
+            self.guided_action_descriptions: bool = self.__definitions.get_bool_value("guided_action_descriptions")
             self.custom_function_model = self.__definitions.get_bool_value("custom_function_model")
             self.function_llm_api = self.__definitions.get_string_value("function_llm_api")
             self.function_llm = self.__definitions.get_string_value("function_llm")

@@ -2,6 +2,8 @@
     "identifier": "mantella_npc_vision",
     "name": "Look",
     "description": "Look at what the player sees.",
+    "guided_description": "See what the player sees. Only when asked to look at something or what is around.",
+    "trust_description": "See what the player sees right now. Use whenever the NPC is asked to look at, check, inspect or examine something nearby (a barrel, chest, item, person, \"that over there\"), or to check something the player claims is there, if willing.",
     "note": "Vision must also be enabled in the Mantella UI for this action to work. If enabled, NPCs can choose whether to use vision each turn. If disabled, vision will trigger every turn.",
     "key": "Look",
     "prompt": "To see what the player sees, begin your response with '{key}:'.",

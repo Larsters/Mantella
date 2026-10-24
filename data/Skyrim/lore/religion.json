@@ -1,0 +1,538 @@
+{
+  "attribution": "Notes paraphrased in our own words from the Unofficial Elder Scrolls Pages (UESP, https://en.uesp.net), licensed CC BY-SA 2.5. Each note lists the page it was drawn from in 'source'.",
+  "notes": [
+    {
+      "id": "talos_ban",
+      "title": "The Talos ban",
+      "scope": "topic",
+      "aliases": [
+        "Talos",
+        "Talos worship",
+        "worship of Talos",
+        "Talos ban",
+        "Ninth Divine",
+        "shrine of Talos",
+        "Heimskr"
+      ],
+      "keywords": [
+        "outlawed",
+        "Thalmor",
+        "Concordat",
+        "Ulfric",
+        "Stormcloaks",
+        "Justiciars",
+        "forbidden",
+        "heresy",
+        "Tiber Septim",
+        "pray"
+      ],
+      "text": "Talos, the deified Tiber Septim, was a Nord and is beloved in Skyrim, but the White-Gold Concordat outlawed his worship. Thalmor Justiciars hunt anyone keeping his shrines, so many Nords pray in secret, while Windhelm worships openly. Defying the ban divides the civil war.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Talos"
+    },
+    {
+      "id": "nine_divines",
+      "title": "The Nine Divines",
+      "scope": "topic",
+      "aliases": [
+        "Nine Divines",
+        "Eight Divines",
+        "the Divines",
+        "Aedra",
+        "the gods"
+      ],
+      "keywords": [
+        "Akatosh",
+        "Arkay",
+        "Dibella",
+        "Julianos",
+        "Kynareth",
+        "Mara",
+        "Stendarr",
+        "Zenithar",
+        "Talos",
+        "temple",
+        "worship",
+        "pray"
+      ],
+      "text": "The Empire's official faith honors the Eight Divines: Akatosh, Arkay, Dibella, Julianos, Kynareth, Mara, Stendarr and Zenithar. The ninth, Talos, has been officially struck out under the Concordat, though most Nords still count him.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Nine_Divines"
+    },
+    {
+      "id": "akatosh",
+      "title": "Akatosh",
+      "scope": "topic",
+      "aliases": [
+        "Akatosh",
+        "Dragon God of Time",
+        "Alkosh"
+      ],
+      "keywords": [
+        "time",
+        "chief of the Divines",
+        "Dragonborn",
+        "dragon blood"
+      ],
+      "text": "Akatosh, the Dragon God of Time, is the chief of the Divines. Legend says he grants the Dragonborn their dragon souls, and the Nords sometimes link him with Alduin, though most priests reject that idea.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Akatosh"
+    },
+    {
+      "id": "arkay",
+      "title": "Arkay",
+      "scope": "topic",
+      "aliases": [
+        "Arkay",
+        "Hall of the Dead",
+        "Priest of Arkay"
+      ],
+      "keywords": [
+        "death",
+        "burial",
+        "funeral",
+        "undead",
+        "necromancy",
+        "catacombs"
+      ],
+      "text": "Arkay is the god of birth, death and the cycle of life. His priests tend the Halls of the Dead in each city and see necromancy and the undead as abominations.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Arkay"
+    },
+    {
+      "id": "dibella",
+      "title": "Dibella",
+      "scope": "topic",
+      "aliases": [
+        "Dibella",
+        "Temple of Dibella",
+        "Sybil of Dibella"
+      ],
+      "keywords": [
+        "beauty",
+        "love",
+        "art",
+        "Markarth temple",
+        "priestesses"
+      ],
+      "text": "Dibella is the goddess of beauty, love and art. Her greatest temple in Skyrim is in Markarth, served by priestesses who keep a young girl, the Sybil, as the goddess's living voice.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Dibella"
+    },
+    {
+      "id": "kynareth",
+      "title": "Kynareth / Kyne",
+      "scope": "topic",
+      "aliases": [
+        "Kynareth",
+        "Kyne",
+        "Mother of Men",
+        "Gildergreen",
+        "Eldergleam"
+      ],
+      "keywords": [
+        "sky",
+        "wind",
+        "nature",
+        "Thu'um",
+        "Whiterun temple",
+        "Danica",
+        "hunters"
+      ],
+      "text": "Kynareth, whom Nords call Kyne, is the goddess of the sky, wind and nature; Nords say she gave men the power of the Voice. Her temple in Whiterun tends the Gildergreen, a sapling of the ancient Eldergleam tree.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Kynareth"
+    },
+    {
+      "id": "mara",
+      "title": "Mara",
+      "scope": "topic",
+      "aliases": [
+        "Mara",
+        "Temple of Mara",
+        "Amulet of Mara",
+        "marriage"
+      ],
+      "keywords": [
+        "love",
+        "compassion",
+        "wedding",
+        "Maramal",
+        "Riften",
+        "marry"
+      ],
+      "text": "Mara is the mother goddess of love and compassion. Couples in Skyrim marry at her temple in Riften, where Maramal will perform the ceremony for anyone wearing an Amulet of Mara who finds a willing partner.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Mara"
+    },
+    {
+      "id": "stendarr",
+      "title": "Stendarr",
+      "scope": "topic",
+      "aliases": [
+        "Stendarr"
+      ],
+      "keywords": [
+        "mercy",
+        "justice",
+        "Vigilants",
+        "charity",
+        "righteous"
+      ],
+      "text": "Stendarr is the god of mercy, justice and righteous might. His Vigilants hunt Daedra worshippers and undead in his name.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Stendarr"
+    },
+    {
+      "id": "julianos_zenithar",
+      "title": "Julianos and Zenithar",
+      "scope": "topic",
+      "aliases": [
+        "Julianos",
+        "Zenithar"
+      ],
+      "keywords": [
+        "wisdom",
+        "logic",
+        "law",
+        "work",
+        "commerce",
+        "merchants",
+        "trade"
+      ],
+      "text": "Julianos is the god of wisdom, logic and law, honored by scholars and magistrates. Zenithar is the god of work and commerce, favored by merchants and craftsmen.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Zenithar"
+    },
+    {
+      "id": "nord_pantheon",
+      "title": "The old Nord gods",
+      "scope": "topic",
+      "aliases": [
+        "Shor",
+        "Tsun",
+        "Ysmir",
+        "Stuhn",
+        "old Nord gods",
+        "Atmoran gods"
+      ],
+      "keywords": [
+        "Sovngarde",
+        "Kyne",
+        "Alduin",
+        "Orkey",
+        "Jhunal",
+        "Mauloch",
+        "ancestors"
+      ],
+      "text": "Nords keep older names for many gods: Shor, the fallen god who rules Sovngarde; Kyne, the warrior widow of the sky; and Tsun, who guards the bridge into Sovngarde. Talos is also called Ysmir, the Dragon of the North.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Nordic_Pantheon"
+    },
+    {
+      "id": "daedric_princes",
+      "title": "The Daedric Princes",
+      "scope": "topic",
+      "aliases": [
+        "Daedric Prince",
+        "Daedric Princes",
+        "Daedra",
+        "Oblivion",
+        "Daedric shrine",
+        "Daedric artifact"
+      ],
+      "keywords": [
+        "Azura",
+        "Boethiah",
+        "Clavicus Vile",
+        "Hermaeus Mora",
+        "Hircine",
+        "Malacath",
+        "Mehrunes Dagon",
+        "Mephala",
+        "Meridia",
+        "Molag Bal",
+        "Namira",
+        "Nocturnal",
+        "Peryite",
+        "Sanguine",
+        "Sheogorath",
+        "Vaermina",
+        "worship",
+        "cult"
+      ],
+      "text": "The Daedric Princes are powerful immortal beings who rule realms in Oblivion and meddle in mortal affairs, granting artifacts to those who serve them. Most respectable people in Skyrim see Daedra worship as dangerous or wicked, though Dunmer revere Azura, Boethiah and Mephala.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Daedric_Princes"
+    },
+    {
+      "id": "azura",
+      "title": "Azura",
+      "scope": "topic",
+      "aliases": [
+        "Azura",
+        "Shrine of Azura",
+        "Azura's Star"
+      ],
+      "keywords": [
+        "dawn",
+        "dusk",
+        "Dunmer",
+        "prophecy",
+        "Aranea",
+        "Winterhold"
+      ],
+      "text": "Azura is the Daedric Prince of dusk and dawn, revered by many Dunmer as a protector. A giant statue of her stands on a mountain south of Winterhold, carved by refugees from Morrowind, where a priestess named Aranea keeps watch.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Azura"
+    },
+    {
+      "id": "molag_bal",
+      "title": "Molag Bal",
+      "scope": "topic",
+      "aliases": [
+        "Molag Bal",
+        "Lord of Domination",
+        "father of vampires"
+      ],
+      "keywords": [
+        "vampires",
+        "domination",
+        "enslavement",
+        "Coldharbour",
+        "Mace of Molag Bal",
+        "Markarth house"
+      ],
+      "text": "Molag Bal is the Daedric Prince of domination and enslavement, whose realm is Coldharbour. Legend says he created the first vampire, and his name is a curse in Skyrim.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Molag_Bal"
+    },
+    {
+      "id": "hircine",
+      "title": "Hircine",
+      "scope": "topic",
+      "aliases": [
+        "Hircine",
+        "Huntsman",
+        "Hunting Grounds",
+        "Father of Manbeasts"
+      ],
+      "keywords": [
+        "hunt",
+        "werewolves",
+        "lycanthropy",
+        "Bloodmoon",
+        "Savior's Hide"
+      ],
+      "text": "Hircine is the Daedric Prince of the hunt, father of werewolves and other beast-folk. His followers see life as a great chase, and the souls of werewolves are said to run forever in his Hunting Grounds.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Hircine"
+    },
+    {
+      "id": "sheogorath_sanguine",
+      "title": "Sheogorath and Sanguine",
+      "scope": "topic",
+      "aliases": [
+        "Sheogorath",
+        "Mad God",
+        "Sanguine",
+        "Shivering Isles"
+      ],
+      "keywords": [
+        "madness",
+        "debauchery",
+        "drinking",
+        "Pelagius",
+        "Sam Guevenne",
+        "Wabbajack"
+      ],
+      "text": "Sheogorath is the Mad God, Prince of madness, whose realm is the Shivering Isles. Sanguine is the Prince of debauchery and revelry, known for showing up at drinking contests with strange wagers.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Sheogorath"
+    },
+    {
+      "id": "nocturnal",
+      "title": "Nocturnal",
+      "scope": "topic",
+      "aliases": [
+        "Nocturnal",
+        "Lady Luck",
+        "Mistress of Shadows",
+        "Evergloam"
+      ],
+      "keywords": [
+        "night",
+        "darkness",
+        "luck",
+        "thieves",
+        "ravens",
+        "Skeleton Key"
+      ],
+      "text": "Nocturnal is the Daedric Prince of night, darkness and luck. Thieves pray to 'Lady Luck', and the Thieves Guild's fortunes are said to rise and fall with her favor.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Nocturnal"
+    },
+    {
+      "id": "malacath",
+      "title": "Malacath",
+      "scope": "topic",
+      "aliases": [
+        "Malacath",
+        "Mauloch",
+        "Code of Malacath"
+      ],
+      "keywords": [
+        "Orcs",
+        "outcasts",
+        "curses",
+        "oaths",
+        "strongholds",
+        "Volendrung"
+      ],
+      "text": "Malacath is the Daedric Prince of outcasts, sworn oaths and curses, and the patron god of the Orcs, who live by his Code in their strongholds. Nords know him as Mauloch, the orc-god their ancestors once fought.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Malacath"
+    },
+    {
+      "id": "mehrunes_dagon",
+      "title": "Mehrunes Dagon",
+      "scope": "topic",
+      "aliases": [
+        "Mehrunes Dagon",
+        "Dagon",
+        "Mythic Dawn",
+        "Mehrunes' Razor"
+      ],
+      "keywords": [
+        "destruction",
+        "Oblivion Crisis",
+        "cultists",
+        "change",
+        "ambition"
+      ],
+      "text": "Mehrunes Dagon is the Daedric Prince of destruction and revolution. His invasion of Tamriel through the Oblivion gates two centuries ago is remembered as the Oblivion Crisis, and the Mythic Dawn cult that served him is supposed to be long gone.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Mehrunes_Dagon"
+    },
+    {
+      "id": "vaermina_namira_boethiah",
+      "title": "Vaermina, Namira and Boethiah",
+      "scope": "topic",
+      "aliases": [
+        "Vaermina",
+        "Namira",
+        "Boethiah",
+        "cannibals",
+        "Hall of the Dead cannibals"
+      ],
+      "keywords": [
+        "nightmares",
+        "dreams",
+        "Skull of Corruption",
+        "decay",
+        "cannibalism",
+        "betrayal",
+        "deceit",
+        "Dawnstar"
+      ],
+      "text": "Vaermina is the Daedric Prince of dreams and nightmares, Namira the Lady of Decay worshipped by secret cannibal cults, and Boethiah the Prince of deceit and conspiracy, whose cultists prize betrayal. All three are spoken of in Skyrim with fear and disgust.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Vaermina"
+    },
+    {
+      "id": "meridia_peryite_clavicus",
+      "title": "Meridia, Peryite, Clavicus Vile and Mephala",
+      "scope": "topic",
+      "aliases": [
+        "Meridia",
+        "Peryite",
+        "Clavicus Vile",
+        "Barbas",
+        "Mephala",
+        "Ebony Blade"
+      ],
+      "keywords": [
+        "light",
+        "undead haters",
+        "pestilence",
+        "plague",
+        "wishes",
+        "bargains",
+        "secrets",
+        "murder",
+        "spider"
+      ],
+      "text": "Meridia is the Daedric Prince of life and light who despises the undead. Peryite rules pestilence, Clavicus Vile grants wishes with a catch through his talking dog Barbas, and Mephala, the Webspinner, deals in secrets, lies and murder.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Daedric_Princes"
+    },
+    {
+      "id": "hermaeus_mora",
+      "title": "Hermaeus Mora",
+      "scope": "topic",
+      "aliases": [
+        "Hermaeus Mora",
+        "Apocrypha",
+        "Black Book",
+        "Black Books",
+        "Oghma Infinium"
+      ],
+      "keywords": [
+        "forbidden knowledge",
+        "tentacles",
+        "Daedric Prince of knowledge",
+        "secrets",
+        "Miraak"
+      ],
+      "text": "Hermaeus Mora is the Daedric Prince of forbidden knowledge and fate, whose realm Apocrypha is an endless library. Scholars who seek his Black Books are said to be lost to madness or to his service.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Hermaeus_Mora"
+    },
+    {
+      "id": "sithis_night_mother",
+      "title": "Sithis and the Night Mother",
+      "scope": "topic",
+      "aliases": [
+        "Sithis",
+        "Dread Father",
+        "Night Mother",
+        "Unholy Matron"
+      ],
+      "keywords": [
+        "Dark Brotherhood",
+        "Listener",
+        "Black Sacrament",
+        "dread",
+        "assassins"
+      ],
+      "text": "Sithis is the Dread Father, the primal void and chaos that the Dark Brotherhood worships. The Night Mother is his spirit bride, who speaks only to a chosen Listener and passes on the prayers of those who perform the Black Sacrament.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Sithis"
+    },
+    {
+      "id": "old_gods_reach",
+      "title": "The Old Gods of the Reach",
+      "scope": "topic",
+      "aliases": [
+        "Old Gods",
+        "Reachmen gods",
+        "hagraven",
+        "hagravens",
+        "briarheart",
+        "Briarhearts"
+      ],
+      "keywords": [
+        "Forsworn",
+        "witches",
+        "ritual",
+        "heart",
+        "sacrifice",
+        "Reach",
+        "Daedra"
+      ],
+      "text": "The Forsworn and many Reachmen worship the Old Gods, which outsiders say are simply the Daedric Princes under other names. Their hagravens, witches transformed into half-bird crones, make briarhearts: warriors whose hearts are replaced by a magical briar.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Hagraven"
+    }
+  ]
+}

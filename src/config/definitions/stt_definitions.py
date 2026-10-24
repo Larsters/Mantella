@@ -142,13 +142,27 @@ class STTDefinitions:
 
     @staticmethod
     def get_process_device_config_value() -> ConfigValue:
-        description = "Whether to run Whisper on your CPU or NVIDIA GPU (with CUDA installed) (only impacts faster_whisper option, no impact on whispercpp, which is controlled by your server)."
-        return ConfigValueSelection("process_device", "Whisper Process Device", description,"cpu",["cpu","cuda"], tags=[ConfigValueTag.advanced])
+        description = """Whether to run Whisper on your CPU, NVIDIA GPU (with CUDA installed) or Apple Silicon GPU (`mlx`, requires the mlx-whisper package) (only impacts faster_whisper option, no impact on whispercpp, which is controlled by your server).
+                        With `mlx`, `Whisper Model` sizes such as `small` or `large-v3-turbo` map to mlx-community models; any other value is used as a Hugging Face repo id."""
+        return ConfigValueSelection("process_device", "Whisper Process Device", description,"cpu",["cpu","cuda","mlx"], tags=[ConfigValueTag.advanced])
+
+    @staticmethod
+    def get_stt_filter_hallucinations_config_value() -> ConfigValue:
+        description = """Drop transcripts that are typical Whisper failures instead of player speech: the transcription prompt echoed back
+                        (eg a list of the NPC names in the conversation), the same word repeated over and over, or text in another script than the selected language.
+                        These usually come from silence or background noise."""
+        return ConfigValueBool("stt_filter_hallucinations", "Filter Whisper Hallucinations", description, False, tags=[ConfigValueTag.advanced])
     
     @staticmethod
     def get_moonshine_folder_config_value(is_hidden: bool = False) -> ConfigValue:
         description = "The folder where Moonshine models are installed (where tiny/ and base/ folders exist)."
         return ConfigValueString("moonshine_folder", "Moonshine Folder", description, "", is_hidden=is_hidden, tags=[ConfigValueTag.advanced])
+
+    @staticmethod
+    def get_player_speech_max_wait_config_value() -> ConfigValue:
+        description = """How long (in seconds) Mantella waits for the player to START speaking before it hands the turn back to the game, which immediately asks to listen again.
+                        This keeps the server from waiting forever when the game drops a conversation (stopquest, recast, crash, loading a save). 0 = wait forever (upstream behaviour)."""
+        return ConfigValueFloat("player_speech_max_wait", "Max Wait for Player Speech", description, 120.0, 0, 3600, tags=[ConfigValueTag.advanced, ConfigValueTag.share_row])
 
     @staticmethod
     def get_silence_auto_response_enabled_config_value() -> ConfigValue:

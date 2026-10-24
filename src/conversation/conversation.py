@@ -15,6 +15,8 @@ from src.remember.remembering import Remembering
 from src.output_manager import ChatManager
 from src.llm.messages import AssistantMessage, SystemMessage, UserMessage
 from src.conversation.context import Context
+from src.lore import lore_hooks
+from src import memory_checkpoint
 from src.llm.message_thread import message_thread
 from src.conversation.conversation_type import conversation_type, multi_npc, pc_to_npc, radiant
 from src.character_manager import Character
@@ -270,6 +272,7 @@ class Conversation:
             new_message: UserMessage = UserMessage(self.__context.config, player_text, player_character.name, False)
             new_message.is_multi_npc_message = self.__context.npcs_in_conversation.contains_multiple_npcs()
             new_message = self.update_game_events(new_message)
+            lore_hooks.attach_turn_lore(self.__context, new_message, self.__messages) # lore lookup (src/lore); no-op when disabled
             self.__messages.add_message(new_message)
             player_voiceline = self.__get_player_voiceline(player_character, player_text)
             text = new_message.text
@@ -283,6 +286,7 @@ class Conversation:
             self.initiate_end_sequence()
         else:
             self.__start_generating_npc_sentences()
+            memory_checkpoint.on_player_turn(self.__rememberer, self.__messages, self.__context)  # crash-safe memory (no-op when off)
 
         return player_text, events_need_updating, player_voiceline
 

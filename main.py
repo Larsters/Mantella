@@ -5,6 +5,7 @@ from src.http.routes.routeable import routeable
 from src.http.routes.mantella_route import mantella_route
 from src.setup import MantellaSetup
 from src.ui.start_ui import StartUI
+from src.control_center.route import ControlCenterRoute
 import src.utils as utils
 
 def main():
@@ -27,7 +28,7 @@ def main():
             language_info=language_info,
         )
         ui = StartUI(config)
-        routes: list[routeable] = [conversation, ui]
+        routes: list[routeable] = [conversation, ui, ControlCenterRoute(config)]
         
         mantella_http_server.start(int(config.port), routes, config.play_startup_sound, config.show_http_debug_messages)
 

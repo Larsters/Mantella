@@ -2,6 +2,7 @@
     "identifier": "mantella_npc_travelto",
     "name": "TravelTo",
     "description": "Make NPC(s) travel to a specific location.",
+    "guided_description": "Make NPC(s) travel to a place. Only when the NPC agrees or decides to go somewhere.",
     "note": "EXPERIMENTAL: Can cause NPC AI packages to break. NPCs can sometimes choose incompatible locations to travel to. Known locations are an exhaustive list of game locations that have a map marker.",
     "key": "TravelTo",
     "parameters": {

@@ -2,6 +2,7 @@
     "identifier": "mantella_npc_barter",
     "name": "Barter",
     "description": "Show what an NPC has for sale.",
+    "guided_description": "Open the NPC's shop as soon as the player wants to buy, sell or see wares. Merchants, smiths, innkeepers and other traders only. Prices are fixed; never promise discounts.",
     "key": "Barter",
     "parameters": {
         "source": {

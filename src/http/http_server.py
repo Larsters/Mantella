@@ -1,9 +1,12 @@
 import logging
+import os
+import threading
 import click
 from fastapi import FastAPI
 import uvicorn
 from src.http.routes.routeable import routeable
 from src import utils
+from src.stt import listen_control
 
 logger = utils.get_logger()
 
@@ -11,6 +14,8 @@ logger = utils.get_logger()
 class http_server:
     """A simple http server using FastAPI. Can be started using different routes.
     """
+    GRACEFUL_SHUTDOWN_SECONDS: int = 5
+
     def __init__(self) -> None:
         self.__app = FastAPI()
 
@@ -58,4 +63,27 @@ class http_server:
         logger.log(25, 'https://art-from-the-machine.github.io/Mantella/pages/issues_qna')
         logger.log(24, '\nWaiting for player to select an NPC...')
     
-        uvicorn.run(self.__app, port=port)
+        server = _MantellaUvicornServer(uvicorn.Config(self.__app, port=port, timeout_graceful_shutdown=self.GRACEFUL_SHUTDOWN_SECONDS))
+        server.run()
+
+
+class _MantellaUvicornServer(uvicorn.Server):
+    """uvicorn server whose SIGTERM/SIGINT also aborts a pending wait for player speech (feat/no-hang-listen).
+
+    Without this, uvicorn's graceful shutdown waits forever for the /mantella request that is
+    blocked on the microphone. A daemon watchdog force-exits if shutdown still stalls.
+    """
+    FORCE_EXIT_AFTER_SECONDS: float = 10.0
+
+    def handle_exit(self, sig, frame) -> None:
+        if not listen_control.is_shutting_down():
+            listen_control.shutdown()
+            watchdog = threading.Timer(self.FORCE_EXIT_AFTER_SECONDS, _force_exit)
+            watchdog.daemon = True
+            watchdog.start()
+        super().handle_exit(sig, frame)
+
+
+def _force_exit() -> None:
+    logger.warning('Shutdown is taking too long: forcing Mantella to exit')
+    os._exit(0)

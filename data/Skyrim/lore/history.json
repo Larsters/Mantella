@@ -1,0 +1,442 @@
+{
+  "attribution": "Notes paraphrased in our own words from the Unofficial Elder Scrolls Pages (UESP, https://en.uesp.net), licensed CC BY-SA 2.5. Each note lists the page it was drawn from in 'source'.",
+  "notes": [
+    {
+      "id": "civil_war",
+      "title": "The Skyrim civil war",
+      "scope": "event",
+      "aliases": [
+        "civil war",
+        "the war",
+        "Stormcloak rebellion",
+        "war for Skyrim",
+        "the rebellion"
+      ],
+      "keywords": [
+        "Stormcloaks",
+        "Imperials",
+        "Ulfric",
+        "Tullius",
+        "fighting",
+        "sides",
+        "battle",
+        "independence",
+        "war"
+      ],
+      "text": "Skyrim is at war with itself: Ulfric Stormcloak's rebels fight for independence and the return of Talos worship, while General Tullius's Imperial Legion fights to keep Skyrim in the Empire. The holds are split, and ordinary folk suffer raids, high prices and divided families.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Civil_War"
+    },
+    {
+      "id": "civil_war_holds",
+      "title": "Who backs whom in the war",
+      "scope": "event",
+      "aliases": [
+        "which side",
+        "whose side",
+        "holds that support",
+        "Imperial holds",
+        "Stormcloak holds"
+      ],
+      "keywords": [
+        "Haafingar",
+        "Reach",
+        "Falkreath",
+        "Hjaalmarch",
+        "Eastmarch",
+        "Rift",
+        "Pale",
+        "Winterhold",
+        "Whiterun neutral",
+        "allegiance",
+        "war",
+        "neutral"
+      ],
+      "text": "When the war began, Haafingar, the Reach, Falkreath and Hjaalmarch backed the Empire, while Eastmarch, the Rift, the Pale and Winterhold backed Ulfric. Whiterun, at the center, stayed neutral, and both sides know whoever holds Whiterun holds Skyrim.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Civil_War"
+    },
+    {
+      "id": "great_war",
+      "title": "The Great War",
+      "scope": "event",
+      "aliases": [
+        "Great War",
+        "war with the Dominion",
+        "war with the elves",
+        "Battle of the Red Ring"
+      ],
+      "keywords": [
+        "Aldmeri Dominion",
+        "Thalmor",
+        "Imperial City sacked",
+        "4E 171",
+        "4E 175",
+        "Titus Mede II",
+        "Red Ring",
+        "Hammerfell"
+      ],
+      "text": "The Great War (4E 171-175) pitted the Empire against the Aldmeri Dominion. The Thalmor sacked the Imperial City; Emperor Titus Mede II retook it at the Battle of the Red Ring, but the exhausted Empire then made peace on humiliating terms. Many Skyrim veterans remember it bitterly.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Great_War"
+    },
+    {
+      "id": "white_gold_concordat",
+      "title": "The White-Gold Concordat",
+      "scope": "event",
+      "aliases": [
+        "White-Gold Concordat",
+        "the Concordat",
+        "the treaty",
+        "peace treaty"
+      ],
+      "keywords": [
+        "Talos ban",
+        "Thalmor",
+        "Great War",
+        "Hammerfell ceded",
+        "Justiciars",
+        "humiliation",
+        "peace"
+      ],
+      "text": "The White-Gold Concordat ended the Great War. The Empire gave up southern Hammerfell, disbanded the Blades, outlawed Talos worship and let Thalmor Justiciars enforce the ban. Many Nords see it as betrayal, and it is the root of Ulfric's rebellion.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:White-Gold_Concordat"
+    },
+    {
+      "id": "markarth_incident",
+      "title": "The Markarth Incident",
+      "scope": "event",
+      "aliases": [
+        "Markarth Incident",
+        "retaking of Markarth",
+        "Reach rebellion"
+      ],
+      "keywords": [
+        "Ulfric",
+        "Forsworn",
+        "Talos worship",
+        "Thalmor",
+        "Hrolfdir",
+        "Igmund",
+        "massacre",
+        "4E 176"
+      ],
+      "text": "In 4E 176 the Forsworn seized the Reach and held Markarth for two years. Ulfric Stormcloak's militia retook it on the promise that Talos worship would be allowed. When the Thalmor found out, they demanded Ulfric's arrest, and the broken promise turned Ulfric against the Empire.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Markarth_Incident",
+      "places": [
+        "markarth",
+        "the_reach"
+      ]
+    },
+    {
+      "id": "death_of_torygg",
+      "title": "The death of High King Torygg",
+      "scope": "event",
+      "aliases": [
+        "Torygg",
+        "High King Torygg",
+        "killed the High King",
+        "murdered the High King",
+        "Ulfric killed the king"
+      ],
+      "keywords": [
+        "Ulfric",
+        "Shout",
+        "Thu'um",
+        "duel",
+        "Blue Palace",
+        "Elisif",
+        "murder",
+        "ancient custom",
+        "Solitude"
+      ],
+      "text": "Ulfric Stormcloak challenged High King Torygg to a duel in the Blue Palace and killed him with his Voice. Ulfric's followers call it an honorable challenge by ancient custom; Imperials and Torygg's widow Elisif call it murder. It sparked the open civil war.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Torygg",
+      "places": [
+        "solitude"
+      ]
+    },
+    {
+      "id": "the_moot",
+      "title": "The Moot and the High Kingship",
+      "scope": "event",
+      "aliases": [
+        "Moot",
+        "High King",
+        "High Queen",
+        "next High King",
+        "succession"
+      ],
+      "keywords": [
+        "Jarls",
+        "council",
+        "Elisif",
+        "Ulfric claim",
+        "throne",
+        "crown"
+      ],
+      "text": "Skyrim's High King is chosen by the Moot, a council of all the Jarls. Since Torygg's death no Moot has been called: the Empire favors his widow Elisif, while Ulfric claims the crown for himself.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Moot"
+    },
+    {
+      "id": "helgen_attack",
+      "title": "The attack on Helgen",
+      "scope": "event",
+      "aliases": [
+        "Helgen attack",
+        "attack on Helgen",
+        "dragon at Helgen",
+        "Helgen burned"
+      ],
+      "keywords": [
+        "dragon",
+        "execution",
+        "Ulfric escaped",
+        "black dragon",
+        "Hadvar",
+        "Ralof"
+      ],
+      "text": "Word has spread that Helgen was destroyed by a dragon in the middle of Ulfric's execution, and that Ulfric escaped in the chaos. Many dismiss it as wild rumor; others fear the old tales are coming true.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Helgen",
+      "places": [
+        "helgen",
+        "riverwood"
+      ]
+    },
+    {
+      "id": "return_of_dragons",
+      "title": "The return of the dragons",
+      "scope": "event",
+      "aliases": [
+        "dragons are back",
+        "dragons have returned",
+        "dragon attacks",
+        "dragons returning"
+      ],
+      "keywords": [
+        "dragon",
+        "dragons",
+        "burial mounds",
+        "Alduin",
+        "end times",
+        "prophecy",
+        "sky",
+        "watchtower"
+      ],
+      "text": "Dragons had not been seen in Skyrim for thousands of years, but now they are attacking towns and travellers. People argue whether it is an omen of the end times, punishment for abandoning Talos, or something worse.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Skyrim:Dragons"
+    },
+    {
+      "id": "alduin_returned",
+      "title": "Alduin's return",
+      "scope": "event",
+      "aliases": [
+        "Alduin returned",
+        "the black dragon",
+        "raising the dead dragons"
+      ],
+      "keywords": [
+        "Alduin",
+        "World-Eater",
+        "burial mounds",
+        "resurrect",
+        "Sovngarde",
+        "souls"
+      ],
+      "text": "The black dragon seen at Helgen is Alduin the World-Eater himself, returned from beyond time. He flies across Skyrim raising the dead dragons from their burial mounds, and he devours souls in Sovngarde to grow stronger.",
+      "spoiler": true,
+      "gate": "A Blade in the Dark",
+      "source": "https://en.uesp.net/wiki/Skyrim:Alduin"
+    },
+    {
+      "id": "dragon_war",
+      "title": "The Dragon War",
+      "scope": "event",
+      "aliases": [
+        "Dragon War",
+        "ancient war against the dragons"
+      ],
+      "keywords": [
+        "Dragon Cult",
+        "Alduin",
+        "Kyne",
+        "ancient Nords",
+        "Throat of the World",
+        "Elder Scroll",
+        "time"
+      ],
+      "text": "Long ago the ancient Nords rose up against the dragons who ruled them. Taught the Thu'um by Kyne's grace, their heroes fought Alduin on the Throat of the World, and legend says they cast him out of time with an Elder Scroll.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Dragon_War"
+    },
+    {
+      "id": "red_year",
+      "title": "The Red Year",
+      "scope": "event",
+      "aliases": [
+        "Red Year",
+        "Red Mountain eruption",
+        "eruption of Red Mountain",
+        "Vvardenfell destroyed",
+        "Argonian invasion"
+      ],
+      "keywords": [
+        "Morrowind",
+        "refugees",
+        "Dunmer",
+        "ash",
+        "Solstheim",
+        "4E 5",
+        "Black Marsh"
+      ],
+      "text": "In 4E 5 Red Mountain on Vvardenfell erupted, devastating Morrowind, and the Argonians soon invaded its south. Waves of Dunmer refugees fled to Skyrim and Solstheim, and their descendants are still treated as outsiders.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Red_Year",
+      "places": [
+        "windhelm"
+      ]
+    },
+    {
+      "id": "oblivion_crisis",
+      "title": "The Oblivion Crisis",
+      "scope": "event",
+      "aliases": [
+        "Oblivion Crisis",
+        "Oblivion gates",
+        "Mehrunes Dagon invasion",
+        "Martin Septim"
+      ],
+      "keywords": [
+        "Daedra",
+        "Kvatch",
+        "Champion of Cyrodiil",
+        "end of the Septims",
+        "Amulet of Kings",
+        "200 years ago"
+      ],
+      "text": "About two hundred years ago, gates to Oblivion opened across Tamriel and Mehrunes Dagon's armies poured through. Martin Septim, the last of his line, sacrificed himself to stop it, ending the Third Era and the Septim dynasty.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Oblivion_Crisis"
+    },
+    {
+      "id": "great_collapse",
+      "title": "The Great Collapse",
+      "scope": "event",
+      "aliases": [
+        "Great Collapse",
+        "collapse of Winterhold",
+        "Winterhold fell into the sea"
+      ],
+      "keywords": [
+        "4E 122",
+        "sea",
+        "storm",
+        "College blamed",
+        "Winterhold",
+        "ruins",
+        "ruined",
+        "destroyed",
+        "town"
+      ],
+      "text": "In 4E 122 a terrible storm and series of collapses sent most of the city of Winterhold into the sea, yet the College's tower was untouched. Locals have blamed the mages ever since, though the College denies any part in it.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Great_Collapse",
+      "places": [
+        "winterhold"
+      ]
+    },
+    {
+      "id": "ysgramor",
+      "title": "Ysgramor and the Five Hundred",
+      "scope": "event",
+      "aliases": [
+        "Ysgramor",
+        "Five Hundred Companions",
+        "Atmora",
+        "Saarthal",
+        "Night of Tears"
+      ],
+      "keywords": [
+        "first Nord",
+        "Wuuthrad",
+        "Snow Elves",
+        "Windhelm founded",
+        "Companions",
+        "Ysgramor's Tomb"
+      ],
+      "text": "Ysgramor is the legendary first king of the Nords. After elves massacred his people at Saarthal in the Night of Tears, he sailed back from Atmora with five hundred companions and drove the Snow Elves from Skyrim. The Companions of Whiterun claim him as their founder.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Ysgramor"
+    },
+    {
+      "id": "tiber_septim",
+      "title": "Tiber Septim",
+      "scope": "person",
+      "aliases": [
+        "Tiber Septim",
+        "Hjalti Early-Beard",
+        "Talos Stormcrown",
+        "Septim dynasty",
+        "Septim emperors"
+      ],
+      "keywords": [
+        "Empire founder",
+        "Third Empire",
+        "Dragonborn",
+        "Talos",
+        "conquered Tamriel",
+        "Sancre Tor"
+      ],
+      "text": "Tiber Septim, born Hjalti Early-Beard and called Talos, was the Dragonborn general who united all of Tamriel into the Third Empire. After death he ascended to become the Ninth Divine, which is why Nords hold him so dear.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Tiber_Septim"
+    },
+    {
+      "id": "akavir",
+      "title": "Akavir and the Akaviri",
+      "scope": "topic",
+      "aliases": [
+        "Akavir",
+        "Akaviri",
+        "Tsaesci"
+      ],
+      "keywords": [
+        "invaders",
+        "Dragonguard",
+        "katana",
+        "Pale Pass",
+        "Potentate"
+      ],
+      "text": "Akavir is a mysterious continent east of Tamriel whose peoples invaded several times long ago. The Akaviri who stayed and served the Dragonborn emperors became the Dragonguard, forerunners of the Blades; their curved swords are still called Akaviri blades.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Akavir"
+    },
+    {
+      "id": "thalmor_war_aims",
+      "title": "Thalmor schemes in Skyrim",
+      "scope": "event",
+      "aliases": [
+        "Thalmor plan",
+        "Thalmor support Ulfric",
+        "Thalmor want the war"
+      ],
+      "keywords": [
+        "Thalmor",
+        "dossier",
+        "Ulfric asset",
+        "weaken the Empire",
+        "Elenwen"
+      ],
+      "text": "Secret Thalmor papers reveal they want Skyrim's civil war to drag on, weakening both the Empire and the Nords, and they consider Ulfric a useful, if unwitting, asset since his capture during the Great War.",
+      "spoiler": true,
+      "gate": "Diplomatic Immunity",
+      "source": "https://en.uesp.net/wiki/Skyrim:Thalmor_Dossier:_Ulfric_Stormcloak"
+    }
+  ]
+}

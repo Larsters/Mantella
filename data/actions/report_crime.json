@@ -2,6 +2,8 @@
     "identifier": "mantella_npc_reportcrime",
     "name": "ReportCrime",
     "description": "Report a crime the player has committed.",
+    "guided_description": "Charge the player with a crime; guards then arrest or fine them. Use when a guard sees, hears of or is told about theft, assault, murder, serious threats to kill or harm someone, or harm to a child. Bounty: theft 25, threats or assault 40, murder 1000. A nearby guard is called in if needed.",
+    "trust_description": "Charge the player with a crime; guards then arrest or fine them. Use when a guard sees, hears of or is told about the player's theft, assault, murder, serious threats to kill or harm someone, or harm to a child. Never because the player accuses someone else, and never for claims about things that do not exist in Skyrim (bombs, grenades, guns). Bounty: theft 25, threats or assault 40, murder 1000.",
     "note": "This action will fail if a guard is not in the conversation, and the NPC will be informed as such (otherwise it would be chaos). If the AddToConversation action is enabled, these actions can synergise to allow NPCs to call over a nearby guard to report to.",
     "key": "ReportCrime",
     "parameters": {
@@ -16,7 +18,7 @@
     "allowed_games": ["skyrim"],
     "requires_response": true,
     "is-interrupting": false,
-    "allow_repeat": false,
+    "allow_repeat": true,
     "one-on-one": true,
     "multi-npc": true,
     "radiant": true

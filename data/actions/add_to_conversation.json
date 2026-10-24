@@ -2,6 +2,8 @@
     "identifier": "mantella_npc_addtoconversation",
     "name": "AddToConversation",
     "description": "Add nearby NPC(s) to the conversation.",
+    "guided_description": "Call one specific nearby person into this conversation, only when the player asks for them by name or role (\"get a guard\"), a real crime or threat needs a guard, or you explicitly call them over yourself. Never because someone is nearby, mentioned or talked about, and never on greetings or small talk.",
+    "trust_description": "Bring one specific nearby person into the conversation, only when the player asks for them by name or role (\"fetch a guard\", \"get Adrianne over here\"), a real crime or threat needs a guard, or an NPC has explicitly called them over (\"Sigurd, come here!\"). Never because someone is nearby, was mentioned or talked about, or might be interested. Never on greetings or small talk. Only the person asked for.",
     "key": "AddToConversation",
     "parameters": {
         "source": {

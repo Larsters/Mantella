@@ -2,6 +2,8 @@
     "identifier": "mantella_npc_moveto",
     "name": "MoveTo",
     "description": "Make NPC(s) move to a specific NPC.",
+    "guided_description": "Make NPC(s) walk over to someone nearby. When asked to come closer or when the NPC wants to confront or join someone.",
+    "trust_description": "Make NPC(s) walk over to someone nearby. When asked to come closer or go to someone and willing, to check a claim about that person, or to confront or join someone.",
     "key": "MoveTo",
     "parameters": {
         "source": {

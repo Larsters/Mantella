@@ -6,6 +6,9 @@ from src.characters_manager import Characters
 from src.conversation.action import Action
 from src.games.gameable import Gameable
 from src import utils
+from src.actions import server_tools
+from src import trust
+import src.companion_profile  # noqa: F401  registers the RememberAboutPlayer server tool
 
 logger = utils.get_logger()
 
@@ -119,6 +122,12 @@ class FunctionManager:
                                         logger.warning(f"Skipping action '{identifier}' - could not resolve '{param_value}' to {resolve_type} ID")
                                         validated_args = None
                                         break
+
+                    # [server tools] Executed by the server (eg RememberAboutPlayer), never sent to the game
+                    if server_tools.is_server_tool(identifier):
+                        if validated_args is not None:
+                            server_tools.run(identifier, validated_args, characters, tool_call.get('id', ''))
+                        continue
 
                     # Only add the parsed tool if validation didn't fail
                     if validated_args is not None:
@@ -308,12 +317,16 @@ class FunctionManager:
                 if not action.get('one_on_one', action.get('one-on-one', False)):
                     continue
 
+            # [server tools] Server-side tools decide per conversation whether they are offered
+            if not server_tools.is_available(action['identifier'], context):
+                continue
+
             # Create OpenAI tool definition
             tool = {
                 'type': 'function',
                 'function': {
                     'name': action['name'],
-                    'description': action['description']
+                    'description': trust.tool_description(action, context.config)  # trust > guided > upstream description
                 }
             }
 
@@ -580,7 +593,7 @@ class FunctionManager:
         scoped_with_entities = 0
         has_unscoped_params = False
         for param_name, param_def in parameters['properties'].items():
-            scope = param_def.get('scope')
+            scope = param_def.pop('scope', None)  # internal field: read it, don't send it to the LLM
             
             # Skip parameters without scope (not entity references)
             if not scope:

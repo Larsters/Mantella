@@ -2,6 +2,8 @@
     "identifier": "mantella_npc_loot",
     "name": "Loot",
     "description": "Make NPC(s) loot items in the area.",
+    "guided_description": "Make NPC(s) loot items nearby. Only when the player asks, or for scavengers and bandits after a fight.",
+    "trust_description": "Make NPC(s) pick up loose items lying around nearby (not inside containers) for about half a minute. When the player asks and the NPC is willing, or for scavengers and bandits after a fight.",
     "key": "Loot",
     "parameters": {
         "source": {

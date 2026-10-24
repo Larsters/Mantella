@@ -4,12 +4,19 @@ from src.http.communication_constants import communication_constants
 from src.conversation.conversation_log import conversation_log
 from src.characters_manager import Characters
 from src.remember.remembering import Remembering
+from src import relationships
+from src import trust as trust_honesty
 from src import utils
 from src.utils import get_time_group
 from src.character_manager import Character
 from src.config.config_loader import ConfigLoader
 from src.llm.llm_client import LLMClient
 from src.config.definitions.game_definitions import GameEnum
+from src.knowledge_scope import build_knowledge_scope
+from src.lore import lore_hooks
+import src.transcripts.recorder as transcript_recorder
+from src import speech_flavor
+from src import companion_profile
 
 logger = utils.get_logger()
 
@@ -39,6 +46,7 @@ class Context:
         self.__have_actors_changed: bool = False
         self.__game: GameEnum = config.game
         self.__prev_nearby_npc_names: list[str] = []  # Cache for nearby NPC names
+        companion_profile.configure(config)  # [companion]
 
         self.__prev_location: str | None = None
         if self.__game.base_game == GameEnum.FALLOUT4:
@@ -326,7 +334,7 @@ class Context:
             trust = 'a friend'
         elif npc.relationship_rank < 0:
             trust = 'an enemy'
-        return trust
+        return relationships.adjust_trust(self.__rememberer, trust, npc, self.__world_id, self.__game_days)  # unchanged unless NPC relationships are enabled
     
     @utils.time_it
     def __get_trusts(self) -> str:
@@ -456,7 +464,15 @@ class Context:
         else:
             self.__prev_game_time = None, time_group
         non_player_chars = self.__npcs_in_conversation.get_non_player_characters()
-        conversation_summaries = self.__rememberer.get_prompt_text(non_player_chars, self.__world_id)
+        # [companion] Opt-in self-aware companion: own one-on-one prompt + {about_player} (private, one-on-one only);
+        # shared group/radiant prompts leave out the companion's private memory summaries.
+        prompt = companion_profile.select_prompt(prompt, self.__npcs_in_conversation, self.__game)
+        about_player = companion_profile.about_player_text(self.__npcs_in_conversation)
+        conversation_summaries = self.__rememberer.get_prompt_text(companion_profile.characters_for_shared_memories(non_player_chars), self.__world_id)
+        relationship = relationships.prompt_text(self.__rememberer, non_player_chars, self.__world_id, player_name, self.__game_days)
+        trust_honesty.publish_scene(self.__config, non_player_chars, player_name, trusts, relationship)  # tool-model scene (no-op when off)
+        if relationship and '{relationship}' not in prompt:  # prompts without the placeholder get it after the summaries
+            conversation_summaries = f"{conversation_summaries}\n\n{relationship}".strip()
         
         # Only include legacy action prompts if advanced actions are disabled
         actions = self.__get_action_texts(actions_for_prompt) if not self.__config.advanced_actions_enabled else ""
@@ -466,8 +482,9 @@ class Context:
         have_summaries_been_dropped = False
         logger.log(23, f'Maximum size of prompt is {self.__client.token_limit} x {self.TOKEN_LIMIT_PERCENT} = {int(round(self.__client.token_limit * self.TOKEN_LIMIT_PERCENT, 0))} tokens.')
         for content in removal_content:
-            result = prompt.format(
+            result = prompt.format(**transcript_recorder.capture_prompt_vars(dict( # W9: prompt vars into transcripts (no-op when off)
                 player_name = player_name,
+                game = self.__game.display_name,  # {game} is an allowed prompt variable but was never passed (KeyError)
                 player_description = player_description,
                 player_equipment = player_equipment,
                 name=name,
@@ -485,8 +502,13 @@ class Context:
                 language=self.__language['language'], 
                 conversation_summary=content[1],
                 conversation_summaries=content[1],
-                actions = actions
-                )
+                actions = actions,
+                knowledge_scope = build_knowledge_scope(non_player_chars, location, getattr(self.__config, 'knowledge_scope_enabled', False)),
+                relationship = relationship,
+                lore = lore_hooks.system_lore(self), # lore lookup (src/lore); "" when disabled
+                speech_flavor = speech_flavor.get_speech_flavor_text(self.__config, non_player_chars),
+                about_player = about_player,
+                )))
             if self.__client.is_too_long(result, self.TOKEN_LIMIT_PERCENT):
                 if content[0] != "":
                     have_summaries_been_dropped = True

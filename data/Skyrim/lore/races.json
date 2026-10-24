@@ -1,0 +1,285 @@
+{
+  "attribution": "Notes paraphrased in our own words from the Unofficial Elder Scrolls Pages (UESP, https://en.uesp.net), licensed CC BY-SA 2.5. Each note lists the page it was drawn from in 'source'.",
+  "notes": [
+    {
+      "id": "race_nord",
+      "title": "Nords",
+      "scope": "race",
+      "aliases": [
+        "Nord",
+        "Nords",
+        "Nordic"
+      ],
+      "keywords": [
+        "Atmora",
+        "Ysgramor",
+        "mead",
+        "Sovngarde",
+        "frost",
+        "Thu'um",
+        "proud",
+        "honor",
+        "Skyrim natives"
+      ],
+      "text": "Nords are the tall, fair, hardy people of Skyrim, descended from settlers who crossed from Atmora under Ysgramor. They value courage, honor, mead and song, distrust magic and elves, and hope for a glorious death that earns a place in Sovngarde.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Nord"
+    },
+    {
+      "id": "race_imperial",
+      "title": "Imperials",
+      "scope": "race",
+      "aliases": [
+        "Imperial",
+        "Cyrodiilic",
+        "Colovian",
+        "Nibenese"
+      ],
+      "keywords": [
+        "Cyrodiil",
+        "Empire",
+        "merchants",
+        "legion",
+        "law",
+        "coin"
+      ],
+      "text": "Imperials come from Cyrodiil, the heart of the Empire, and are known as disciplined soldiers, administrators and shrewd traders. In Skyrim many see them as occupiers; others value the order and trade they bring.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Imperial"
+    },
+    {
+      "id": "race_breton",
+      "title": "Bretons",
+      "scope": "race",
+      "aliases": [
+        "Breton",
+        "Bretons"
+      ],
+      "keywords": [
+        "High Rock",
+        "magic resistance",
+        "mixed blood",
+        "nobles",
+        "Markarth"
+      ],
+      "text": "Bretons are the people of High Rock, of mixed human and elven blood, with a natural gift for magic and resisting it. Many live in the western holds, especially Markarth and the Reach.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Breton"
+    },
+    {
+      "id": "race_redguard",
+      "title": "Redguards",
+      "scope": "race",
+      "aliases": [
+        "Redguard",
+        "Redguards",
+        "Yokudan"
+      ],
+      "keywords": [
+        "Hammerfell",
+        "swordsmen",
+        "Alik'r warriors",
+        "desert",
+        "independent"
+      ],
+      "text": "Redguards are the dark-skinned warrior people of Hammerfell, famous swordsmen descended from the lost continent of Yokuda. They earned respect by driving the Thalmor from Hammerfell on their own after the Empire made peace without them.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Redguard"
+    },
+    {
+      "id": "race_altmer",
+      "title": "Altmer (High Elves)",
+      "scope": "race",
+      "aliases": [
+        "Altmer",
+        "High Elf",
+        "High Elves"
+      ],
+      "keywords": [
+        "Summerset",
+        "Thalmor",
+        "arrogant",
+        "magic",
+        "golden skin",
+        "elves"
+      ],
+      "text": "Altmer, or High Elves, are tall golden-skinned elves from the Summerset Isles, proud of their ancient lineage and skill in magic. In Skyrim most people assume any High Elf is a Thalmor agent, which makes life hard for those who are not.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Altmer"
+    },
+    {
+      "id": "race_bosmer",
+      "title": "Bosmer (Wood Elves)",
+      "scope": "race",
+      "aliases": [
+        "Bosmer",
+        "Wood Elf",
+        "Wood Elves"
+      ],
+      "keywords": [
+        "Valenwood",
+        "archers",
+        "Green Pact",
+        "meat",
+        "hunters",
+        "Dominion"
+      ],
+      "text": "Bosmer, or Wood Elves, come from the forests of Valenwood and are famed archers and hunters bound by the Green Pact. Valenwood belongs to the Aldmeri Dominion, so some Nords eye them with suspicion too.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Bosmer"
+    },
+    {
+      "id": "race_dunmer",
+      "title": "Dunmer (Dark Elves)",
+      "scope": "race",
+      "aliases": [
+        "Dunmer",
+        "Dark Elf",
+        "Dark Elves",
+        "grey-skin",
+        "gray-skin"
+      ],
+      "keywords": [
+        "Morrowind",
+        "refugees",
+        "Red Mountain",
+        "Gray Quarter",
+        "Azura",
+        "ash",
+        "Windhelm"
+      ],
+      "text": "Dunmer, or Dark Elves, are ashen-skinned elves from Morrowind. Thousands fled to Skyrim after Red Mountain erupted, and many Nords, especially in Windhelm, treat them as unwelcome foreigners and crowd them into poor quarters.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Dunmer"
+    },
+    {
+      "id": "race_orsimer",
+      "title": "Orcs (Orsimer)",
+      "scope": "race",
+      "aliases": [
+        "Orc",
+        "Orcs",
+        "Orsimer"
+      ],
+      "keywords": [
+        "strongholds",
+        "Malacath",
+        "smiths",
+        "Orichalcum",
+        "warriors",
+        "Orsinium"
+      ],
+      "text": "Orcs, or Orsimer, are tusked green-skinned folk known as fierce warriors and fine smiths. In Skyrim most live in strongholds under the Code of Malacath; those in towns often face distrust, though Orc soldiers serve with distinction in the Legion.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Orc"
+    },
+    {
+      "id": "race_khajiit",
+      "title": "Khajiit",
+      "scope": "race",
+      "aliases": [
+        "Khajiit",
+        "cat-folk",
+        "cat people"
+      ],
+      "keywords": [
+        "Elsweyr",
+        "moon sugar",
+        "skooma",
+        "caravans",
+        "Two Moons",
+        "thieves"
+      ],
+      "text": "Khajiit are the cat-like people of Elsweyr, nimble and often traders. Most Nords distrust them as thieves and skooma dealers, and Khajiit caravans usually have to camp outside city walls.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Khajiit"
+    },
+    {
+      "id": "race_argonian",
+      "title": "Argonians",
+      "scope": "race",
+      "aliases": [
+        "Argonian",
+        "Argonians",
+        "lizard-folk",
+        "Saxhleel"
+      ],
+      "keywords": [
+        "Black Marsh",
+        "Hist",
+        "dock workers",
+        "Windhelm docks",
+        "slavery",
+        "water breathing"
+      ],
+      "text": "Argonians are reptilian people from Black Marsh, bound to their sacred Hist trees. In Skyrim they often do hard labor on the docks, and in Windhelm they are not even allowed to live inside the city walls.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Argonian"
+    },
+    {
+      "id": "race_reachmen",
+      "title": "Reachmen",
+      "scope": "race",
+      "aliases": [
+        "Reachman",
+        "Reachmen",
+        "Reachfolk"
+      ],
+      "keywords": [
+        "Reach",
+        "Forsworn",
+        "hagravens",
+        "Old Gods",
+        "witches",
+        "natives"
+      ],
+      "text": "The Reachmen are the native people of the Reach, of mixed Breton, Nord and elven ancestry, who keep their own gods and customs. Nords call them savages and associate all of them with the Forsworn, which deepens the bitterness on both sides.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Reachmen"
+    },
+    {
+      "id": "race_falmer",
+      "title": "Falmer",
+      "scope": "race",
+      "aliases": [
+        "Falmer",
+        "Snow Elves",
+        "Snow Elf"
+      ],
+      "keywords": [
+        "blind",
+        "underground",
+        "Dwemer",
+        "betrayed",
+        "chaurus",
+        "Blackreach"
+      ],
+      "text": "The Falmer were once the Snow Elves of Skyrim, driven underground by the Nords long ago. Enslaved and blinded by the Dwemer, they degenerated into the twisted cave dwellers that now lurk in Dwemer ruins with their chaurus.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Falmer"
+    },
+    {
+      "id": "race_dwemer",
+      "title": "Dwemer",
+      "scope": "race",
+      "aliases": [
+        "Dwemer",
+        "Dwarves",
+        "Dwarven",
+        "Deep Elves"
+      ],
+      "keywords": [
+        "vanished",
+        "machines",
+        "Red Mountain",
+        "Numidium",
+        "Calcelmo",
+        "ruins",
+        "Lexicon"
+      ],
+      "text": "The Dwemer were a race of brilliant elven engineers who built underground cities of stone and brass across Skyrim and Morrowind. Thousands of years ago they all vanished at once, and nobody knows why.",
+      "spoiler": false,
+      "source": "https://en.uesp.net/wiki/Lore:Dwemer"
+    }
+  ]
+}

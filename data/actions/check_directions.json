@@ -2,6 +2,8 @@
     "identifier": "mantella_npc_givedirections",
     "name": "CheckDirections",
     "description": "Returns directions on how to reach a specified location.",
+    "guided_description": "Look up the way to a place. When asked for directions to a specific place the NPC would know.",
+    "trust_description": "Look up the way to a named place (a town, inn, cave or hold) the NPC would know, when asked for directions. Never for objects or people nearby; use Look for those.",
     "note": "NPCs can sometimes choose incompatible locations to check directions to. Known locations are an exhaustive list of game locations that have a map marker.",
     "key": "CheckDirections",
     "parameters": {

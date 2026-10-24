@@ -4,6 +4,8 @@ from faster_whisper import WhisperModel
 from src.config.config_loader import ConfigLoader
 from src.llm.client_base import ClientBase
 from src.stt.ptt_controller import PTTController
+from src.stt.fast_stt import MlxWhisper, clean_transcript
+from src.stt import listen_control
 import src.utils as utils
 import requests
 import json
@@ -52,7 +54,10 @@ class Transcriber:
         self.moonshine_model_path = os.path.join(self.moonshine_folder, self.full_moonshine_model)
         self.whisper_model = config.whisper_model
         self.process_device = config.whisper_process_device
+        self.filter_hallucinations = config.stt_filter_hallucinations
+        self.mlx_model: MlxWhisper | None = None
         self.listen_timeout = config.listen_timeout
+        self.player_speech_max_wait: float = float(getattr(config, 'player_speech_max_wait', 0) or 0) # feat/no-hang-listen
         self.external_whisper_service = config.external_whisper_service
         self.whisper_service = config.whisper_url
         self.whisper_url = self.__get_endpoint(config.whisper_url)
@@ -101,7 +106,13 @@ class Transcriber:
             if self.stt_service != 'whisper':
                 logger.error("Moonshine selected but moonshine not installed, trying whisper")
 
-            if not self.external_whisper_service:
+            if not self.external_whisper_service and self.process_device == 'mlx':
+                try:
+                    self.mlx_model = MlxWhisper(self.whisper_model)
+                except Exception as e:
+                    logger.error(f'Could not run Whisper on the Apple GPU ({e}). Falling back to the CPU.')
+                    self.process_device = 'cpu'
+            if not self.external_whisper_service and self.process_device != 'mlx':
                 if self.process_device == 'cuda':
                     logger.error(f'''Depending on your NVIDIA CUDA version, setting the Whisper process device to `cuda` may cause errors! For more information, see here: https://github.com/SYSTRAN/faster-whisper#gpu''')
                     try:
@@ -177,13 +188,11 @@ class Transcriber:
 
     @utils.time_it
     def __generate_sync_client(self):
-        if self.__initial_client:
-            client = self.__initial_client
-            self.__initial_client = None # do not reuse the same client
-        else:
-            client = OpenAI(api_key=self.__api_key, base_url=self.whisper_url)
-
-        return client
+        # Keep one client (and its HTTP keep-alive connection) for the whole conversation:
+        # a new client per phrase pays a fresh TLS handshake every time
+        if not self.__initial_client:
+            self.__initial_client = OpenAI(api_key=self.__api_key, base_url=self.whisper_url, timeout=15, max_retries=1)
+        return self.__initial_client
     
 
     @utils.time_it
@@ -243,6 +252,17 @@ If you would prefer to run speech-to-text locally, please ensure the `Speech-to-
 
     @utils.time_it
     def whisper_transcribe(self, audio: np.ndarray, prompt: str):
+        text = self.__whisper_transcribe(audio, prompt)
+        if text and self.filter_hallucinations:
+            text = clean_transcript(text, prompt, self.language)
+        return text
+
+    def __whisper_transcribe(self, audio: np.ndarray, prompt: str):
+        if self.mlx_model: # local model on the Apple Silicon GPU
+            result_text = self.mlx_model.transcribe(audio, language=self.language, task=self.task, prompt=prompt)
+            if utils.clean_text(result_text) in self.__ignore_list: # common phrases hallucinated by Whisper
+                return ''
+            return result_text
         if self.transcribe_model: # local model
             segments, _ = self.transcribe_model.transcribe(audio, task=self.task, language=self.language, beam_size=5, vad_filter=False, initial_prompt=prompt)
             result_text = ' '.join(segment.text for segment in segments)
@@ -268,17 +288,18 @@ If you would prefer to run speech-to-text locally, please ensure the `Speech-to-
                 response_data = client.audio.transcriptions.create(model=self.whisper_model, language=self.language, file=audio_file, prompt=prompt)
             except Exception as e:
                 utils.play_error_sound()
-                if e.code in [404, 'model_not_found']:
+                if getattr(e, 'code', None) in [404, 'model_not_found']:
                     if self.whisper_service == 'OpenAI':
                         logger.error(f"Selected Whisper model '{self.whisper_model}' does not exist in the OpenAI service. Try changing 'Speech-to-Text'->'Model Size' to 'whisper-1' in the Mantella UI")
                     elif self.whisper_service == 'Groq':
                         logger.error(f"Selected Whisper model '{self.whisper_model}' does not exist in the Groq service. Try changing 'Speech-to-Text'->'Model Size' to one of the following models in the Mantella UI: https://console.groq.com/docs/speech-text#supported-models")
                     else:
                         logger.error(f"Selected Whisper model '{self.whisper_model}' does not exist in the selected service {self.whisper_service}. Try changing 'Speech-to-Text'->'Model Size' to a compatible model in the Mantella UI")
+                    input("Press Enter to exit.")
                 else:
+                    # a network hiccup must not freeze the server: drop this phrase and keep listening
                     logger.error(f'STT error: {e}')
-                input("Press Enter to exit.")
-            client.close()
+                return ''
             if utils.clean_text(response_data.text) in self.__ignore_list: # common phrases hallucinated by Whisper
                 return ''
             return response_data.text.strip()
@@ -325,7 +346,13 @@ If you would prefer to run speech-to-text locally, please ensure the `Speech-to-
         '''Start background listening thread'''
         if self._running:
             return
-            
+
+        # Only one microphone listener per process (stacked listeners -> duplicate "Speech detected")
+        previous_listener = listen_control.claim_listener(self)
+        if previous_listener is not None and getattr(previous_listener, 'is_listening', False):
+            logger.warning('Stopping a previous microphone listener that was still running')
+            previous_listener.stop_listening()
+
         self._running = True
         self._reset_state()
         self.prompt = prompt
@@ -544,13 +571,22 @@ If you would prefer to run speech-to-text locally, please ensure the `Speech-to-
         
         Returns:
             The transcribed text, or None if silence_timeout elapsed without any speech being detected
+
+        Raises:
+            listen_control.ListenAborted: the wait was superseded, timed out (player_speech_max_wait) or the server is stopping
         """
+        wait_started = time.monotonic()
         while True:
             # Use timeout only if silence_timeout > 0 and player hasn't started speaking yet
             use_timeout = silence_timeout > 0 and not self._speech_detected
             timeout_value = silence_timeout if use_timeout else None
             
-            received_transcription = self._transcription_ready.wait(timeout=timeout_value)
+            # Interruptible wait (feat/no-hang-listen): raises listen_control.ListenAborted when the game
+            # sent a newer request, the server shuts down, or player_speech_max_wait passed in silence
+            received_transcription = listen_control.wait_for_event(
+                self._transcription_ready, timeout_value,
+                max_wait=self.player_speech_max_wait, started_at=wait_started,
+                is_speaking=lambda: self._speech_detected)
             
             if not received_transcription and use_timeout and not self._speech_detected:
                 logger.log(self.loglevel, f"Silence timeout of {silence_timeout} seconds reached without speech")
@@ -574,11 +610,13 @@ If you would prefer to run speech-to-text locally, please ensure the `Speech-to-
             self._speech_detected = False
             self._current_transcription = ''
 
+            listen_control.check_abort()
             time.sleep(0.1)
 
 
     def stop_listening(self) -> None:
         """Stop listening for speech."""
+        listen_control.release_listener(self)
         if not self._running:
             return
             
@@ -593,7 +631,7 @@ If you would prefer to run speech-to-text locally, please ensure the `Speech-to-
         
         # Wait for processing thread to finish
         if self._processing_thread:
-            self._processing_thread.join()  # timeout=1.0 Add timeout to prevent hanging
+            self._processing_thread.join(timeout=5.0)  # bounded so a stuck transcription cannot hang the server
             self._processing_thread = None
         
         # Clear queue
