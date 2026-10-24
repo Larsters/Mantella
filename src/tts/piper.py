@@ -2,6 +2,7 @@ import platform
 from src.config.config_loader import ConfigLoader
 from src.tts.ttsable import TTSable
 import subprocess
+import shutil
 import os
 import time
 import wave
@@ -28,6 +29,46 @@ def enqueue_output(out, queue, stop_flag):
 
 class TTSServiceFailure(Exception):
     pass
+
+# Wine bundled by SkyrimMT (https://github.com/HorrorPills/skyrimmt), used when MANTELLA_WINE is not set
+SKYRIMMT_WINE = '~/Games/skyrim/wine/bin/wine'
+DEFAULT_PIPER_WINEPREFIX = '~/Games/mantella-wine'
+
+
+def find_wine(environ=None) -> str:
+    """Locate a Wine binary to run piper.exe on macOS / Linux.
+
+    Order: $MANTELLA_WINE, SkyrimMT's bundled Wine, then `wine` / `wine64` on PATH.
+    """
+    environ = os.environ if environ is None else environ
+    if environ.get('MANTELLA_WINE'):
+        return environ['MANTELLA_WINE']
+    skyrimmt_wine = os.path.expanduser(SKYRIMMT_WINE)
+    if os.path.isfile(skyrimmt_wine):
+        return skyrimmt_wine
+    for name in ('wine', 'wine64'):
+        found = shutil.which(name)
+        if found:
+            return found
+    return 'wine'
+
+
+def build_piper_command(piper_exe: Path, system: str | None = None, environ=None):
+    """Return (command, env) for subprocess.Popen.
+
+    On Windows piper.exe is started directly (upstream behaviour, env inherited).
+    Elsewhere the Windows build is run through Wine in a dedicated prefix
+    ($MANTELLA_WINEPREFIX, default ~/Games/mantella-wine), kept separate from the game's
+    Wine prefix so the game launcher shutting down its wineserver never kills Piper.
+    """
+    system = platform.system() if system is None else system
+    if system == "Windows":
+        return piper_exe, None
+    environ = os.environ if environ is None else environ
+    prefix = environ.get('MANTELLA_WINEPREFIX') or os.path.expanduser(DEFAULT_PIPER_WINEPREFIX)
+    env = dict(environ, WINEPREFIX=prefix, WINEDEBUG='-all')
+    return [find_wine(environ), str(piper_exe)], env
+
 
 class Piper(TTSable):
     """Piper TTS handler
@@ -222,13 +263,7 @@ class Piper(TTSable):
     @utils.time_it
     def _run_piper(self):
         try:
-            command = self.__piper_path / 'piper.exe'
-            popen_env = None
-            if platform.system() != "Windows":
-                # macOS/Linux: run Mantella's Windows Piper build through Wine, in a dedicated prefix
-                wine = os.environ.get('MANTELLA_WINE', os.path.expanduser('~/Games/skyrim/wine/bin/wine'))
-                popen_env = dict(os.environ, WINEPREFIX=os.environ.get('MANTELLA_WINEPREFIX', os.path.expanduser('~/Games/mantella-wine')), WINEDEBUG='-all')
-                command = [wine, str(command)]
+            command, popen_env = build_piper_command(self.__piper_path / 'piper.exe')
 
             self.process = subprocess.Popen(
                 command, 
