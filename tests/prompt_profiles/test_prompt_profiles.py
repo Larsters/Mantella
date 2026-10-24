@@ -143,3 +143,31 @@ def test_context_knowledge_scope_disabled(default_config: ConfigLoader, default_
 
 def test_context_formats_game_placeholder(default_context: Context):
     assert default_context.generate_system_message("Game {game}.", []) == "Game Skyrim."
+
+
+def test_export_hotfix_works_on_servers_without_knowledge_scope():
+    """The exported prompts must pass an upstream server's checker (no {knowledge_scope})."""
+    import configparser, json
+    from src.config.config_file_writer import ConfigFileWriter
+    from src.prompt_profiles.export_hotfix import config_lines, encode_ini_value
+    upstream_allowed = [v for v in PromptDefinitions.ALLOWED_PROMPT_VARIABLES if v != "knowledge_scope"]
+    upstream_radiant = [v for v in PromptDefinitions.ALLOWED_PROMPT_VARIABLES_RADIANT if v != "knowledge_scope"]
+    lines = config_lines("living_npcs_v1")
+    for key, allowed in (("skyrim_prompt", upstream_allowed), ("skyrim_multi_npc_prompt", upstream_allowed),
+                         ("skyrim_radiant_prompt", upstream_radiant), ("radiant_start_prompt", []), ("radiant_end_prompt", [])):
+        assert PromptDefinitions.PromptChecker(allowed).apply_constraint(lines[key]).is_success, key
+        assert "What you know" not in lines[key] and "What they know" not in lines[key]
+    # Round trip through configparser exactly as ConfigLoader reads it
+    parser = configparser.ConfigParser()
+    parser.read_string("[Prompts]\n" + "\n".join(f"{k} = {encode_ini_value(v)}" for k, v in lines.items()))
+    for key, raw in parser.items("Prompts"):
+        assert json.loads(ConfigFileWriter.unescape_hash_symbols(raw)) == lines[key]
+
+
+def test_profile_pushes_initiative():
+    profile = get_profile_prompts("living_npcs_v1")
+    for text in (profile.prompt, profile.multi_npc_prompt):
+        assert "fictional video game" in text
+        assert "Do not wait to be asked" in text
+        assert "Threats are deeds" in text
+        assert "ReportCrime" in text and "Brawl" in text and "Flee" in text

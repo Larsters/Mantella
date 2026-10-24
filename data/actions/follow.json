@@ -2,7 +2,7 @@
     "identifier": "mantella_npc_follow",
     "name": "Follow",
     "description": "Make NPC(s) follow the player.",
-    "guided_description": "Make NPC(s) travel with the player. Only when asked AND it fits: followers, housecarls, paid hirelings, or someone with a real reason (debt, shared goal, love). Guards on duty, jarls, merchants and busy workers refuse.",
+    "guided_description": "Make NPC(s) travel with the player. Followers, housecarls and paid hirelings follow on the first request; others only with a real reason (debt, shared goal, love). Guards on duty, jarls, merchants and busy workers refuse.",
     "note": "EXPERIMENTAL: May cause NPC AI packages to break.",
     "key": "Follow",
     "parameters": {

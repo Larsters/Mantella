@@ -2,7 +2,7 @@
     "identifier": "mantella_npc_wait",
     "name": "Wait",
     "description": "Make NPC(s) wait / rest in the area.",
-    "guided_description": "Make NPC(s) stay here. When the player asks them to wait or stay, or the NPC refuses to go further.",
+    "guided_description": "Make NPC(s) stay here. Use on the first request to wait or stay, or when the NPC refuses to go further.",
     "key": "Wait",
     "parameters": {
         "source": {

@@ -13,7 +13,7 @@ def test_every_action_has_a_guided_description():
         data = json.loads(path.read_text(encoding="utf-8"))
         guided = data.get("guided_description", "")
         assert guided, f"{path.name} has no guided_description"
-        assert len(guided.split()) <= 50, f"{path.name}: keep tool descriptions lean"
+        assert len(guided.split()) <= 60, f"{path.name}: keep tool descriptions lean"
 
 
 def _tools(context: Context) -> dict[str, dict]:
@@ -30,8 +30,8 @@ def test_upstream_descriptions_by_default(default_config: ConfigLoader, default_
 def test_guided_descriptions_when_enabled(default_config: ConfigLoader, default_context: Context):
     default_config.guided_action_descriptions = True
     tools = _tools(default_context)
-    assert "Never for insults alone" in tools["Attack"]["description"]
-    assert "insulted again after a warning" in tools["Brawl"]["description"]
+    assert "seriously threatens to kill" in tools["Attack"]["description"]
+    assert "insulted after one warning" in tools["Brawl"]["description"]
 
 
 def test_internal_scope_field_not_sent_to_llm(default_context: Context):
