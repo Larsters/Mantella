@@ -7,6 +7,7 @@ from src.llm.message_thread import message_thread
 from src.llm.messages import Message
 from src.llm.messages import SystemMessage
 from src.model_profile_manager import get_profile_manager
+from src import trust
 
 logger = utils.get_logger()
 
@@ -17,7 +18,7 @@ class FunctionClient(ClientBase):
     @utils.time_it
     def __init__(self, config: ConfigLoader) -> None:
         self.__config = config
-        self.__function_prompt: str = config.function_llm_prompt.format(game=config.game.display_name)
+        self.__function_prompt: str = trust.function_prompt(config, config.function_llm_prompt.format(game=config.game.display_name))  # + trust rules when enabled
         
         # Use custom function model config values
         profile_manager = get_profile_manager()
@@ -100,7 +101,7 @@ class FunctionClient(ClientBase):
             logger.log(23, f"Function LLM analyzing conversation for potential actions...")
             
             # Replace the system prompt with the function LLM prompt
-            shortened_thread = messages.clone_with_new_system_message(self.__function_prompt)
+            shortened_thread = messages.clone_with_new_system_message(trust.function_system_prompt(self.__config, self.__function_prompt))  # + scene (trust)
             
             # Call the function LLM with tools
             tools_called = self.request_call_with_tools(shortened_thread, tools)

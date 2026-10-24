@@ -78,6 +78,35 @@ UPDATE_JSON_SCHEMA: dict[str, Any] = {
     },
 }
 
+# Trust and honesty (src/trust): extra per-NPC fields, only requested when lie tracking is on.
+LIES_PROPERTIES: dict[str, Any] = {
+    "caught_lies": {"type": "array", "items": {
+        "type": "object", "additionalProperties": False, "required": ["text", "witnesses"],
+        "properties": {"text": {"type": "string"}, "witnesses": _STR_LIST}}},
+    "credibility_change": {"type": "integer"},
+}
+
+LIES_INSTRUCTIONS = """Honesty: for every character also return "caught_lies" and "credibility_change".
+- caught_lies: lies by {player_name} that the character caught in THIS conversation: a claim that was checked and proved false, a claim that contradicts what the character saw or remembers, an obviously invented claim meant to trick them (eg about things that do not exist in Skyrim, like bombs or grenades), or a promise {player_name} broke. Describe each from the character's view, eg "Claimed a bomb was hidden in the barrels; there was nothing". Not for jokes the character took as jokes, not for unchecked claims, not for lies already in the record. witnesses: other people who saw it.
+- credibility_change: integer from -50 to 15. About -15 to -30 per caught lie; +3 to +10 when a checkable claim by {player_name} proved true; 0 otherwise. The record's "credibility" is 0 (believes nothing) to 100 (takes their word), 50 = no opinion yet."""
+
+
+def update_json_schema(track_lies: bool = False) -> dict[str, Any]:
+    if not track_lies:
+        return UPDATE_JSON_SCHEMA
+    schema = copy.deepcopy(UPDATE_JSON_SCHEMA)
+    item = schema["properties"]["npcs"]["items"]
+    item["properties"].update(copy.deepcopy(LIES_PROPERTIES))
+    item["required"] = item["required"] + list(LIES_PROPERTIES)
+    return schema
+
+
+def response_format(track_lies: bool = False) -> dict[str, Any]:
+    if not track_lies:
+        return RESPONSE_FORMAT
+    return {"type": "json_schema", "json_schema": {"name": "relationship_update", "strict": True, "schema": update_json_schema(True)}}
+
+
 RESPONSE_FORMAT: dict[str, Any] = {
     "type": "json_schema",
     "json_schema": {"name": "relationship_update", "strict": True, "schema": UPDATE_JSON_SCHEMA},
@@ -87,9 +116,9 @@ MIN_OUTPUT_TOKENS = 800
 MAX_BIO_CHARS = 600
 
 
-def record_for_prompt(record: dict[str, Any]) -> str:
+def record_for_prompt(record: dict[str, Any], track_lies: bool = False) -> str:
     """Compact JSON of the parts of a record the LLM needs (ids included, history excluded)."""
-    view = {
+    view: dict[str, Any] = {
         "opinion": record.get("opinion", 0),
         "attitude": record.get("attitude", ""),
         "facts": [{"id": f["id"], "text": f["text"]} for f in record.get("facts", [])],
@@ -97,23 +126,27 @@ def record_for_prompt(record: dict[str, Any]) -> str:
         "favours": [{"id": d["id"], "text": d["text"], "owed_by": d.get("owed_by", "player")} for d in record.get("favours", [])],
         "promises": [{"id": p["id"], "text": p["text"], "by": p.get("by", "player")} for p in record.get("promises", [])],
     }
+    if track_lies:
+        view["credibility"] = record.get("credibility", 50)
+        view["lies"] = [{"id": l["id"], "text": l["text"]} for l in record.get("lies", [])]
     return json.dumps(view, ensure_ascii=False)
 
 
 BYSTANDER_INSTRUCTIONS = """Bystanders ({bystanders}) were nearby and only overheard the conversation; they did not take part. Also return one entry in "npcs" for each of them, using the exact name. For a bystander: opinion_change from -15 to 15 and only if what they overheard would plausibly change how they see {player_name} (0 for small talk); new_facts only what they overheard; new_grudges only for things that hurt them or people they care about (severity 1 or 2); leave favours and promises empty."""
 
 
-def _npc_section(name: str, bio: str, record: dict[str, Any], heading_suffix: str = "") -> str:
+def _npc_section(name: str, bio: str, record: dict[str, Any], heading_suffix: str = "", track_lies: bool = False) -> str:
     bio_text = (bio or "").strip().replace("\n", " ")
     if len(bio_text) > MAX_BIO_CHARS:
         bio_text = bio_text[:MAX_BIO_CHARS] + "…"
-    return f"\n## {name}{heading_suffix}\nBio: {bio_text or 'unknown'}\nCurrent record: {record_for_prompt(record)}"
+    return f"\n## {name}{heading_suffix}\nBio: {bio_text or 'unknown'}\nCurrent record: {record_for_prompt(record, track_lies)}"
 
 
 def build_messages(prompt_template: str, game: str, language: str, player_name: str,
                    npcs: list[tuple[str, str, dict[str, Any]]], witnesses: list[str],
                    transcript: str, game_day: float | None,
-                   bystanders: list[tuple[str, str, dict[str, Any]]] | None = None) -> tuple[str, str]:
+                   bystanders: list[tuple[str, str, dict[str, Any]]] | None = None,
+                   track_lies: bool = False) -> tuple[str, str]:
     """Returns (system_prompt, user_content). `npcs` and `bystanders` are lists of (name, bio, record).
     Bystanders (nearby NPCs who only overheard) are updated in the same call; their instructions go into the
     user message so that custom update prompts keep working."""
@@ -125,19 +158,21 @@ def build_messages(prompt_template: str, game: str, language: str, player_name: 
         bystander_names = ", ".join(name for name, _, _ in bystanders)
         lines.append(f"Bystanders to update (overheard only): {bystander_names}")
         lines.append(BYSTANDER_INSTRUCTIONS.format(bystanders=bystander_names, player_name=player_name))
+    if track_lies:  # in the user message, so custom update prompts keep working
+        lines.append(LIES_INSTRUCTIONS.format(player_name=player_name))
     if witnesses:
         lines.append(f"Other people present or nearby (possible witnesses): {', '.join(witnesses)}")
     if isinstance(game_day, (int, float)):
         lines.append(f"Current in-game day: {int(game_day)}")
     for name, bio, record in npcs:
-        lines.append(_npc_section(name, bio, record))
+        lines.append(_npc_section(name, bio, record, track_lies=track_lies))
     for name, bio, record in bystanders:
-        lines.append(_npc_section(name, bio, record, " (bystander, overheard only)"))
+        lines.append(_npc_section(name, bio, record, " (bystander, overheard only)", track_lies))
     lines.append(f"\n## Conversation transcript\n{transcript.strip()}")
     return system_prompt, "\n".join(lines)
 
 
-def _request_params_for(client: Any, structured: bool) -> dict[str, Any]:
+def _request_params_for(client: Any, structured: bool, track_lies: bool = False) -> dict[str, Any]:
     params = dict(getattr(client, "_request_params", None) or {})
     params.pop("stop", None)    # upstream summary params stop at "#", JSON must not be cut
     params.pop("stream", None)
@@ -150,17 +185,17 @@ def _request_params_for(client: Any, structured: bool) -> dict[str, Any]:
         current = 0
     params[token_key] = max(current, MIN_OUTPUT_TOKENS)
     if structured:
-        params["response_format"] = RESPONSE_FORMAT
+        params["response_format"] = response_format(track_lies)
     else:
         params.pop("response_format", None)
     return params
 
 
-def _call(client: Any, messages: Any, structured: bool) -> str | None:
+def _call(client: Any, messages: Any, structured: bool, track_lies: bool = False) -> str | None:
     # Shallow copy so the shared client's params are not mutated; the copy still goes through
     # ClientBase._request_call_full (and with it any request adapters / usage logging).
     call_client = copy.copy(client)
-    call_client._request_params = _request_params_for(client, structured)
+    call_client._request_params = _request_params_for(client, structured, track_lies)
     # Own lock: this runs in a background thread and must not block the NPC's next streamed reply
     # when the summary client is the main conversation client.
     call_client._generation_lock = threading.Lock()
@@ -170,11 +205,11 @@ def _call(client: Any, messages: Any, structured: bool) -> str | None:
     return completion.choices[0].message.content
 
 
-def request_update(client: Any, messages: Any) -> dict[str, Any] | None:
+def request_update(client: Any, messages: Any, track_lies: bool = False) -> dict[str, Any] | None:
     """Ask for structured output first; on an API error or unparseable reply, retry once as plain text."""
     reply = None
     try:
-        reply = _call(client, messages, structured=True)
+        reply = _call(client, messages, structured=True, track_lies=track_lies)
     except Exception as e:  # providers / local servers that reject response_format
         logger.info(f"Relationship update: structured output not accepted ({e.__class__.__name__}); retrying as plain JSON.")
     parsed = parse_update_reply(reply)

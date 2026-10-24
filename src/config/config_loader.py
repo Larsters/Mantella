@@ -13,6 +13,7 @@ from src.config.config_file_writer import ConfigFileWriter
 from src.config.types.config_value_string import ConfigValueString
 import src.utils as utils
 from src.prompt_profiles import apply_prompt_profile
+from src import trust
 import src.transcripts.recorder as transcript_recorder
 from pathlib import Path
 import json
@@ -347,6 +348,9 @@ LLM parameter list must be valid JSON""")
             self.relationship_token_budget: int = self.__definitions.get_int_value("relationship_token_budget")
             self.relationship_opinion_decay_per_day: int = self.__definitions.get_int_value("relationship_opinion_decay_per_day")
             self.relationship_bystander_records: bool = self.__definitions.get_bool_value("relationship_bystander_records")
+            # Trust and honesty (src/trust)
+            self.trust_and_honesty_enabled: bool = self.__definitions.get_bool_value("trust_and_honesty_enabled")
+            self.trust_tool_model_context: bool = self.__definitions.get_bool_value("trust_tool_model_context")
             self.enable_character_tag_reading: bool = self.__definitions.get_bool_value("enable_character_tag_reading")
             # Generated bios (src/bio_generation)
             self.bio_generation_enabled: bool = self.__definitions.get_bool_value("bio_generation_enabled")
@@ -395,6 +399,7 @@ LLM parameter list must be valid JSON""")
             self.prompt_profile: str = self.__definitions.get_string_value("prompt_profile")
             self.knowledge_scope_enabled: bool = self.__definitions.get_bool_value("knowledge_scope_enabled")
             apply_prompt_profile(self)
+            trust.apply_prompt_rules(self)  # trust and honesty rule blocks (no-op when off)
 
             # Vision
             self.vision_enabled = self.__definitions.get_bool_value('vision_enabled')

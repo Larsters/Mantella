@@ -98,7 +98,7 @@ class RelationshipTracker:
                  prompt_template: str = updater.DEFAULT_UPDATE_PROMPT, token_budget: int = 150,
                  decay_per_day: float = 0.0, affects_trust: bool = True, run_in_background: bool = True,
                  bystander_records: bool = False, resolve_ref_id: Callable[[str], str | None] | None = None,
-                 lookup_bio: Callable[[str], str] | None = None) -> None:
+                 lookup_bio: Callable[[str], str] | None = None, track_lies: bool = False) -> None:
         self.store = store
         self.__client = client
         self.__game_name = game_name
@@ -112,6 +112,8 @@ class RelationshipTracker:
         self.bystander_records = bystander_records
         self.__resolve_ref_id = resolve_ref_id
         self.__lookup_bio = lookup_bio
+        # Trust and honesty (src/trust): caught lies + credibility in the update call
+        self.track_lies = track_lies
         # Messages already processed per NPC during the current conversation (reloads re-send the tail)
         self.__seen: dict[tuple[str, str, str], Counter] = {}
         self.__threads: list[threading.Thread] = []
@@ -262,11 +264,11 @@ class RelationshipTracker:
             system_prompt, user_content = updater.build_messages(
                 self.__prompt_template, self.__game_name, self.__language, player_name,
                 [(n.name, n.bio, records[n.name]) for n in npcs], others, transcript, game_day,
-                bystanders=[(name, bio, bystander_records[name]) for name, _, bio in bystanders])
+                bystanders=[(name, bio, bystander_records[name]) for name, _, bio in bystanders], track_lies=self.track_lies)
             thread = message_thread(None, system_prompt)
             thread.add_message(UserMessage(None, user_content))
             logger.log(23, f"Relationship update prompt: {user_content}")
-            parsed = updater.request_update(self.__client, thread)
+            parsed = updater.request_update(self.__client, thread, self.track_lies)
             if parsed is None:
                 return {}
             updates = _match_updates(parsed.get("npcs", []), [n.name for n in npcs] + list(bystander_records))

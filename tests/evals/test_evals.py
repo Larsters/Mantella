@@ -83,7 +83,7 @@ def test_stratified_sample_keeps_rare_groups():
 
 def test_seed_items_are_complete_requests():
     items = seeds.build_seed_items()
-    assert len(items) == 12 and len({i['id'] for i in items}) == 12
+    assert len(items) == 16 and len({i['id'] for i in items}) == 16
     by_id = {i['id']: i for i in items}
     lydia = by_id['seed-03-lydia-wait']
     assert lydia['request']['messages'][0]['role'] == 'system'

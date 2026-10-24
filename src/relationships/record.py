@@ -19,6 +19,13 @@ Record layout (schema_version 1)::
       "history":  [{"day": 12, "change": -15, "reason": "..."}],
       "updated_at": "2026-10-24T18:00:00"
     }
+
+Schema version 2 (trust and honesty, src/trust) adds, with defaults for older files::
+
+      "credibility": 50,                   # 0 (believes nothing) .. 100 (takes their word); 50 = unknown
+      "lies": [{"id": "l1", "text": "...", "day": 12, "witnesses": ["..."]}],
+
+Version 1 files load unchanged (credibility 50, no lies); nothing is rendered for those defaults.
 """
 from __future__ import annotations
 
@@ -27,7 +34,7 @@ import re
 from datetime import datetime
 from typing import Any
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 
 OPINION_MIN = -100
 OPINION_MAX = 100
@@ -41,12 +48,24 @@ CAPS: dict[str, int] = {
     "favours": 6,
     "promises": 6,
     "history": 8,
+    "lies": 6,
 }
+
+# Credibility (trust and honesty): how far the NPC takes the player's word.
+CREDIBILITY_MIN = 0
+CREDIBILITY_MAX = 100
+CREDIBILITY_DEFAULT = 50
+MAX_CREDIBILITY_GAIN = 15          # per conversation
+MAX_CREDIBILITY_LOSS = 50          # per conversation
+MIN_CREDIBILITY_DROP_PER_LIE = 15  # a newly caught lie always costs at least this much
+MIN_OPINION_DROP_PER_LIE = 5
+MAX_BYSTANDER_CREDIBILITY_CHANGE = 15
 MAX_TEXT_LENGTH = 200
 MAX_ATTITUDE_LENGTH = 160
 MAX_WITNESSES = 6
 
-ID_PREFIX: dict[str, str] = {"facts": "f", "grudges": "g", "favours": "d", "promises": "p"}
+ID_PREFIX: dict[str, str] = {"facts": "f", "grudges": "g", "favours": "d", "promises": "p", "lies": "l"}
+LIST_KEYS = ("facts", "grudges", "favours", "promises", "lies")
 
 # (upper bound inclusive, label). Checked in order.
 OPINION_LABELS: list[tuple[int, str]] = [
@@ -75,6 +94,21 @@ def clamp_opinion(value: Any) -> int:
     return max(OPINION_MIN, min(OPINION_MAX, number))
 
 
+def clamp_credibility(value: Any) -> int:
+    try:
+        number = int(round(float(value)))
+    except (TypeError, ValueError):
+        return CREDIBILITY_DEFAULT
+    return max(CREDIBILITY_MIN, min(CREDIBILITY_MAX, number))
+
+
+def credibility_ceiling(lie_count: int) -> int:
+    """While caught lies are on record, credibility cannot climb back above this."""
+    if lie_count <= 0:
+        return CREDIBILITY_MAX
+    return max(10, 70 - 10 * lie_count)
+
+
 def new_record(npc_name: str, npc_ref_id: str = "", player_name: str = "") -> dict[str, Any]:
     return {
         "schema_version": SCHEMA_VERSION,
@@ -93,6 +127,8 @@ def new_record(npc_name: str, npc_ref_id: str = "", player_name: str = "") -> di
         "favours": [],
         "promises": [],
         "history": [],
+        "credibility": CREDIBILITY_DEFAULT,
+        "lies": [],
         "updated_at": None,
     }
 
@@ -148,7 +184,7 @@ def normalize_record(raw: Any, npc_name: str = "", npc_ref_id: str = "", player_
         record["overheard_count"] = 0
     record["updated_at"] = raw.get("updated_at")
 
-    for key in ("facts", "grudges", "favours", "promises"):
+    for key in LIST_KEYS:
         items = raw.get(key) or []
         if not isinstance(items, list):
             continue
@@ -162,6 +198,8 @@ def normalize_record(raw: Any, npc_name: str = "", npc_ref_id: str = "", player_
     if isinstance(history, list):
         record["history"] = [h for h in history if isinstance(h, dict)][-CAPS["history"]:]
     _enforce_caps(record)
+    record["credibility"] = min(clamp_credibility(raw.get("credibility", CREDIBILITY_DEFAULT)),
+                                credibility_ceiling(len(record["lies"])))
     return record
 
 
@@ -184,14 +222,15 @@ def _sanitize_item(key: str, item: dict[str, Any], default_day: Any) -> dict[str
     if isinstance(day, float):
         day = int(day)
     clean: dict[str, Any] = {"text": text, "day": day}
-    if key in ("facts", "grudges") and item.get("overheard"):
+    if key in ("facts", "grudges", "lies") and item.get("overheard"):
         clean["overheard"] = True
-    if key == "grudges":
-        try:
-            severity = int(item.get("severity", 1))
-        except (TypeError, ValueError):
-            severity = 1
-        clean["severity"] = max(1, min(3, severity))
+    if key in ("grudges", "lies"):
+        if key == "grudges":
+            try:
+                severity = int(item.get("severity", 1))
+            except (TypeError, ValueError):
+                severity = 1
+            clean["severity"] = max(1, min(3, severity))
         witnesses = item.get("witnesses") or []
         if isinstance(witnesses, str):
             witnesses = [w.strip() for w in witnesses.split(",")]
@@ -217,8 +256,9 @@ def _add_item(record: dict[str, Any], key: str, item: dict[str, Any], default_da
                 existing["day"] = clean["day"]
             if not clean.get("overheard"):
                 existing.pop("overheard", None)  # now experienced first-hand
-            if key == "grudges":
-                existing["severity"] = max(existing.get("severity", 1), clean["severity"])
+            if key in ("grudges", "lies"):
+                if key == "grudges":
+                    existing["severity"] = max(existing.get("severity", 1), clean["severity"])
                 witnesses = existing.get("witnesses", [])
                 for w in clean["witnesses"]:
                     if w not in witnesses:
@@ -258,7 +298,7 @@ def _day_key(item: dict[str, Any]) -> float:
 
 
 def _enforce_caps(record: dict[str, Any]) -> None:
-    for key in ("facts", "favours", "promises"):
+    for key in ("facts", "favours", "promises", "lies"):
         cap = CAPS[key]
         if len(record[key]) > cap:
             # Keep the most recent entries (stable for equal days: later entries win)
@@ -323,6 +363,12 @@ def bystander_update(update: dict[str, Any]) -> dict[str, Any]:
         grudges.append(g)
     result["new_grudges"] = grudges
     result["resolved_grudges"] = update.get("resolved_grudges") or []
+    result["caught_lies"] = [{**(l if isinstance(l, dict) else {"text": l}), "overheard": True} for l in update.get("caught_lies") or []]
+    try:
+        cred = int(round(float(update.get("credibility_change", 0) or 0)))
+    except (TypeError, ValueError):
+        cred = 0
+    result["credibility_change"] = max(-MAX_BYSTANDER_CREDIBILITY_CHANGE, min(MAX_BYSTANDER_CREDIBILITY_CHANGE, cred))
     return result
 
 
@@ -336,7 +382,11 @@ def apply_update(record: dict[str, Any], update: dict[str, Any], game_day: float
          "new_facts": ["..."], "new_grudges": [{"text": "...", "severity": 2, "witnesses": ["..."]}],
          "resolved_grudges": ["g1"], "new_favours": [{"text": "...", "owed_by": "player"}],
          "settled_favours": ["d1"], "new_promises": [{"text": "...", "by": "player"}],
-         "resolved_promises": [{"id": "p1", "status": "kept"}]}
+         "resolved_promises": [{"id": "p1", "status": "kept"}],
+         "caught_lies": [{"text": "...", "witnesses": ["..."]}], "credibility_change": -20}
+
+    Every newly caught lie (not a duplicate of one on record) costs at least MIN_CREDIBILITY_DROP_PER_LIE
+    credibility and MIN_OPINION_DROP_PER_LIE opinion (bystanders: a third), whatever the model said.
     """
     if bystander:
         update = bystander_update(update)
@@ -367,6 +417,36 @@ def apply_update(record: dict[str, Any], update: dict[str, Any], game_day: float
         _add_item(result, "favours", item if isinstance(item, dict) else {"text": item}, day)
     for item in update.get("new_promises") or []:
         _add_item(result, "promises", item if isinstance(item, dict) else {"text": item}, day)
+
+    # Trust and honesty: caught lies and credibility
+    lies_before = len(result.get("lies", []))
+    result.setdefault("lies", [])
+    caught = [item if isinstance(item, dict) else {"text": item} for item in update.get("caught_lies") or []]
+    for item in caught:
+        _add_item(result, "lies", item, day)
+    new_lies = [l for l in result["lies"][lies_before:]]
+    try:
+        cred_change = int(round(float(update.get("credibility_change", 0) or 0)))
+    except (TypeError, ValueError):
+        cred_change = 0
+    cred_change = max(-MAX_CREDIBILITY_LOSS, min(MAX_CREDIBILITY_GAIN, cred_change))
+    if new_lies:
+        factor = 3 if bystander else 1
+        cred_change = max(-MAX_CREDIBILITY_LOSS, min(cred_change, -(MIN_CREDIBILITY_DROP_PER_LIE * len(new_lies)) // factor))
+        min_opinion_drop = -(MIN_OPINION_DROP_PER_LIE * len(new_lies)) // factor
+        if change > min_opinion_drop:
+            extra = min_opinion_drop - change
+            change = min_opinion_drop
+            result["opinion"] = clamp_opinion(result["opinion"] + extra)
+            result["opinion_label"] = opinion_label(result["opinion"])
+            if result["history"] and result["history"][-1].get("day") == day and result["history"][-1].get("reason") == reason:
+                result["history"][-1]["change"] = change
+            else:
+                result["history"].append({"day": day, "change": change, "reason": reason or "caught lying"})
+        for lie in new_lies:
+            result["history"].append({"day": day, "change": 0, "reason": f"Caught lying: {lie['text']}"})
+    old_cred = clamp_credibility(result.get("credibility", CREDIBILITY_DEFAULT))
+    result["credibility"] = min(clamp_credibility(old_cred + cred_change), credibility_ceiling(len(result["lies"])))
 
     for grudge in _remove_items(result, "grudges", update.get("resolved_grudges")):
         result["history"].append({"day": day, "change": 0, "reason": f"Forgave: {grudge['text']}"})
