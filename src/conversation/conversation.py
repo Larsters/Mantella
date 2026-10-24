@@ -16,6 +16,7 @@ from src.output_manager import ChatManager
 from src.llm.messages import AssistantMessage, SystemMessage, UserMessage
 from src.conversation.context import Context
 from src.lore import lore_hooks
+from src import memory_checkpoint
 from src.llm.message_thread import message_thread
 from src.conversation.conversation_type import conversation_type, multi_npc, pc_to_npc, radiant
 from src.character_manager import Character
@@ -285,6 +286,7 @@ class Conversation:
             self.initiate_end_sequence()
         else:
             self.__start_generating_npc_sentences()
+            memory_checkpoint.on_player_turn(self.__rememberer, self.__messages, self.__context)  # crash-safe memory (no-op when off)
 
         return player_text, events_need_updating, player_voiceline
 

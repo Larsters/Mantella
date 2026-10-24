@@ -116,6 +116,8 @@ class RelationshipTracker:
         self.track_lies = track_lies
         # Messages already processed per NPC during the current conversation (reloads re-send the tail)
         self.__seen: dict[tuple[str, str, str], Counter] = {}
+        # Memory checkpoints (src/memory_checkpoint) mark saved messages themselves and switch this off
+        self.dedupe_reloads = True
         self.__threads: list[threading.Thread] = []
 
     # ---------- prompt side ----------
@@ -176,6 +178,8 @@ class RelationshipTracker:
     def _new_messages(self, keys: list[tuple[str, str, str]], messages: list[Message]) -> list[Message]:
         """Drop messages that were already processed in an earlier (reload) update of this conversation.
         Reloads summarise the whole thread and then keep its tail, so the tail would otherwise be counted twice."""
+        if not self.dedupe_reloads:
+            return list(messages)
         remaining = Counter(self.__seen.get(keys[0], Counter()))
         fresh = []
         for m in messages:
