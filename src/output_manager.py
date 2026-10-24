@@ -265,6 +265,7 @@ class ChatManager:
         with create_span_from_thread("process_response") as span:
             span.set_attribute("active_character.name", active_character.name)
             usage_logger.set_context(speaker=active_character.name, npcs=[c.name for c in characters.get_non_player_characters()])
+            usage_logger.set_context(has_player=characters.contains_player_character()) # read by src/transcripts/recorder.py
 
             raw_response: str = ''  # Track the raw response
             first_token = True
