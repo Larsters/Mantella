@@ -34,3 +34,10 @@ class SpeechFlavorDefinitions:
     def get_speech_flavor_tts_respell_config_value() -> ConfigValue:
         description = """Respell common foreign words for the English Piper voices (e.g. 'Scheiße' -> 'Shy-sa', 'Genau' -> 'Geh-now') so they sound closer to the real thing. Only the spoken audio changes; subtitles keep the proper spelling."""
         return ConfigValueBool("speech_flavor_tts_respell", "Speech Flavour: Respell for TTS", description, True, tags=[ConfigValueTag.advanced, ConfigValueTag.share_row])
+
+    @staticmethod
+    def get_social_register_enabled_config_value() -> ConfigValue:
+        description = """Street jargon for low-class NPCs: beggars, thieves and the Thieves Guild, fences, skooma users, drunks, dock hands, labourers, miners, servants, orphans and bandits (detected from name, bio and voice type), and all Khajiit (their own third-person street talk).
+                        Rendered through the {speech_flavor} prompt variable, after the speech flavour, so the prompts must contain {speech_flavor}. Guards and Lydia are never detected.
+                        Per-NPC: add "social_register": "street" | "khajiit" | "none" to the NPC's JSON in data/Skyrim/character_overrides (a forced register works even while this is off)."""
+        return ConfigValueBool("social_register_enabled", "Street Jargon (Social Register)", description, False, tags=[ConfigValueTag.share_row])

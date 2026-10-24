@@ -369,6 +369,7 @@ LLM parameter list must be valid JSON""")
             self.speech_flavor_intensity: str = self.__definitions.get_string_value("speech_flavor_intensity")
             self.speech_flavor_scope: str = self.__definitions.get_string_value("speech_flavor_scope")
             self.speech_flavor_tts_respell: bool = self.__definitions.get_bool_value("speech_flavor_tts_respell")
+            self.social_register_enabled: bool = self.__definitions.get_bool_value("social_register_enabled")  # src/social_register
 
             #HTTP
             self.port = self.__definitions.get_int_value("port")
