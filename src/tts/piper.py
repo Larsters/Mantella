@@ -1,6 +1,7 @@
 import platform
 from src.config.config_loader import ConfigLoader
 from src.tts.ttsable import TTSable
+from src import speech_flavor
 import subprocess
 import os
 import time
@@ -83,6 +84,7 @@ class Piper(TTSable):
             voiceline = voiceline.replace('.','!')
         voiceline = voiceline.replace('*','') # Drop *. Piper reads them aloud. "*She waves.*" -> "Asterisk She waves. Asterisk"
         voiceline = voiceline.replace('\n', ' ').replace('\r', ' ')
+        voiceline = speech_flavor.prepare_for_tts(voiceline, self._config) # German words -> English-voice respelling (no-op unless enabled)
 
         attempts = 0
         max_attempts = 5

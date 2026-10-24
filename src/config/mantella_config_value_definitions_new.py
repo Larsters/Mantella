@@ -8,6 +8,7 @@ from src.config.definitions.game_definitions import GameDefinitions
 from src.config.definitions.language_definitions import LanguageDefinitions
 from src.config.definitions.llm_definitions import LLMDefinitions
 from src.config.definitions.other_definitions import OtherDefinitions
+from src.config.definitions.speech_flavor_definitions import SpeechFlavorDefinitions
 from src.config.definitions.startup_definitions import StartupDefinitions
 from src.config.definitions.prompt_definitions import PromptDefinitions
 from src.config.definitions.stt_definitions import STTDefinitions
@@ -193,6 +194,10 @@ class MantellaConfigValueDefinitionsNew:
         other_category.add_config_value(OtherDefinitions.get_player_voice_model())
         other_category.add_config_value(OtherDefinitions.get_conversation_summary_enabled_config_value())
         other_category.add_config_value(OtherDefinitions.get_enable_character_tag_reading_config_value())
+        other_category.add_config_value(SpeechFlavorDefinitions.get_speech_flavor_config_value())
+        other_category.add_config_value(SpeechFlavorDefinitions.get_speech_flavor_intensity_config_value())
+        other_category.add_config_value(SpeechFlavorDefinitions.get_speech_flavor_scope_config_value())
+        other_category.add_config_value(SpeechFlavorDefinitions.get_speech_flavor_tts_respell_config_value())
         other_category.add_config_value(OtherDefinitions.get_save_audio_data_to_character_folder_config_value())
         other_category.add_config_value(OtherDefinitions.get_port_config_value())
         other_category.add_config_value(OtherDefinitions.get_show_http_debug_messages_config_value())

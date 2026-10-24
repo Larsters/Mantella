@@ -27,7 +27,8 @@ class PromptDefinitions:
                                 "language", 
                                 "conversation_summary",
                                 "conversation_summaries",
-                                "actions"]
+                                "actions",
+                                "speech_flavor"]
     
     ALLOWED_PROMPT_VARIABLES_RADIANT = [
                                 "game",
@@ -44,7 +45,8 @@ class PromptDefinitions:
                                 "language", 
                                 "conversation_summary",
                                 "conversation_summaries",
-                                "actions"]
+                                "actions",
+                                "speech_flavor"]
     
     ALLOWED_PROMPT_VARIABLES_FUNCTION_LLM = [
                                 "game"]

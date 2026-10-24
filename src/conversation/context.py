@@ -10,6 +10,7 @@ from src.character_manager import Character
 from src.config.config_loader import ConfigLoader
 from src.llm.llm_client import LLMClient
 from src.config.definitions.game_definitions import GameEnum
+from src import speech_flavor
 
 logger = utils.get_logger()
 
@@ -485,7 +486,8 @@ class Context:
                 language=self.__language['language'], 
                 conversation_summary=content[1],
                 conversation_summaries=content[1],
-                actions = actions
+                actions = actions,
+                speech_flavor = speech_flavor.get_speech_flavor_text(self.__config, non_player_chars),
                 )
             if self.__client.is_too_long(result, self.TOKEN_LIMIT_PERCENT):
                 if content[0] != "":
