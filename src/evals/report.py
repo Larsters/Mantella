@@ -96,6 +96,10 @@ def aggregate(items: dict[str, dict[str, Any]], replies_path: str, judgments_pat
             'total_p50': percentile([r.get('total_s') for r in ok], 50), 'total_p90': percentile([r.get('total_s') for r in ok], 90),
             'cost_per_reply_usd': round(sum(costs) / len(costs), 6) if costs else None,
             'replay_cost_usd': round(sum(costs), 4),
+            'mode': meta.get(label, {}).get('mode') or 'one call',
+            'second_call_rate': _rate([bool(r.get('followup')) for r in ok]) if any('followup' in r for r in ok) else None,
+            'speech_ttft_p50': percentile([r.get('speech_ttft_s', r.get('ttft_s')) for r in ok], 50),
+            'speech_ttft_p90': percentile([r.get('speech_ttft_s', r.get('ttft_s')) for r in ok], 90),
             'mean_completion_tokens': round(sum((r.get('usage') or {}).get('completion_tokens', 0) for r in ok) / len(ok), 1) if ok else None,
         })
     rows.sort(key=lambda r: (r['overall']['mean'] is None, -(r['overall']['mean'] or 0), r['ttft_p50'] or 1e9))
