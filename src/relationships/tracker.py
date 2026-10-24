@@ -10,7 +10,7 @@ import json
 import os
 import threading
 from collections import Counter
-from typing import Any
+from typing import Any, Callable
 
 from src import utils
 from src.character_manager import Character
@@ -24,6 +24,7 @@ from src.remember.remembering import Remembering
 logger = utils.get_logger()
 
 MIN_TALK_MESSAGES = 2
+MAX_BYSTANDERS = 4  # nearby NPCs who get a record per conversation (closest first, as sent by the game)
 
 
 class RelationshipStore:
@@ -61,6 +62,22 @@ class RelationshipStore:
                     pass
         return rec.normalize_record(raw, utils.remove_trailing_number(npc_name), npc_ref_id, player_name)
 
+    def find_ref_id(self, npc_name: str, world_id: str) -> str | None:
+        """ref_id of the single existing '<name> - <ref_id>' folder for this NPC in this world (None if none or several).
+        Returns "" if only a legacy '<name>' folder exists (path_for then resolves to it)."""
+        base_name = utils.remove_trailing_number(npc_name)
+        world_folder = os.path.join(self.__base, world_id)
+        if not os.path.isdir(world_folder):
+            return None
+        prefix = f"{base_name} - "
+        refs = [entry[len(prefix):] for entry in os.listdir(world_folder)
+                if entry.startswith(prefix) and os.path.isdir(os.path.join(world_folder, entry))]
+        if len(refs) == 1:
+            return refs[0]
+        if not refs and os.path.isdir(os.path.join(world_folder, base_name)):
+            return ""
+        return None
+
     def exists(self, npc_name: str, npc_ref_id: str, world_id: str) -> bool:
         return os.path.exists(self.path_for(npc_name, npc_ref_id, world_id))
 
@@ -79,7 +96,9 @@ class RelationshipTracker:
 
     def __init__(self, store: RelationshipStore, client: Any, game_name: str, language: str,
                  prompt_template: str = updater.DEFAULT_UPDATE_PROMPT, token_budget: int = 150,
-                 decay_per_day: float = 0.0, affects_trust: bool = True, run_in_background: bool = True) -> None:
+                 decay_per_day: float = 0.0, affects_trust: bool = True, run_in_background: bool = True,
+                 bystander_records: bool = False, resolve_ref_id: Callable[[str], str | None] | None = None,
+                 lookup_bio: Callable[[str], str] | None = None) -> None:
         self.store = store
         self.__client = client
         self.__game_name = game_name
@@ -89,6 +108,10 @@ class RelationshipTracker:
         self.decay_per_day = decay_per_day
         self.affects_trust = affects_trust
         self.__background = run_in_background
+        # Nearby NPCs who only overheard the conversation also get a record (same LLM call)
+        self.bystander_records = bystander_records
+        self.__resolve_ref_id = resolve_ref_id
+        self.__lookup_bio = lookup_bio
         # Messages already processed per NPC during the current conversation (reloads re-send the tail)
         self.__seen: dict[tuple[str, str, str], Counter] = {}
         self.__threads: list[threading.Thread] = []
@@ -112,7 +135,7 @@ class RelationshipTracker:
         if not self.store.exists(npc.name, npc.ref_id, world_id):
             return None
         record = self.store.load(npc.name, npc.ref_id, world_id)
-        if record.get("conversation_count", 0) == 0:
+        if not rec.has_met(record):
             return None
         return rec.decayed_opinion(record, current_day, self.decay_per_day)
 
@@ -128,15 +151,15 @@ class RelationshipTracker:
     # ---------- update side ----------
     def update_after_conversation(self, groups: list[tuple[list[Character], message_thread]], world_id: str,
                                   player_name: str, witnesses: list[str], game_day: float | None,
-                                  is_final: bool = True) -> None:
+                                  is_final: bool = True, bystanders: list[str] | None = None) -> None:
         """Entry point used by the rememberer. Runs in a background thread unless configured otherwise."""
         if self.__background:
-            thread = threading.Thread(target=self._safe_update, args=(groups, world_id, player_name, witnesses, game_day, is_final),
+            thread = threading.Thread(target=self._safe_update, args=(groups, world_id, player_name, witnesses, game_day, is_final, bystanders),
                                       name="relationship-update", daemon=False)
             self.__threads = [t for t in self.__threads if t.is_alive()] + [thread]
             thread.start()
         else:
-            self._safe_update(groups, world_id, player_name, witnesses, game_day, is_final)
+            self._safe_update(groups, world_id, player_name, witnesses, game_day, is_final, bystanders)
 
     def wait_for_pending_updates(self, timeout: float | None = None) -> None:
         for thread in list(self.__threads):
@@ -165,8 +188,37 @@ class RelationshipTracker:
                 seen[m.get_formatted_content()] += 1
         return fresh
 
+    def resolve_bystanders(self, names: list[str], world_id: str, exclude: set[str]) -> list[tuple[str, str, str]]:
+        """(name, ref_id, bio) for nearby NPCs that can be matched to one specific NPC. Unresolvable names
+        (eg several 'Whiterun Guard's and none talked to before) are skipped: a record keyed by name only
+        would be shared by all of them."""
+        result: list[tuple[str, str, str]] = []
+        for name in dict.fromkeys(n for n in names if n and n not in exclude):
+            if len(result) >= MAX_BYSTANDERS:
+                break
+            ref_id = self.store.find_ref_id(name, world_id)
+            if ref_id is None and self.__resolve_ref_id is not None:
+                try:
+                    ref_id = self.__resolve_ref_id(name) or None
+                except Exception as e:
+                    logger.debug(f"Could not resolve bystander {name}: {e}")
+                    ref_id = None
+            if ref_id is None:
+                logger.info(f"Relationship: bystander {name} skipped (cannot be matched to one NPC).")
+                continue
+            bio = ""
+            if self.__lookup_bio is not None:
+                try:
+                    bio = self.__lookup_bio(name) or ""
+                except Exception:
+                    bio = ""
+            result.append((name, str(ref_id), bio))
+        return result
+
     def update_groups(self, groups: list[tuple[list[Character], message_thread]], world_id: str, player_name: str,
-                      witnesses: list[str], game_day: float | None, is_final: bool = True) -> None:
+                      witnesses: list[str], game_day: float | None, is_final: bool = True,
+                      bystanders: list[str] | None = None) -> None:
+        pending: list[tuple[list[Character], list[Message]]] = []
         for npcs, thread in groups:
             npcs = [n for n in npcs if not n.is_player_character]
             if not npcs:
@@ -180,29 +232,44 @@ class RelationshipTracker:
             if len(fresh) < MIN_TALK_MESSAGES or not any(isinstance(m, UserMessage) for m in fresh):
                 logger.info(f"Relationship update skipped for {', '.join(n.name for n in npcs)}: not enough new dialogue.")
                 continue
-            self.update_records(npcs, message_thread.transform_to_text(fresh), world_id, player_name, witnesses, game_day)
+            pending.append((npcs, fresh))
+        resolved: list[tuple[str, str, str]] = []
+        if self.bystander_records and bystanders and pending:
+            participants = {n.name for npcs, _ in groups for n in npcs} | {player_name}
+            resolved = self.resolve_bystanders(bystanders, world_id, participants)
+        # Bystanders ride along with the group that heard the most (normally the only group): still one call
+        longest = max(range(len(pending)), key=lambda i: len(pending[i][1])) if pending else -1
+        for i, (npcs, fresh) in enumerate(pending):
+            self.update_records(npcs, message_thread.transform_to_text(fresh), world_id, player_name, witnesses, game_day,
+                                bystanders=resolved if i == longest else None)
 
     def update_records(self, npcs: list[Character], transcript: str, world_id: str, player_name: str,
-                       witnesses: list[str], game_day: float | None) -> dict[str, dict[str, Any]]:
-        """One LLM call for all `npcs` (who heard the same transcript); merges and saves each record."""
-        paths = sorted({self.store.path_for(n.name, n.ref_id, world_id) for n in npcs})
+                       witnesses: list[str], game_day: float | None,
+                       bystanders: list[tuple[str, str, str]] | None = None) -> dict[str, dict[str, Any]]:
+        """One LLM call for all `npcs` (who heard the same transcript) and the `bystanders` ((name, ref_id, bio)
+        of nearby NPCs who overheard it); merges and saves each record."""
+        bystanders = [b for b in (bystanders or []) if b[0] not in {n.name for n in npcs}]
+        paths = sorted({self.store.path_for(n.name, n.ref_id, world_id) for n in npcs}
+                       | {self.store.path_for(name, ref, world_id) for name, ref, _ in bystanders})
         locks = [self.store.lock_for(p) for p in paths]
         for lock in locks:
             lock.acquire()
         try:
             records = {n.name: self.store.load(n.name, n.ref_id, world_id, player_name) for n in npcs}
-            npc_names = {n.name for n in npcs}
+            bystander_records = {name: self.store.load(name, ref, world_id, player_name) for name, ref, _ in bystanders}
+            npc_names = {n.name for n in npcs} | set(bystander_records)
             others = [w for w in witnesses if w not in npc_names and w != player_name]
             system_prompt, user_content = updater.build_messages(
                 self.__prompt_template, self.__game_name, self.__language, player_name,
-                [(n.name, n.bio, records[n.name]) for n in npcs], others, transcript, game_day)
+                [(n.name, n.bio, records[n.name]) for n in npcs], others, transcript, game_day,
+                bystanders=[(name, bio, bystander_records[name]) for name, _, bio in bystanders])
             thread = message_thread(None, system_prompt)
             thread.add_message(UserMessage(None, user_content))
             logger.log(23, f"Relationship update prompt: {user_content}")
             parsed = updater.request_update(self.__client, thread)
             if parsed is None:
                 return {}
-            updates = _match_updates(parsed.get("npcs", []), [n.name for n in npcs])
+            updates = _match_updates(parsed.get("npcs", []), [n.name for n in npcs] + list(bystander_records))
             saved: dict[str, dict[str, Any]] = {}
             for npc in npcs:
                 update = updates.get(npc.name, {})
@@ -217,6 +284,16 @@ class RelationshipTracker:
                 path = self.store.save(new_record, npc.name, npc.ref_id, world_id)
                 logger.info(f"Relationship of {npc.name} towards {player_name or 'the player'}: {new_record['opinion']:+d} ({new_record['opinion_label']}). Saved to {path}")
                 saved[npc.name] = new_record
+            for name, ref, _ in bystanders:
+                update = updates.get(name)
+                if not update:
+                    continue  # the model returned nothing for this bystander: leave the record alone
+                new_record = rec.apply_update(bystander_records[name], update, game_day, self.decay_per_day, bystander=True)
+                if player_name:
+                    new_record["player_name"] = player_name
+                path = self.store.save(new_record, name, ref, world_id)
+                logger.info(f"Relationship of bystander {name} towards {player_name or 'the player'}: {new_record['opinion']:+d} ({new_record['opinion_label']}). Saved to {path}")
+                saved[name] = new_record
             return saved
         finally:
             for lock in reversed(locks):
@@ -264,7 +341,9 @@ class RelationshipRememberer(Remembering):
             groups = build_groups(self._inner, messages, npcs_to_summarize, npcs_in_conversation)
             witnesses = _witnesses(npcs_in_conversation)
             player_name = npcs_in_conversation.get_player_name() or ""
-            self.relationship_tracker.update_after_conversation(groups, world_id, player_name, witnesses, end_timestamp, is_final=not is_reload)
+            bystanders = _bystanders(npcs_in_conversation) if getattr(self.relationship_tracker, "bystander_records", False) else None
+            self.relationship_tracker.update_after_conversation(groups, world_id, player_name, witnesses, end_timestamp,
+                                                                is_final=not is_reload, bystanders=bystanders)
         except Exception as e:
             logger.error(f"Relationship update could not be started: {e}")
 
@@ -299,3 +378,16 @@ def _witnesses(npcs_in_conversation: Characters) -> list[str]:
     except Exception:
         pass
     return list(dict.fromkeys(n for n in names if n))
+
+
+def _bystanders(npcs_in_conversation: Characters) -> list[str]:
+    """Nearby NPCs who were never part of the conversation."""
+    try:
+        members = {c.name for c in npcs_in_conversation.get_all_characters_since_start()}
+    except Exception:
+        members = set()
+    try:
+        nearby = npcs_in_conversation.get_nearby_npc_names()
+    except Exception:
+        return []
+    return [n for n in dict.fromkeys(nearby) if n and n not in members]

@@ -288,3 +288,83 @@ def test_real_client_base_receives_response_format_without_blocking(llm_client, 
     assert captured["model"] == llm_client.model_name
     assert "stop" not in captured
     assert tracker.store.load("Lydia", "A2C94", "w1")["opinion"] == -25
+
+
+# ---------------- bystanders (nearby NPCs who only overheard) ----------------
+
+BYSTANDER_REPLY = json.dumps({"npcs": [
+    json.loads(INSULT_REPLY)["npcs"][0],
+    json.loads(INSULT_REPLY)["npcs"][1],
+    {"name": "Alfhild", "opinion_change": -30, "reason": "heard the Thane insult Lydia", "attitude": "Thinks the Thane is a brute.",
+     "new_facts": ["Is the Thane of Whiterun"],
+     "new_grudges": [{"text": "Dragonborn insulted Lydia in my house", "severity": 3, "witnesses": []}],
+     "resolved_grudges": [], "new_favours": [{"text": "should not be stored", "owed_by": "player"}], "settled_favours": [],
+     "new_promises": [{"text": "should not be stored", "by": "player"}], "resolved_promises": []},
+]})
+
+
+def _bystander_rememberer(tmp_path, client, **kwargs):
+    tracker = _tracker(tmp_path, client, **kwargs)
+    return tracker, RelationshipRememberer(SimpleNamespace(save_conversation_state=lambda *a, **k: None,
+                                                           get_prompt_text=lambda *a: ""), tracker)
+
+
+def test_bystander_gets_capped_overheard_record_in_the_same_call(tmp_path, people):
+    thread, chars = _conversation(people)
+    client = FakeClient([BYSTANDER_REPLY])
+    tracker, rememberer = _bystander_rememberer(tmp_path, client, bystander_records=True,
+                                                resolve_ref_id=lambda name: "1A2B" if name == "Alfhild" else None,
+                                                lookup_bio=lambda name: "Alfhild is Lydia's friend.")
+    rememberer.save_conversation_state(thread, [people["lydia"], people["guard"]], chars, "w1", end_timestamp=12.4)
+
+    assert len(client.calls) == 1  # still one call per conversation
+    user_content = client.calls[0]["messages"][1]["content"]
+    assert "Bystanders to update (overheard only): Alfhild" in user_content
+    assert "## Alfhild (bystander, overheard only)" in user_content and "Lydia's friend" in user_content
+
+    alfhild = tracker.store.load("Alfhild", "1A2B", "w1")
+    assert alfhild["opinion"] == -15  # capped at +-15
+    assert alfhild["conversation_count"] == 0 and alfhild["overheard_count"] == 1
+    assert alfhild["facts"][0]["overheard"] is True
+    assert alfhild["grudges"][0]["severity"] == 2 and alfhild["grudges"][0]["overheard"] is True
+    assert alfhild["favours"] == [] and alfhild["promises"] == []
+    assert alfhild["history"][-1]["reason"].startswith("overheard:")
+    # Participants are unchanged by the bystander logic
+    assert tracker.store.load("Lydia", "A2C94", "w1")["opinion"] == -25
+
+    alfhild_npc = _npc("Alfhild", "1A2B")
+    text = relationships.prompt_text(rememberer, [alfhild_npc], "w1", "Dragonborn", 13)
+    assert "Is the Thane of Whiterun (overheard)" in text and "overheard" in text.split("Grudge:")[1]
+    assert relationships.adjust_trust(rememberer, "a stranger", alfhild_npc, "w1", 13) == "a distrusted stranger"
+
+    # Talking to her later first-hand keeps the record and counts a real conversation
+    record = tracker.store.load("Alfhild", "1A2B", "w1")
+    from src.relationships.record import apply_update
+    later = apply_update(record, {"opinion_change": 5, "new_facts": ["Is the Thane of Whiterun"]}, 14)
+    assert later["conversation_count"] == 1 and "overheard" not in later["facts"][0]
+
+
+def test_bystanders_are_off_by_default(tmp_path, people):
+    thread, chars = _conversation(people)
+    client = FakeClient([BYSTANDER_REPLY])
+    tracker, rememberer = _bystander_rememberer(tmp_path, client, resolve_ref_id=lambda name: "1A2B")
+    rememberer.save_conversation_state(thread, [people["lydia"], people["guard"]], chars, "w1", end_timestamp=12.4)
+    assert "Bystanders" not in client.calls[0]["messages"][1]["content"]
+    assert not tracker.store.exists("Alfhild", "1A2B", "w1")
+
+
+def test_bystander_ref_id_from_existing_folder_and_unresolvable_ones_skipped(tmp_path, people):
+    thread, chars = _conversation(people)
+    chars.set_nearby_npcs([{"name": "Alfhild", "distance": 3}, {"name": "Whiterun Guard", "distance": 5}, {"name": "Lydia", "distance": 1}])
+    os.makedirs(tmp_path / "w1" / "Alfhild - 9F")
+    client = FakeClient([BYSTANDER_REPLY])
+    tracker, rememberer = _bystander_rememberer(tmp_path, client, bystander_records=True, resolve_ref_id=lambda name: None)
+    rememberer.save_conversation_state(thread, [people["lydia"], people["guard"]], chars, "w1", end_timestamp=12.4)
+    content = client.calls[0]["messages"][1]["content"]
+    assert "Bystanders to update (overheard only): Alfhild Bystanders (Alfhild)" in content  # guard ambiguous, Lydia is a participant
+    assert tracker.store.load("Alfhild", "9F", "w1")["overheard_count"] == 1
+
+
+def test_bystander_config_default(default_config):
+    assert default_config.relationship_bystander_records is False
+    assert default_config.relationship_opinion_decay_per_day == 0

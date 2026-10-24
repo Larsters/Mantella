@@ -4,7 +4,7 @@ from __future__ import annotations
 import math
 from typing import Any, Callable
 
-from src.relationships.record import decayed_opinion, opinion_label
+from src.relationships.record import decayed_opinion, has_met, opinion_label
 
 TokenCounter = Callable[[str], int]
 
@@ -42,7 +42,7 @@ def render_record(record: dict[str, Any], player_name: str, current_day: float |
     name = record.get("npc_name") or "This character"
     player = player_name or record.get("player_name") or "the player"
     has_content = any(record.get(k) for k in ("facts", "grudges", "favours", "promises", "attitude")) \
-        or record.get("conversation_count", 0) > 0
+        or has_met(record)
     if not has_content:
         return ""
 
@@ -58,6 +58,8 @@ def render_record(record: dict[str, Any], player_name: str, current_day: float |
         when = _when(g.get("day"), current_day)
         if when:
             notes.append(when.strip(" ()"))
+        if g.get("overheard"):
+            notes.append("overheard")
         if g.get("witnesses"):
             notes.append("witnessed by " + ", ".join(g["witnesses"]))
         suffix = f" ({', '.join(notes)})" if notes else ""
@@ -81,10 +83,11 @@ def render_record(record: dict[str, Any], player_name: str, current_day: float |
         if piece == "__FACTS__":
             known: list[str] = []
             for f in facts:
-                trial = f"{name} knows about {player}: " + "; ".join(known + [_t(f["text"])]) + "."
+                fact = _t(f["text"]) + (" (overheard)" if f.get("overheard") else "")
+                trial = f"{name} knows about {player}: " + "; ".join(known + [fact]) + "."
                 if count_tokens(text + " " + trial) > token_budget:
                     break
-                known.append(_t(f["text"]))
+                known.append(fact)
             if known:
                 text += " " + f"{name} knows about {player}: " + "; ".join(known) + "."
             continue
