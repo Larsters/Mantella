@@ -40,6 +40,20 @@ import src.runtime_settings as runtime_settings
 logger = utils.get_logger()
 
 
+
+async def _close_llm_stream(stream) -> None:
+    """aclose() an LLM stream so its `with _generation_lock` block exits (no-op when finished or None).
+
+    feat/no-hang-listen: ClientBase.streaming_call holds the client's lock across its yields, so a
+    stream abandoned with `break` must be closed before the next call on the same client.
+    """
+    if stream is None or not hasattr(stream, 'aclose'):
+        return
+    try:
+        await stream.aclose()
+    except Exception as e:
+        logger.debug(f'Closing LLM stream failed: {e}')
+
 class ChatManager:
     def __init__(self, config: ConfigLoader, tts: TTSable, client: AIClient, game: Gameable | None = None):
         self.loglevel = 28
@@ -298,6 +312,7 @@ class ChatManager:
                 for i in indicators:
                     cut_indicators.add(i)
             accumulator: sentence_accumulator = sentence_accumulator(list(cut_indicators))
+            llm_stream = None # the current streaming_call generator (closed explicitly, see _close_llm_stream)
         
             try:
                 current_sentence: str = ''
@@ -315,7 +330,12 @@ class ChatManager:
                 while not has_text_response and retries < max_retries:
                     try:
                         start_time = time.time()
-                        async for item in active_client.streaming_call(messages=messages, is_multi_npc=is_multi_npc, tools=current_tools):
+                        # feat/no-hang-listen: close the previous stream first. streaming_call holds the client's
+                        # _generation_lock across its yields, so an abandoned stream (break after tool calls) would
+                        # deadlock the "second LLM call" on the same client.
+                        await _close_llm_stream(llm_stream)
+                        llm_stream = active_client.streaming_call(messages=messages, is_multi_npc=is_multi_npc, tools=current_tools)
+                        async for item in llm_stream:
                             if self.__stop_generation.is_set():
                                 break
                             if not item:
@@ -486,6 +506,7 @@ class ChatManager:
                 else:
                     logger.error(f"LLM API Error: {e}")
             finally:
+                await _close_llm_stream(llm_stream) # releases the client's _generation_lock (feat/no-hang-listen)
                 # Handle any remaining content
                 if parsed_sentence:
                     if not self.__config.narration_handling == NarrationHandlingEnum.CUT_NARRATIONS or parsed_sentence.sentence_type != SentenceTypeEnum.NARRATION:

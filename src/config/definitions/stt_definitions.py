@@ -159,6 +159,12 @@ class STTDefinitions:
         return ConfigValueString("moonshine_folder", "Moonshine Folder", description, "", is_hidden=is_hidden, tags=[ConfigValueTag.advanced])
 
     @staticmethod
+    def get_player_speech_max_wait_config_value() -> ConfigValue:
+        description = """How long (in seconds) Mantella waits for the player to START speaking before it hands the turn back to the game, which immediately asks to listen again.
+                        This keeps the server from waiting forever when the game drops a conversation (stopquest, recast, crash, loading a save). 0 = wait forever (upstream behaviour)."""
+        return ConfigValueFloat("player_speech_max_wait", "Max Wait for Player Speech", description, 120.0, 0, 3600, tags=[ConfigValueTag.advanced, ConfigValueTag.share_row])
+
+    @staticmethod
     def get_silence_auto_response_enabled_config_value() -> ConfigValue:
         description = """If enabled, the AI will automatically generate a response if the player is silent for a period of time."""
         return ConfigValueBool("silence_auto_response_enabled", "Auto-Response on Silence", description, False, tags=[ConfigValueTag.advanced])
