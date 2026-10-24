@@ -1,0 +1,923 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mantella Control Center</title>
+<link rel="icon" href="/favicon.ico">
+<style>
+:root {
+  color-scheme: light;
+  --surface-0: #f4f3f0;
+  --surface-1: #fcfcfb;
+  --surface-2: #f0efeb;
+  --border: #e3e1dc;
+  --grid: #ebe9e4;
+  --text-primary: #0b0b0b;
+  --text-secondary: #52514e;
+  --text-muted: #7a7974;
+  --series-1: #2a78d6;
+  --series-2: #eb6834;
+  --series-3: #1baf7a;
+  --series-4: #eda100;
+  --accent: #2a78d6;
+  --live: #1baf7a;
+  --live-bg: rgba(27, 175, 122, .12);
+  --warn: #c98500;
+  --danger: #c4402a;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --surface-0: #111110; --surface-1: #1a1a19; --surface-2: #232321; --border: #2e2d2b; --grid: #262624;
+    --text-primary: #f0efec; --text-secondary: #c3c2b7; --text-muted: #8f8e87;
+    --series-1: #3987e5; --series-2: #d95926; --series-3: #199e70; --series-4: #c98500;
+    --accent: #3987e5; --live-bg: rgba(25, 158, 112, .18); --danger: #e0644d;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --surface-0: #111110; --surface-1: #1a1a19; --surface-2: #232321; --border: #2e2d2b; --grid: #262624;
+  --text-primary: #f0efec; --text-secondary: #c3c2b7; --text-muted: #8f8e87;
+  --series-1: #3987e5; --series-2: #d95926; --series-3: #199e70; --series-4: #c98500;
+  --accent: #3987e5; --live-bg: rgba(25, 158, 112, .18); --danger: #e0644d;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--surface-0); color: var(--text-primary);
+  font: 14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+main { max-width: 1180px; margin: 0 auto; padding: 24px 16px 48px; }
+header { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin-bottom: 16px; }
+h1 { font-size: 22px; margin: 0; letter-spacing: -0.01em; }
+.sub { color: var(--text-muted); font-size: 12px; }
+.sub a { color: inherit; }
+.live { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--live); margin-right: 6px; }
+.controls { margin-left: auto; max-width: 100%; display: flex; gap: 8px; flex-wrap: wrap; }
+.seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: var(--surface-1); }
+.seg button { border: 0; background: none; color: var(--text-secondary); padding: 6px 12px; font: inherit; font-size: 13px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--text-primary); color: var(--surface-1); }
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+.tabs button { border: 0; background: none; font: inherit; font-size: 14px; color: var(--text-secondary); padding: 8px 14px; cursor: pointer;
+  border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.tabs button[aria-selected="true"] { color: var(--text-primary); border-bottom-color: var(--text-primary); font-weight: 600; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(160px, 100%), 1fr)); gap: 12px; margin-bottom: 16px; }
+.tile, .card { min-width: 0; background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; }
+.tile .label { color: var(--text-secondary); font-size: 12px; }
+.tile .value { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; margin-top: 2px; }
+.tile .hint { color: var(--text-muted); font-size: 12px; }
+.tile.hero .value { font-size: 34px; }
+.tile.wide { grid-column: span 2; }
+@media (max-width: 520px) { .tile.wide { grid-column: auto; } }
+.tile .value.small { font-size: 18px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.grid2 { display: grid; grid-template-columns: 3fr 2fr; gap: 12px; margin-bottom: 16px; }
+@media (max-width: 820px) { .grid2 { grid-template-columns: 1fr; } }
+.card h2 { font-size: 14px; margin: 0 0 2px; }
+.card .desc { color: var(--text-muted); font-size: 12px; margin-bottom: 10px; }
+.card-head { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 8px 16px; margin-bottom: 8px; }
+.card-head > div:first-child { flex: 1 1 260px; }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12px; color: var(--text-secondary); margin-bottom: 6px; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+svg text { fill: var(--text-muted); font-size: 11px; }
+.tablewrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; }
+th { text-align: left; color: var(--text-secondary); font-weight: 500; font-size: 12px; border-bottom: 1px solid var(--border); padding: 6px 8px; white-space: nowrap; }
+td { border-bottom: 1px solid var(--grid); padding: 6px 8px; white-space: nowrap; }
+td.num, th.num { text-align: right; }
+.tag { font-size: 11px; padding: 1px 6px; border-radius: 6px; border: 1px solid var(--border); color: var(--text-secondary); white-space: nowrap; }
+.tag i { display: inline-block; width: 7px; height: 7px; border-radius: 2px; margin-right: 4px; }
+.tag.live-tag { border-color: transparent; background: var(--live-bg); color: var(--live); font-weight: 600; }
+#tip { position: fixed; pointer-events: none; background: var(--surface-1); border: 1px solid var(--border); border-radius: 8px;
+  padding: 8px 10px; font-size: 12px; box-shadow: 0 4px 16px rgba(0,0,0,.12); display: none; z-index: 10; min-width: 140px; }
+#tip b { display: block; margin-bottom: 4px; }
+#tip .row { display: flex; justify-content: space-between; gap: 12px; color: var(--text-secondary); }
+.empty { padding: 40px 16px; text-align: center; color: var(--text-secondary); }
+.empty code, code { background: var(--surface-2); padding: 1px 5px; border-radius: 4px; font-size: 12px; }
+.warn { color: var(--warn); font-size: 12px; margin-top: 8px; }
+.bar-hit { fill: transparent; cursor: default; }
+[hidden] { display: none !important; }
+
+/* tuning */
+.tune-grid { display: grid; grid-template-columns: 3fr 2fr; gap: 12px; margin-bottom: 16px; align-items: start; }
+@media (max-width: 900px) { .tune-grid { grid-template-columns: 1fr; } }
+.stack { display: grid; gap: 12px; min-width: 0; }
+.param { display: grid; grid-template-columns: 150px minmax(0, 1fr) 88px 28px; align-items: center; gap: 6px 12px; padding: 9px 0; border-top: 1px solid var(--grid); }
+.param:first-of-type { border-top: 0; }
+@media (max-width: 560px) { .param { grid-template-columns: minmax(0, 1fr) 88px 28px; } .param .pctl { grid-column: 1 / -1; grid-row: 2; } }
+.param .pname { font-size: 13px; font-weight: 500; }
+.param .pname .pmeta { display: block; font-weight: 400; font-size: 11px; color: var(--text-muted); }
+.livebadge { margin-left: 6px; font-size: 10px; font-weight: 700; color: var(--live); background: var(--live-bg); padding: 1px 5px; border-radius: 5px; vertical-align: 1px; }
+.pctl .seg { flex-wrap: nowrap; }
+.pctl .seg button { white-space: nowrap; padding: 6px 10px; }
+.param.is-default .pctl, .param.is-default input.num { opacity: .55; }
+.pctl { min-width: 0; }
+input[type=range] { width: 100%; accent-color: var(--accent); margin: 0; }
+input.num, input.text, select { width: 100%; font: inherit; font-size: 13px; padding: 5px 8px; border: 1px solid var(--border); border-radius: 7px;
+  background: var(--surface-0); color: var(--text-primary); font-variant-numeric: tabular-nums; min-width: 0; }
+input.num { text-align: right; }
+input:focus-visible, select:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.icon-btn { width: 28px; height: 28px; border: 1px solid transparent; border-radius: 7px; background: none; color: var(--text-muted); cursor: pointer; font-size: 15px; line-height: 1; }
+.icon-btn:hover:not(:disabled) { border-color: var(--border); color: var(--text-primary); }
+.icon-btn:disabled { visibility: hidden; }
+.btn { border: 1px solid var(--border); background: var(--surface-1); color: var(--text-primary); border-radius: 8px; padding: 7px 12px; font: inherit; font-size: 13px; cursor: pointer; white-space: nowrap; }
+.btn:hover:not(:disabled) { background: var(--surface-2); }
+.btn.primary { background: var(--text-primary); color: var(--surface-1); border-color: var(--text-primary); }
+.btn.primary:hover:not(:disabled) { opacity: .88; background: var(--text-primary); }
+.btn:disabled { opacity: .45; cursor: default; }
+.btnrow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.npcbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 4px 0 8px; }
+.npcbar input { max-width: 240px; }
+.chip { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; padding: 2px 4px 2px 9px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface-0); cursor: pointer; color: var(--text-secondary); }
+.chip[aria-pressed="true"] { border-color: var(--live); color: var(--text-primary); }
+.chip b { font-weight: 600; }
+.chip .x { border: 0; background: none; color: var(--text-muted); cursor: pointer; font-size: 13px; padding: 0 4px; }
+.actions-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 2px 12px; margin-top: 4px; }
+.actions-grid label { display: flex; align-items: center; gap: 7px; font-size: 13px; padding: 4px 0; cursor: pointer; min-width: 0; }
+.actions-grid label span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.actions-grid label.changed span { color: var(--live); font-weight: 600; }
+.actions-grid input { accent-color: var(--accent); margin: 0; }
+.savebar { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; }
+.savebar .note { flex: 1 1 320px; color: var(--text-muted); font-size: 12px; }
+#toast { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); background: var(--text-primary); color: var(--surface-1);
+  padding: 8px 14px; border-radius: 8px; font-size: 13px; opacity: 0; transition: opacity .2s; pointer-events: none; z-index: 20; max-width: calc(100% - 32px); }
+#toast.show { opacity: 1; }
+#toast.err { background: var(--danger); color: #fff; }
+.lastcall .value.small { font-size: 17px; }
+.kv { display: flex; flex-wrap: wrap; gap: 2px 14px; margin-top: 6px; font-size: 12px; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+.kv b { color: var(--text-primary); font-weight: 600; }
+
+/* memories */
+.mem-active { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr)); gap: 12px; margin-bottom: 16px; }
+.mem-browse { display: grid; grid-template-columns: minmax(220px, 1fr) 2fr; gap: 12px; align-items: start; }
+@media (max-width: 760px) { .mem-browse { grid-template-columns: 1fr; } }
+.mem-list { max-height: 480px; overflow-y: auto; margin: 8px -6px 0; }
+.mem-list button { display: flex; width: 100%; justify-content: space-between; gap: 8px; border: 0; background: none; text-align: left; font: inherit; font-size: 13px;
+  color: var(--text-primary); padding: 6px; border-radius: 7px; cursor: pointer; }
+.mem-list button:hover { background: var(--surface-2); }
+.mem-list button[aria-current="true"] { background: var(--surface-2); font-weight: 600; }
+.mem-list .when { color: var(--text-muted); font-size: 11px; white-space: nowrap; }
+.npc-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; margin-bottom: 8px; }
+.npc-head h2 { font-size: 16px; margin: 0; }
+.entries { display: grid; gap: 8px; max-height: 520px; overflow-y: auto; padding-right: 2px; }
+.entry { border: 1px solid var(--grid); border-radius: 9px; padding: 9px 11px; background: var(--surface-0); }
+.entry .day { font-size: 11px; color: var(--text-muted); margin-bottom: 3px; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.entry p { margin: 0; font-size: 13px; line-height: 1.5; }
+.entry.condensed { opacity: .7; }
+.entry.new { border-color: var(--live); animation: flash 2.4s ease-out 1; }
+.badge-new { font-size: 10px; font-weight: 700; color: var(--live); background: var(--live-bg); padding: 1px 6px; border-radius: 5px; letter-spacing: .02em; }
+@keyframes flash { 0% { background: var(--live-bg); box-shadow: 0 0 0 3px var(--live-bg); } 100% { background: var(--surface-0); box-shadow: none; } }
+@media (prefers-reduced-motion: reduce) { .entry.new { animation: none; } }
+.rel { border: 1px dashed var(--border); border-radius: 9px; padding: 10px 12px; margin-bottom: 10px; font-size: 13px; }
+.rel h3 { font-size: 12px; margin: 0 0 6px; color: var(--text-secondary); font-weight: 600; }
+.rel ul { margin: 2px 0 6px; padding-left: 18px; }
+.meter { position: relative; height: 8px; border-radius: 4px; background: var(--grid); margin: 4px 0 8px; }
+.meter i { position: absolute; top: -3px; width: 4px; height: 14px; border-radius: 2px; background: var(--text-primary); }
+.meter::after { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--border); }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div>
+      <h1>Mantella Control Center</h1>
+      <div class="sub"><span class="live" id="liveDot"></span><span id="status">connecting…</span> · <a href="/ui" target="_blank">Mantella settings</a></div>
+    </div>
+    <div class="controls">
+      <div class="seg" id="themeSeg" role="group" aria-label="Theme">
+        <button data-theme-btn="auto">Auto</button>
+        <button data-theme-btn="light">Light</button>
+        <button data-theme-btn="dark">Dark</button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button role="tab" data-tab="tuning" aria-selected="true">Tuning</button>
+    <button role="tab" data-tab="memories" aria-selected="false">Memories</button>
+    <button role="tab" data-tab="spend" aria-selected="false">Spend</button>
+  </nav>
+
+  <!-- ============ TUNING ============ -->
+  <section id="tab-tuning">
+    <section class="tiles" id="tuneTiles"></section>
+
+    <div class="tune-grid">
+      <div class="stack">
+        <section class="card">
+          <div class="card-head">
+            <div><h2>Language model</h2>
+              <div class="desc">Changes apply to the <b>next</b> LLM call, no restart. Values marked <span class="tag live-tag">live</span> override config.ini until reset or restart.</div></div>
+            <div class="seg" id="scopeSeg" role="group" aria-label="Scope">
+              <button data-scope="dialogue">NPC dialogue</button>
+              <button data-scope="memory">Memory summaries</button>
+              <button data-scope="npc">Per NPC</button>
+            </div>
+          </div>
+          <div id="npcBar" class="npcbar" hidden>
+            <input class="text" id="npcName" list="npcList" placeholder="NPC name, e.g. Lydia" aria-label="NPC name">
+            <datalist id="npcList"></datalist>
+            <span id="npcChips" style="display:contents"></span>
+          </div>
+          <div id="params"></div>
+          <div class="btnrow" style="margin-top:10px">
+            <button class="btn" id="resetScope">Reset this scope to config</button>
+            <span class="sub" id="scopeNote"></span>
+          </div>
+        </section>
+      </div>
+
+      <div class="stack">
+        <section class="card">
+          <h2>Conversation</h2>
+          <div class="desc">Sentence caps cut the reply after N sentences. Vision sends a screenshot with each reply.</div>
+          <div id="general"></div>
+        </section>
+        <section class="card">
+          <div class="card-head">
+            <div><h2>Actions</h2><div class="desc" id="actionsDesc">Ticked actions are offered to the LLM as tools.</div></div>
+            <div class="btnrow"><button class="btn" id="actAll">All</button><button class="btn" id="actNone">None</button></div>
+          </div>
+          <div class="actions-grid" id="actions"></div>
+        </section>
+      </div>
+    </div>
+
+    <section class="card">
+      <div class="savebar">
+        <div class="note" id="saveNote"></div>
+        <button class="btn" id="resetAll">Reset everything to config</button>
+        <button class="btn primary" id="saveBtn">Save to config.ini</button>
+      </div>
+    </section>
+  </section>
+
+  <!-- ============ MEMORIES ============ -->
+  <section id="tab-memories" hidden>
+    <div class="card-head" style="margin-bottom:12px">
+      <div><h2 style="font-size:16px;margin:0" id="memTitle">Current conversation</h2>
+        <div class="sub" id="memSub"></div></div>
+    </div>
+    <div class="mem-active" id="memActive"></div>
+    <div class="mem-browse">
+      <section class="card">
+        <h2>All NPCs</h2><div class="desc">Everyone with saved memories, newest first</div>
+        <input class="text" id="memSearch" type="search" placeholder="Search NPCs" aria-label="Search NPCs">
+        <div class="mem-list" id="memList"></div>
+      </section>
+      <section class="card" id="memViewer"><div class="empty" style="padding:24px 8px">Pick an NPC to read their memories.</div></section>
+    </div>
+  </section>
+
+  <!-- ============ SPEND ============ -->
+  <section id="tab-spend" hidden>
+    <div class="card-head" style="margin-bottom:12px">
+      <div class="sub" id="spendStatus"></div>
+      <div class="btnrow">
+        <div class="seg" id="rangeSeg" role="group" aria-label="Time range">
+          <button data-range="session">Session</button>
+          <button data-range="today">Today</button>
+          <button data-range="7d">7 days</button>
+          <button data-range="30d">30 days</button>
+          <button data-range="all">All</button>
+        </div>
+        <div class="seg" id="curSeg" role="group" aria-label="Currency">
+          <button data-cur="USD">$</button>
+          <button data-cur="EUR">€</button>
+        </div>
+      </div>
+    </div>
+    <div id="content"></div>
+  </section>
+</main>
+<div id="tip"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+// ---------------- shared helpers ----------------
+const store = (() => { try { return window.localStorage; } catch { return null; } })();
+const pref = (k, d) => { try { return store?.getItem(k) ?? d; } catch { return d; } };
+const setPref = (k, v) => { try { store?.setItem(k, v); } catch {} };
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const fmtInt = n => n >= 1e6 ? (n / 1e6).toFixed(2) + 'M' : n >= 1e4 ? (n / 1e3).toFixed(1) + 'k' : (n ?? 0).toLocaleString();
+const parseTs = ts => new Date(ts);
+const $ = id => document.getElementById(id);
+
+const state = {
+  tab: 'tuning', range: pref('mus.range', 'today'), cur: pref('mus.cur', 'EUR'),
+  data: null,          // /api/usage
+  ctl: null,           // /api/control/state
+  scope: pref('mcc.scope', 'dialogue'), npc: pref('mcc.npc', ''),
+  theme: pref('mcc.theme', 'auto'),
+};
+
+function eurRate() { return state.data?.eur_per_usd ?? state.ctl?.eur_per_usd ?? 1; }
+function money(usd, digits) {
+  if (usd == null) return '—';
+  const v = state.cur === 'EUR' ? usd * eurRate() : usd;
+  const sym = state.cur === 'EUR' ? '€' : '$';
+  const d = digits ?? (Math.abs(v) >= 1 ? 2 : Math.abs(v) >= 0.01 ? 3 : 4);
+  return sym + v.toFixed(d);
+}
+function ago(ts) {
+  const s = Math.max(0, (Date.now() - parseTs(ts)) / 1000);
+  return s < 60 ? Math.round(s) + ' s ago' : s < 3600 ? Math.round(s / 60) + ' min ago' : s < 86400 ? Math.round(s / 3600) + ' h ago' : ts.slice(0, 10);
+}
+let toastTimer;
+function toast(msg, err) {
+  const t = $('toast'); t.textContent = msg; t.className = 'show' + (err ? ' err' : '');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.className = '', err ? 5000 : 1800);
+}
+
+// ---------------- theme + tabs ----------------
+function applyTheme() {
+  const q = new URLSearchParams(location.search).get('theme') || new URLSearchParams(location.search).get('__theme');
+  const t = q || state.theme;
+  if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; else delete document.documentElement.dataset.theme;
+  document.querySelectorAll('#themeSeg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.themeBtn === (q || state.theme)));
+}
+$('themeSeg').addEventListener('click', e => {
+  const t = e.target.dataset.themeBtn; if (!t) return;
+  state.theme = t; setPref('mcc.theme', t);
+  if (new URLSearchParams(location.search).has('theme')) history.replaceState(null, '', location.pathname + location.hash);
+  applyTheme(); if (state.tab === 'spend' && state.data) render();
+});
+function showTab(tab) {
+  state.tab = tab;
+  document.querySelectorAll('.tabs button').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === tab));
+  $('tab-tuning').hidden = tab !== 'tuning'; $('tab-spend').hidden = tab !== 'spend'; $('tab-memories').hidden = tab !== 'memories';
+  if (location.hash !== '#' + tab) history.replaceState(null, '', '#' + tab);
+  refresh();
+}
+document.querySelector('.tabs').addEventListener('click', e => { if (e.target.dataset.tab) showTab(e.target.dataset.tab); });
+
+// ---------------- API ----------------
+async function api(path, body) {
+  const res = await fetch(path, body === undefined ? { cache: 'no-store' } :
+    { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  const json = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(json.error || res.statusText);
+  return json;
+}
+function prettyError(e) {
+  try { const o = JSON.parse(e.message); return Object.entries(o).map(([k, v]) => `${k}: ${v}`).join('; '); } catch { return e.message; }
+}
+
+// ---------------- TUNING ----------------
+const PARAMS = [
+  { key: 'model', label: 'Model', kind: 'model', meta: 'same provider as config' },
+  { key: 'temperature', label: 'Temperature', kind: 'range', min: 0, max: 2, step: 0.05, def: 1, meta: 'randomness' },
+  { key: 'top_p', label: 'Top P', kind: 'range', min: 0, max: 1, step: 0.01, def: 1, meta: 'nucleus sampling' },
+  { key: 'max_tokens', label: 'Max tokens', kind: 'range', min: 16, max: 2000, step: 1, def: 250, int: true, meta: 'reply length cap' },
+  { key: 'frequency_penalty', label: 'Frequency penalty', kind: 'range', min: -2, max: 2, step: 0.05, def: 0, meta: 'less repetition' },
+  { key: 'presence_penalty', label: 'Presence penalty', kind: 'range', min: -2, max: 2, step: 0.05, def: 0, meta: 'new topics' },
+  { key: 'reasoning_effort', label: 'Reasoning effort', kind: 'select', meta: 'reasoning models only' },
+];
+const NPC_EXTRA = [
+  { key: 'max_response_sentences_single', label: 'Max sentences', kind: 'range', min: 1, max: 12, step: 1, int: true, meta: 'this NPC, one-on-one' },
+];
+const GENERAL = [
+  { key: 'max_response_sentences_single', label: 'Max sentences (1 NPC)', kind: 'range', min: 1, max: 12, step: 1, int: true },
+  { key: 'max_response_sentences_multi', label: 'Max sentences (group)', kind: 'range', min: 1, max: 20, step: 1, int: true },
+  { key: 'vision_enabled', label: 'Vision', kind: 'tri' },
+];
+
+function scopeValues() {
+  const c = state.ctl; if (!c) return { base: {}, live: {} };
+  if (state.scope === 'npc') {
+    const name = state.npc.trim();
+    const live = Object.entries(c.live.npc).find(([n]) => n.toLowerCase() === name.toLowerCase())?.[1] || {};
+    const base = { ...c.effective.dialogue };
+    base.max_response_sentences_single = c.effective.general.max_response_sentences_single;
+    return { base, live, baseLabel: 'dialogue' };
+  }
+  return { base: { ...c.config[state.scope] }, live: c.live.llm[state.scope] || {}, baseLabel: 'config' };
+}
+
+function fmtVal(p, v) {
+  if (v == null) return p.kind === 'select' ? 'not set' : 'API default';
+  if (p.kind === 'range') return p.int ? String(v) : (+v).toFixed(2).replace(/\.?0+$/, m => m.startsWith('.') ? '' : m);
+  return String(v);
+}
+
+function paramRow(p, base, live, baseLabel) {
+  const isLive = p.key in live;
+  const v = isLive ? live[p.key] : base[p.key];
+  const hint = `${baseLabel}: ${esc(fmtVal(p, base[p.key]))}`;
+  const cls = `param${isLive ? ' is-live' : ''}${!isLive && base[p.key] == null ? ' is-default' : ''}`;
+  let ctl = '', num = '';
+  if (p.kind === 'range') {
+    const shown = v ?? p.def;
+    ctl = `<input type="range" min="${p.min}" max="${p.max}" step="${p.step}" value="${esc(shown)}" data-k="${p.key}" aria-label="${esc(p.label)}">`;
+    num = `<input class="num" type="number" min="${p.min}" max="${p.max}" step="${p.step}" value="${esc(shown)}" data-k="${p.key}" aria-label="${esc(p.label)} value">`;
+  } else if (p.kind === 'model') {
+    ctl = `<input class="text" list="modelList" value="${esc(v ?? '')}" data-k="${p.key}" aria-label="Model" spellcheck="false">
+      <datalist id="modelList">${(state.ctl.models || []).map(m => `<option value="${esc(m)}">`).join('')}</datalist>`;
+  } else if (p.kind === 'select') {
+    ctl = `<select data-k="${p.key}" aria-label="${esc(p.label)}"><option value="">${esc(base[p.key] ? baseLabel + ' (' + base[p.key] + ')' : 'not sent')}</option>
+      ${(state.ctl.reasoning_efforts || []).map(o => `<option ${v === o && isLive ? 'selected' : ''}>${esc(o)}</option>`).join('')}</select>`;
+  }
+  return `<div class="${cls}" data-row="${p.key}">
+    <div class="pname">${esc(p.label)}${isLive ? '<span class="livebadge">live</span>' : ''}<span class="pmeta">${hint}${p.meta ? ' · ' + esc(p.meta) : ''}</span></div>
+    <div class="pctl">${ctl}</div><div>${num}</div>
+    <button class="icon-btn" title="Back to ${esc(baseLabel)} value" data-clear="${p.key}" ${isLive ? '' : 'disabled'}>↺</button></div>`;
+}
+
+function renderTuning() {
+  const c = state.ctl; if (!c) return;
+  document.querySelectorAll('#scopeSeg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.scope === state.scope));
+  $('npcBar').hidden = state.scope !== 'npc';
+  const { base, live, baseLabel } = scopeValues();
+  const rows = state.scope === 'npc' ? [...PARAMS, ...NPC_EXTRA] : PARAMS;
+  const params = $('params');
+  if (state.scope === 'npc') {
+    $('npcList').innerHTML = (c.npc_suggestions || []).map(n => `<option value="${esc(n)}">`).join('');
+    $('npcChips').innerHTML = Object.entries(c.live.npc).map(([n, v]) =>
+      `<span class="chip" data-npc="${esc(n)}" aria-pressed="${n.toLowerCase() === state.npc.trim().toLowerCase()}"><b>${esc(n)}</b> ${Object.keys(v).length}<button class="x" data-npc-clear="${esc(n)}" title="Remove overrides for ${esc(n)}">×</button></span>`).join('');
+    if ($('npcName') !== document.activeElement) $('npcName').value = state.npc;
+  }
+  if (state.scope === 'npc' && !state.npc.trim()) {
+    params.innerHTML = `<div class="empty" style="padding:24px 8px">Type or pick an NPC name. Their values override the NPC dialogue scope whenever they speak.</div>`;
+  } else {
+    params.innerHTML = rows.map(p => paramRow(p, base, live, baseLabel)).join('');
+  }
+  const provider = state.scope === 'memory' ? c.config.summary_llm_api : c.config.llm_api;
+  $('scopeNote').textContent = state.scope === 'npc' ? 'Per-NPC values are live only (not saved to config.ini).' : `Provider: ${provider || '?'}`;
+  $('resetScope').disabled = !Object.keys(live).length;
+
+  // general
+  const g = c.config.general, gl = c.live.general;
+  $('general').innerHTML = GENERAL.map(p => {
+    if (p.kind === 'tri') {
+      const isLive = 'vision_enabled' in gl, cur = isLive ? (gl.vision_enabled ? 'on' : 'off') : 'config';
+      return `<div class="param${isLive ? ' is-live' : ''}"><div class="pname">${esc(p.label)}${isLive ? '<span class="livebadge">live</span>' : ''}<span class="pmeta">config: ${g.vision_enabled ? 'on' : 'off'}</span></div>
+        <div class="pctl"><div class="seg" id="visionSeg">${['config', 'on', 'off'].map(o => `<button data-vision="${o}" aria-pressed="${cur === o}">${o === 'config' ? 'Use config' : o === 'on' ? 'On' : 'Off'}</button>`).join('')}</div></div><div></div><div></div></div>`;
+    }
+    return paramRow(p, g, gl, 'config');
+  }).join('');
+
+  // actions
+  const configDisabled = new Set(g.disabled_actions || []);
+  const disabled = new Set(gl.disabled_actions ?? g.disabled_actions ?? []);
+  $('actions').innerHTML = (c.actions || []).map(a => `<label class="${configDisabled.has(a) !== disabled.has(a) ? 'changed' : ''}" title="${esc(a)}${configDisabled.has(a) !== disabled.has(a) ? ' (live change)' : ''}">
+      <input type="checkbox" data-action="${esc(a)}" ${disabled.has(a) ? '' : 'checked'}><span>${esc(a)}</span></label>`).join('');
+  $('actionsDesc').innerHTML = c.config.advanced_actions_enabled ? `Ticked actions are offered to the LLM as tools. ${'disabled_actions' in gl ? '<span class="tag live-tag">live</span>' : ''}`
+    : `<span style="color:var(--warn)">Advanced actions are off in config.ini, so tool actions aren't offered.</span>`;
+
+  // save bar
+  const nLlm = Object.values(c.live.llm).reduce((a, v) => a + Object.keys(v).length, 0), nGen = Object.keys(gl).length, nNpc = Object.keys(c.live.npc).length;
+  const savable = nLlm + nGen;
+  $('saveNote').innerHTML = (savable || nNpc ? `<b style="color:var(--text-primary)">${savable} live change${savable === 1 ? '' : 's'}</b>${nNpc ? ` + ${nNpc} NPC override${nNpc === 1 ? '' : 's'} (live only)` : ''}. `
+    : 'Everything matches config.ini. ') +
+    'Live values are lost when Mantella restarts. Saving writes them through Mantella\'s own config writer; Mantella then rebuilds its clients on the next request, which ends a running conversation, so save between conversations.';
+  $('saveBtn').disabled = !savable; $('resetAll').disabled = !(savable || nNpc);
+}
+
+function renderTuneTiles() {
+  const c = state.ctl; if (!c) return;
+  const r = c.last_call;
+  const eff = c.effective.dialogue;
+  const liveCount = Object.values(c.live.llm).reduce((a, v) => a + Object.keys(v).length, 0) + Object.keys(c.live.general).length + Object.keys(c.live.npc).length;
+  $('tuneTiles').innerHTML = `
+    <div class="tile wide lastcall"><div class="label">Last call ${r ? '· ' + esc(r.call_type) + (r.speaker ? ' · ' + esc(r.speaker) : '') + ' · ' + ago(r.ts) : ''}</div>
+      ${r ? `<div class="value small">${esc(r.model)}</div>
+      <div class="kv"><span>latency <b>${r.latency_s != null ? r.latency_s.toFixed(2) + ' s' : '—'}</b></span>
+        <span>in <b>${r.estimated ? '~' : ''}${fmtInt(r.prompt_tokens || 0)}</b>${r.cached_tokens ? ' (' + fmtInt(r.cached_tokens) + ' cached)' : ''}</span>
+        <span>out <b>${r.estimated ? '~' : ''}${fmtInt(r.completion_tokens || 0)}</b></span><span>cost <b>${money(r.cost_usd, 4)}</b></span>
+        ${r.tool_calls ? `<span>actions <b>${esc(r.tool_calls.join(', '))}</b></span>` : ''}</div>`
+      : `<div class="value small">—</div><div class="hint">no LLM call logged yet</div>`}</div>
+    <div class="tile"><div class="label">Dialogue model now</div><div class="value small">${esc(eff.model || '—')}</div>
+      <div class="hint">${'model' in (c.live.llm.dialogue || {}) ? 'live override' : 'from config.ini'}</div></div>
+    <div class="tile"><div class="label">Live overrides</div><div class="value">${liveCount}</div>
+      <div class="hint">${liveCount ? 'active until reset or restart' : 'running on config.ini'}</div></div>`;
+}
+
+async function sendLive(scope, values) {
+  try {
+    state.ctl = await api('/api/control/live', { scope, npc: scope === 'npc' ? state.npc.trim() : undefined, values });
+    lastVersion = state.ctl.version;
+    renderTuning(); renderTuneTiles();
+    const k = Object.keys(values);
+    toast(k.length === 1 && values[k[0]] == null ? `${k[0]} back to config` : 'Applied live · next reply uses it');
+  } catch (e) { toast(prettyError(e), true); renderTuning(); }
+}
+function currentScopeTarget() { return state.scope === 'npc' ? 'npc' : state.scope; }
+function coerce(p, raw) {
+  if (p.kind === 'range') { const n = Number(raw); return Number.isFinite(n) ? (p.int ? Math.round(n) : n) : null; }
+  return raw === '' ? null : raw;
+}
+function findParam(key, inGeneral) { return (inGeneral ? GENERAL : [...PARAMS, ...NPC_EXTRA]).find(p => p.key === key); }
+
+// slider drag mirrors the number box; release / enter applies
+document.addEventListener('input', e => {
+  const k = e.target.dataset?.k; if (!k || e.target.type !== 'range') return;
+  const row = e.target.closest('.param'); const num = row.querySelector('input.num'); if (num) num.value = e.target.value;
+});
+document.addEventListener('change', e => {
+  const t = e.target, k = t.dataset?.k;
+  if (k) {
+    const inGeneral = !!t.closest('#general');
+    const p = findParam(k, inGeneral);
+    const v = coerce(p, t.value);
+    if (p.kind === 'model' && v == null) return sendLive(inGeneral ? 'general' : currentScopeTarget(), { [k]: null });
+    if (v == null && p.kind !== 'select') return;
+    return sendLive(inGeneral ? 'general' : currentScopeTarget(), { [k]: v });
+  }
+  if (t.dataset?.action !== undefined) {
+    const disabled = [...document.querySelectorAll('#actions input')].filter(i => !i.checked).map(i => i.dataset.action);
+    sendLive('general', { disabled_actions: disabled });
+  }
+});
+document.addEventListener('click', e => {
+  const clear = e.target.closest('[data-clear]');
+  if (clear) { const inGeneral = !!clear.closest('#general'); return sendLive(inGeneral ? 'general' : currentScopeTarget(), { [clear.dataset.clear]: null }); }
+  const vis = e.target.closest('[data-vision]');
+  if (vis) { const o = vis.dataset.vision; return sendLive('general', { vision_enabled: o === 'config' ? null : o === 'on' }); }
+  const npcClear = e.target.closest('[data-npc-clear]');
+  if (npcClear) { e.stopPropagation(); return doReset('npc', npcClear.dataset.npcClear); }
+  const chip = e.target.closest('[data-npc]');
+  if (chip) { state.npc = chip.dataset.npc; setPref('mcc.npc', state.npc); renderTuning(); }
+});
+$('npcName').addEventListener('input', e => { state.npc = e.target.value; setPref('mcc.npc', state.npc); renderTuning(); e.target.focus(); });
+$('scopeSeg').addEventListener('click', e => {
+  if (!e.target.dataset.scope) return; state.scope = e.target.dataset.scope; setPref('mcc.scope', state.scope); renderTuning();
+});
+async function doReset(scope, npc) {
+  try {
+    state.ctl = await api('/api/control/reset', { scope, npc }); lastVersion = state.ctl.version;
+    renderTuning(); renderTuneTiles(); toast(scope === 'all' ? 'Everything back to config.ini' : 'Reset to config');
+  } catch (e) { toast(prettyError(e), true); }
+}
+$('resetScope').addEventListener('click', () => doReset(state.scope, state.scope === 'npc' ? state.npc.trim() : undefined));
+$('resetAll').addEventListener('click', () => doReset('all'));
+$('actAll').addEventListener('click', () => sendLive('general', { disabled_actions: [] }));
+$('actNone').addEventListener('click', () => sendLive('general', { disabled_actions: [...(state.ctl?.actions || [])] }));
+$('saveBtn').addEventListener('click', async () => {
+  if (!confirm('Write the live values to config.ini?\n\nMantella rebuilds its LLM clients on the next request, which ends a conversation that is running right now.')) return;
+  try {
+    const res = await api('/api/control/save', {});
+    state.ctl = res.state; lastVersion = state.ctl.version; renderTuning(); renderTuneTiles();
+    toast(res.saved.length ? 'Saved to config.ini: ' + res.saved.join(', ') : 'Nothing to save, config.ini already matches');
+  } catch (e) { toast(prettyError(e), true); }
+});
+
+// ---------------- SPEND (port of tools/usage-dashboard.html) ----------------
+const TYPES = [
+  { key: 'dialogue', label: 'NPC dialogue', color: 'var(--series-1)' },
+  { key: 'memory',   label: 'Memory summaries', color: 'var(--series-2)' },
+  { key: 'vision',   label: 'Vision', color: 'var(--series-3)' },
+  { key: 'actions',  label: 'Action model', color: 'var(--series-4)' },
+];
+const typeOf = k => TYPES.find(t => t.key === k) || { key: k, label: k, color: 'var(--text-muted)' };
+
+function filterRecords(records) {
+  if (state.range === 'all') return records;
+  if (state.range === 'session') {
+    let start = 0;
+    for (let i = 1; i < records.length; i++)
+      if (parseTs(records[i].ts) - parseTs(records[i - 1].ts) > 2 * 3600e3) start = i;
+    return records.slice(start);
+  }
+  const now = new Date();
+  let from;
+  if (state.range === 'today') from = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  else from = new Date(now - (state.range === '7d' ? 7 : 30) * 86400e3);
+  return records.filter(r => parseTs(r.ts) >= from);
+}
+function bucketKey(d, hourly) {
+  const p = n => String(n).padStart(2, '0');
+  return hourly ? `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}:00`
+                : `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
+}
+
+function render() {
+  const el = $('content');
+  const all = state.data.records;
+  document.querySelectorAll('#rangeSeg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.range === state.range));
+  document.querySelectorAll('#curSeg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.cur === state.cur));
+
+  if (!all.length) {
+    el.innerHTML = `<div class="card empty"><h2>No requests logged yet</h2>
+      <p>Talk to an NPC. Every LLM call gets appended to <code>${esc(state.data.log_path)}</code>, and this page updates every few seconds.</p></div>`;
+    return;
+  }
+  const recs = filterRecords(all);
+  const sum = (arr, f) => arr.reduce((a, r) => a + (f(r) || 0), 0);
+  const total = sum(recs, r => r.cost_usd);
+  const replies = recs.filter(r => r.call_type === 'dialogue');
+  const convs = new Set(recs.map(r => r.conversation_id).filter(Boolean));
+  const promptTok = sum(recs, r => r.prompt_tokens), cachedTok = sum(recs, r => r.cached_tokens), outTok = sum(recs, r => r.completion_tokens);
+  const allTotal = sum(all, r => r.cost_usd);
+  let activeMs = 0;
+  for (let i = 1; i < recs.length; i++) {
+    const gap = parseTs(recs[i].ts) - parseTs(recs[i - 1].ts);
+    if (gap < 10 * 60e3) activeMs += gap;
+  }
+  const perHour = activeMs > 5 * 60e3 ? total / (activeMs / 3600e3) : null;
+  const unpriced = [...new Set(recs.filter(r => r.cost_usd == null).map(r => r.model))];
+  const estimated = recs.filter(r => r.estimated).length;
+  const lat = replies.map(r => r.latency_s).filter(v => v != null).sort((a, b) => a - b);
+  const p50 = lat.length ? lat[Math.floor(lat.length / 2)] : null;
+  const last = [...all].reverse().find(r => r.call_type === 'dialogue') || all.at(-1);
+  const rangeLabel = { session: 'this session', today: 'today', '7d': 'last 7 days', '30d': 'last 30 days', all: 'all time' }[state.range];
+
+  el.innerHTML = `
+    <section class="tiles">
+      <div class="tile hero"><div class="label">Spent ${rangeLabel}</div><div class="value">${money(total)}</div>
+        <div class="hint">${money(allTotal)} all time</div></div>
+      <div class="tile"><div class="label">Per NPC reply</div><div class="value">${replies.length ? money(sum(replies, r => r.cost_usd) / replies.length, 4) : '—'}</div>
+        <div class="hint">${replies.length ? '≈ ' + Math.round(1 / Math.max(sum(replies, r => r.cost_usd) / replies.length * (state.cur === 'EUR' ? eurRate() : 1), 1e-9)) + ' replies per ' + (state.cur === 'EUR' ? '€1' : '$1') : 'no replies yet'}</div></div>
+      <div class="tile"><div class="label">Per hour of talking</div><div class="value">${perHour == null ? '—' : money(perHour, 2)}</div>
+        <div class="hint">time between requests &lt;10 min</div></div>
+      <div class="tile"><div class="label">Requests</div><div class="value">${fmtInt(recs.length)}</div>
+        <div class="hint">${replies.length} replies · ${convs.size} conversations</div></div>
+      <div class="tile"><div class="label">Tokens in / out</div><div class="value">${fmtInt(promptTok)} / ${fmtInt(outTok)}</div>
+        <div class="hint">${promptTok ? Math.round(cachedTok / promptTok * 100) : 0}% of input served from cache</div></div>
+      <div class="tile lastcall"><div class="label">Last call · ${esc(ago(last.ts))}</div><div class="value small">${esc(last.model)}</div>
+        <div class="kv"><span><b>${last.latency_s != null ? last.latency_s.toFixed(2) + ' s' : '—'}</b></span><span><b>${fmtInt(last.prompt_tokens || 0)}</b>/<b>${fmtInt(last.completion_tokens || 0)}</b> tok</span><span><b>${money(last.cost_usd, 4)}</b></span></div>
+        <div class="hint">reply latency p50 ${p50 != null ? p50.toFixed(2) + ' s' : '—'}</div></div>
+    </section>
+
+    <section class="grid2">
+      <div class="card"><h2>Spend over time</h2><div class="desc" id="timeDesc"></div>
+        <div class="legend" id="timeLegend"></div><div id="timeChart"></div></div>
+      <div class="card"><h2>Spend by NPC</h2><div class="desc">Who costs you the most, including their memory summaries</div>
+        <div id="npcChart"></div></div>
+    </section>
+
+    <section class="card" style="margin-bottom:16px"><h2>Conversations</h2><div class="desc">Newest first</div>
+      <div class="tablewrap"><table id="convTable"></table></div></section>
+
+    <section class="card"><h2>Recent requests</h2><div class="desc">Last 60 LLM calls in range</div>
+      <div class="tablewrap"><table id="reqTable"></table></div>
+      ${unpriced.length ? `<div class="warn">⚠ No price for model(s) ${unpriced.map(esc).join(', ')}; add them to data/llm_pricing.json.</div>` : ''}
+      ${estimated ? `<div class="sub" style="margin-top:6px">${estimated} request(s) marked ~ were cut off before the API reported usage; tokens estimated locally.</div>` : ''}
+    </section>`;
+
+  if (!recs.length) {
+    ['timeChart', 'npcChart'].forEach(id => $(id).innerHTML = `<div class="empty" style="padding:20px">Nothing in this range</div>`);
+    return;
+  }
+  renderTimeChart(recs); renderNpcChart(recs); renderConvTable(recs); renderReqTable(recs);
+}
+
+function renderTimeChart(recs) {
+  const first = parseTs(recs[0]?.ts ?? Date.now()), last = parseTs(recs.at(-1)?.ts ?? Date.now());
+  const hourly = (last - first) < 2 * 86400e3;
+  $('timeDesc').textContent = hourly ? 'Per hour, stacked by request type' : 'Per day, stacked by request type';
+  const buckets = new Map();
+  const step = hourly ? 3600e3 : 86400e3;
+  const startD = new Date(first); hourly ? startD.setMinutes(0, 0, 0) : startD.setHours(0, 0, 0, 0);
+  for (let t = startD.getTime(); t <= last.getTime(); t += step) buckets.set(bucketKey(new Date(t), hourly), {});
+  for (const r of recs) {
+    const k = bucketKey(parseTs(r.ts), hourly);
+    const b = buckets.get(k) || {}; buckets.set(k, b);
+    b[r.call_type] = (b[r.call_type] || 0) + (r.cost_usd || 0);
+  }
+  const keys = [...buckets.keys()];
+  const present = TYPES.filter(t => recs.some(r => r.call_type === t.key));
+  const extra = [...new Set(recs.map(r => r.call_type))].filter(k => !TYPES.some(t => t.key === k)).map(typeOf);
+  const series = [...present, ...extra];
+  $('timeLegend').innerHTML = series.map(s => `<span><i style="background:${s.color}"></i>${esc(s.label)}</span>`).join('');
+
+  const W = 640, H = 220, padL = 52, padB = 26, padT = 8, padR = 8;
+  const totals = keys.map(k => Object.values(buckets.get(k)).reduce((a, b) => a + b, 0));
+  const conv = state.cur === 'EUR' ? eurRate() : 1;
+  const maxV = niceMax(Math.max(...totals, 1e-6) * conv);
+  const iw = W - padL - padR, ih = H - padT - padB;
+  const bw = iw / keys.length, barW = Math.max(2, Math.min(36, bw - 6));
+  let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Spend over time">`;
+  for (let i = 0; i <= 4; i++) {
+    const y = padT + ih - ih * i / 4;
+    svg += `<line x1="${padL}" x2="${W - padR}" y1="${y}" y2="${y}" stroke="var(--grid)" stroke-width="1"/>`;
+    svg += `<text x="${padL - 6}" y="${y + 4}" text-anchor="end">${(state.cur === 'EUR' ? '€' : '$') + fmtAxis(maxV * i / 4)}</text>`;
+  }
+  const labelEvery = Math.ceil(keys.length / 8);
+  keys.forEach((k, i) => {
+    const x = padL + i * bw + (bw - barW) / 2;
+    let y = padT + ih;
+    const b = buckets.get(k);
+    const segs = series.filter(s => b[s.key] > 0);
+    segs.forEach((s, j) => {
+      const h = b[s.key] * conv / maxV * ih;
+      const gap = j > 0 ? 2 : 0;
+      const top = j === segs.length - 1;
+      y -= h;
+      const hh = Math.max(h - gap, 0.5);
+      svg += top ? `<path d="${roundTop(x, y, barW, hh, Math.min(4, hh, barW / 2))}" fill="${s.color}"/>`
+                 : `<rect x="${x}" y="${y}" width="${barW}" height="${hh}" fill="${s.color}"/>`;
+    });
+    if (i % labelEvery === 0) svg += `<text x="${x + barW / 2}" y="${H - 8}" text-anchor="middle">${hourly ? k.slice(11, 16) : k.slice(5)}</text>`;
+    svg += `<rect class="bar-hit" data-i="${i}" x="${padL + i * bw}" y="${padT}" width="${bw}" height="${ih}"/>`;
+  });
+  svg += `<line x1="${padL}" x2="${W - padR}" y1="${padT + ih}" y2="${padT + ih}" stroke="var(--border)"/></svg>`;
+  const host = $('timeChart');
+  host.innerHTML = svg;
+  host.querySelectorAll('.bar-hit').forEach(r => {
+    const i = +r.dataset.i, b = buckets.get(keys[i]);
+    attachTip(r, () => `<b>${esc(keys[i])}</b>` + series.filter(s => b[s.key]).map(s =>
+      `<div class="row"><span><i style="display:inline-block;width:8px;height:8px;border-radius:2px;background:${s.color};margin-right:5px"></i>${esc(s.label)}</span><span>${money(b[s.key])}</span></div>`).join('') +
+      `<div class="row" style="color:var(--text-primary);margin-top:4px"><span>Total</span><span>${money(totals[i])}</span></div>`);
+  });
+}
+
+function renderNpcChart(recs) {
+  const by = new Map();
+  for (const r of recs) {
+    const k = r.speaker || '(unknown)';
+    const e = by.get(k) || { cost: 0, replies: 0 }; by.set(k, e);
+    e.cost += r.cost_usd || 0;
+    if (r.call_type === 'dialogue') e.replies++;
+  }
+  let rows = [...by.entries()].sort((a, b) => b[1].cost - a[1].cost);
+  if (rows.length > 10) {
+    const rest = rows.slice(9).reduce((a, [, e]) => ({ cost: a.cost + e.cost, replies: a.replies + e.replies }), { cost: 0, replies: 0 });
+    rows = [...rows.slice(0, 9), [`Other (${rows.length - 9})`, rest]];
+  }
+  const max = Math.max(...rows.map(r => r[1].cost), 1e-9);
+  const W = 420, rowH = 28, labelW = 130, valW = 64, H = rows.length * rowH + 4;
+  let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Spend by NPC">`;
+  rows.forEach(([name, e], i) => {
+    const y = i * rowH + 4, w = Math.max(2, e.cost / max * (W - labelW - valW - 8));
+    svg += `<text x="${labelW - 8}" y="${y + 15}" text-anchor="end" style="fill:var(--text-secondary);font-size:12px">${esc(name.length > 18 ? name.slice(0, 17) + '…' : name)}</text>`;
+    svg += `<path d="${roundRight(labelW, y + 4, w, 16, Math.min(4, w / 2))}" fill="var(--series-1)"/>`;
+    svg += `<text x="${labelW + w + 6}" y="${y + 16}" style="fill:var(--text-primary);font-size:12px">${money(e.cost)}</text>`;
+    svg += `<rect class="bar-hit" data-i="${i}" x="0" y="${y}" width="${W}" height="${rowH}"/>`;
+  });
+  svg += `</svg>`;
+  const host = $('npcChart');
+  host.innerHTML = svg;
+  host.querySelectorAll('.bar-hit').forEach(r => {
+    const [name, e] = rows[+r.dataset.i];
+    attachTip(r, () => `<b>${esc(name)}</b><div class="row"><span>Spent</span><span>${money(e.cost)}</span></div>
+      <div class="row"><span>Replies</span><span>${e.replies}</span></div>
+      <div class="row"><span>Per reply</span><span>${e.replies ? money(e.cost / e.replies, 4) : '—'}</span></div>`);
+  });
+}
+
+function renderConvTable(recs) {
+  const by = new Map();
+  for (const r of recs) {
+    const k = r.conversation_id || '(no id)';
+    const e = by.get(k) || { start: r.ts, end: r.ts, npcs: new Set(), replies: 0, inT: 0, outT: 0, cost: 0, actions: 0 };
+    by.set(k, e);
+    e.end = r.ts;
+    (r.npcs || []).forEach(n => e.npcs.add(n));
+    if (r.call_type === 'dialogue') e.replies++;
+    if (r.tool_calls) e.actions += r.tool_calls.length;
+    e.inT += r.prompt_tokens || 0; e.outT += r.completion_tokens || 0; e.cost += r.cost_usd || 0;
+  }
+  const rows = [...by.values()].reverse().slice(0, 40);
+  const dur = e => { const m = Math.round((parseTs(e.end) - parseTs(e.start)) / 60e3); return m < 1 ? '<1 min' : m + ' min'; };
+  $('convTable').innerHTML =
+    `<tr><th>Started</th><th>NPCs</th><th class="num">Length</th><th class="num">Replies</th><th class="num">Actions</th><th class="num">Tokens in</th><th class="num">Tokens out</th><th class="num">Cost</th></tr>` +
+    rows.map(e => `<tr><td>${esc(e.start.replace('T', ' ').slice(0, 16))}</td><td>${esc([...e.npcs].join(', ') || '—')}</td>
+      <td class="num">${dur(e)}</td><td class="num">${e.replies}</td><td class="num">${e.actions}</td><td class="num">${fmtInt(e.inT)}</td><td class="num">${fmtInt(e.outT)}</td>
+      <td class="num"><b>${money(e.cost)}</b></td></tr>`).join('');
+}
+
+function renderReqTable(recs) {
+  const rows = recs.slice(-60).reverse();
+  $('reqTable').innerHTML =
+    `<tr><th>Time</th><th>Type</th><th>NPC</th><th>Model</th><th class="num">In (cached)</th><th class="num">Out</th><th class="num">Latency</th><th>Notes</th><th class="num">Cost</th></tr>` +
+    rows.map(r => {
+      const t = typeOf(r.call_type);
+      const notes = [r.vision ? 'image' : '', r.tool_calls ? r.tool_calls.join(', ') : ''].filter(Boolean).join(' · ');
+      return `<tr><td>${esc(r.ts.slice(11))}</td><td><span class="tag"><i style="background:${t.color}"></i>${esc(t.label)}</span></td>
+        <td>${esc(r.speaker || '—')}</td><td>${esc(r.model)}</td>
+        <td class="num">${r.estimated ? '~' : ''}${fmtInt(r.prompt_tokens)} (${fmtInt(r.cached_tokens || 0)})</td><td class="num">${r.estimated ? '~' : ''}${fmtInt(r.completion_tokens)}</td>
+        <td class="num">${r.latency_s != null ? r.latency_s.toFixed(1) + ' s' : ''}</td><td>${esc(notes)}</td><td class="num">${money(r.cost_usd)}</td></tr>`;
+    }).join('');
+}
+
+function niceMax(v) {
+  const p = Math.pow(10, Math.floor(Math.log10(v)));
+  for (const m of [1, 2, 2.5, 5, 10]) if (m * p >= v) return m * p;
+  return 10 * p;
+}
+const fmtAxis = v => v === 0 ? '0' : v < 0.01 ? v.toFixed(4) : v < 1 ? v.toFixed(2) : v.toFixed(v < 10 ? 1 : 0);
+function roundTop(x, y, w, h, r) {
+  return `M${x},${y + h}V${y + r}Q${x},${y} ${x + r},${y}H${x + w - r}Q${x + w},${y} ${x + w},${y + r}V${y + h}Z`;
+}
+function roundRight(x, y, w, h, r) {
+  return `M${x},${y}H${x + w - r}Q${x + w},${y} ${x + w},${y + r}V${y + h - r}Q${x + w},${y + h} ${x + w - r},${y + h}H${x}Z`;
+}
+const tip = $('tip');
+function attachTip(node, html) {
+  node.addEventListener('mousemove', ev => {
+    tip.innerHTML = html(); tip.style.display = 'block';
+    const r = tip.getBoundingClientRect();
+    let x = ev.clientX + 14, y = ev.clientY + 14;
+    if (x + r.width > innerWidth - 8) x = ev.clientX - r.width - 14;
+    if (y + r.height > innerHeight - 8) y = ev.clientY - r.height - 14;
+    tip.style.left = x + 'px'; tip.style.top = y + 'px';
+  });
+  node.addEventListener('mouseleave', () => tip.style.display = 'none');
+}
+$('rangeSeg').addEventListener('click', e => {
+  if (!e.target.dataset.range) return;
+  state.range = e.target.dataset.range; setPref('mus.range', state.range); render();
+});
+$('curSeg').addEventListener('click', e => {
+  if (!e.target.dataset.cur) return;
+  state.cur = e.target.dataset.cur; setPref('mus.cur', state.cur); if (state.data) render(); renderTuneTiles();
+});
+
+// ---------------- MEMORIES ----------------
+const mem = { seen: new Map(), fresh: new Set(), selected: new URLSearchParams(location.search).get('npc') || pref('mcc.memNpc', ''), query: '', listKey: '', activeKey: '', viewKey: '' };
+// entries present the first time an NPC is loaded count as "seen"; anything later gets the "new" badge
+function markSeen(npc) {
+  if (!mem.seen.has(npc.id)) { mem.seen.set(npc.id, new Set(npc.entries.map(e => e.id))); return; }
+  const seen = mem.seen.get(npc.id);
+  for (const e of npc.entries) if (!seen.has(e.id)) { seen.add(e.id); mem.fresh.add(e.id); }
+}
+function relPanel(rel) {
+  if (!rel || typeof rel !== 'object') return '';
+  if (rel._error) return `<div class="rel"><h3>Relationship</h3><div class="warn">${esc(rel._error)}</div></div>`;
+  const known = ['opinion_of_player', 'facts_about_player', 'grudges', 'debts', 'favours', 'favors', 'last_seen'];
+  const list = (title, arr) => Array.isArray(arr) && arr.length ? `<div><b>${esc(title)}</b><ul>${arr.map(x => `<li>${esc(typeof x === 'object' ? JSON.stringify(x) : x)}</li>`).join('')}</ul></div>` : '';
+  const op = typeof rel.opinion_of_player === 'number' ? rel.opinion_of_player : null;
+  const other = Object.entries(rel).filter(([k]) => !known.includes(k));
+  return `<div class="rel"><h3>Relationship${rel.last_seen ? ' · last seen ' + esc(rel.last_seen) : ''}</h3>
+    ${op != null ? `<div>Opinion of player <b>${op > 0 ? '+' : ''}${op}</b></div><div class="meter" title="-100 … +100"><i style="left:calc(${(Math.max(-100, Math.min(100, op)) + 100) / 2}% - 2px)"></i></div>` : ''}
+    ${list('Knows about the player', rel.facts_about_player)}${list('Grudges', rel.grudges)}${list('Debts', rel.debts)}${list('Favours', rel.favours || rel.favors)}
+    ${other.map(([k, v]) => `<div><b>${esc(k)}</b>: ${esc(typeof v === 'object' ? JSON.stringify(v) : v)}</div>`).join('')}</div>`;
+}
+function npcCard(npc, opts = {}) {
+  const fresh = npc.entries.filter(e => mem.fresh.has(e.id)).length;
+  return `<div class="npc-head"><h2>${esc(npc.name)}</h2><span class="sub">${npc.ref_id ? esc(npc.ref_id) + ' · ' : ''}${esc(npc.world)} · ${npc.entries.length} memor${npc.entries.length === 1 ? 'y' : 'ies'} · updated ${esc(ago(new Date(npc.updated * 1000).toISOString()))}</span>
+      ${fresh ? `<span class="badge-new">${fresh} NEW</span>` : ''}</div>
+    ${relPanel(npc.relationship)}
+    <div class="entries" style="${opts.maxh ? 'max-height:' + opts.maxh : ''}">${npc.entries.length ? npc.entries.map(e => `<div class="entry${mem.fresh.has(e.id) ? ' new' : ''}${e.condensed ? ' condensed' : ''}">
+      <div class="day">${e.day ? esc(e.day) : '<span>no in-game time</span>'}${mem.fresh.has(e.id) ? '<span class="badge-new">NEW</span>' : ''}${e.condensed ? '<span title="Older file; its content was condensed into a newer summary">condensed earlier</span>' : ''}</div>
+      <p>${esc(e.text)}</p></div>`).join('') : '<div class="sub">No memories yet.</div>'}</div>`;
+}
+function renderMemActive(d) {
+  const label = { conversation: 'Current conversation', last: 'Last conversation', recent: 'Recently updated NPCs' }[d.source];
+  $('memTitle').textContent = label;
+  $('memSub').textContent = d.source === 'recent' ? 'No conversation seen since Mantella started; showing the NPCs whose memories changed most recently.'
+    : `${d.names.join(', ')}${d.no_memories_yet.length ? ' · no memories yet for ' + d.no_memories_yet.join(', ') : ''} · memories are written when a conversation ends`;
+  $('memActive').innerHTML = d.npcs.length ? d.npcs.map(n => `<section class="card">${npcCard(n, { maxh: '360px' })}</section>`).join('')
+    : `<div class="card empty">No memories saved yet. They appear here when a conversation ends.</div>`;
+}
+function renderMemList(list) {
+  $('memList').innerHTML = list.length ? list.map(n => `<button data-mem-npc="${esc(n.id)}" aria-current="${n.id === mem.selected}">
+      <span>${esc(n.name)}${n.ref_id ? ` <span class="when">${esc(n.ref_id)}</span>` : ''}</span><span class="when">${esc(ago(new Date(n.updated * 1000).toISOString()))}</span></button>`).join('')
+    : '<div class="sub" style="padding:6px">No NPCs match.</div>';
+}
+async function refreshMemories() {
+  const [active, list] = await Promise.all([api('/api/memories/active'), api('/api/memories/npcs?q=' + encodeURIComponent(mem.query))]);
+  active.npcs.forEach(markSeen);
+  const aKey = JSON.stringify([active.source, active.names, active.npcs.map(n => [n.id, n.updated, n.entries.length]), mem.fresh.size]);
+  if (aKey !== mem.activeKey) { mem.activeKey = aKey; renderMemActive(active); }
+  const lKey = JSON.stringify([list.npcs.map(n => [n.id, n.updated]), mem.selected]);
+  if (lKey !== mem.listKey) { mem.listKey = lKey; renderMemList(list.npcs); }
+  if (mem.selected) {
+    try {
+      const npc = await api('/api/memories/npc?id=' + encodeURIComponent(mem.selected));
+      markSeen(npc);
+      const vKey = JSON.stringify([npc.id, npc.updated, npc.entries.length, mem.fresh.size]);
+      if (vKey !== mem.viewKey) { mem.viewKey = vKey; $('memViewer').innerHTML = npcCard(npc); }
+    } catch { mem.selected = ''; $('memViewer').innerHTML = '<div class="empty">That NPC has no memories folder any more.</div>'; }
+  }
+}
+$('memList').addEventListener('click', e => {
+  const b = e.target.closest('[data-mem-npc]'); if (!b) return;
+  mem.selected = b.dataset.memNpc; setPref('mcc.memNpc', mem.selected); mem.viewKey = ''; mem.listKey = ''; refreshMemories();
+});
+let memSearchTimer;
+$('memSearch').addEventListener('input', e => {
+  clearTimeout(memSearchTimer); memSearchTimer = setTimeout(() => { mem.query = e.target.value; mem.listKey = ''; refreshMemories(); }, 200);
+});
+
+// ---------------- polling ----------------
+let lastVersion = -1, lastLen = -1;
+function setStatus(ok, text) {
+  $('liveDot').style.background = ok ? 'var(--live)' : 'var(--text-muted)';
+  $('status').textContent = text;
+}
+async function refresh() {
+  try {
+    if (state.tab === 'tuning') {
+      const ctl = await api('/api/control/state');
+      const editing = document.activeElement && document.activeElement.closest?.('#tab-tuning') && document.activeElement.matches('input:not([type=checkbox]), select');
+      state.ctl = ctl;
+      if (ctl.version !== lastVersion && !editing) { lastVersion = ctl.version; renderTuning(); }
+      renderTuneTiles();
+      setStatus(true, `connected to Mantella · updated ${new Date().toLocaleTimeString()}`);
+    } else if (state.tab === 'memories') {
+      await refreshMemories();
+      setStatus(true, `connected to Mantella · memories checked ${new Date().toLocaleTimeString()}`);
+    } else {
+      state.data = await api('/api/usage');
+      if (state.data.records.length !== lastLen) { lastLen = state.data.records.length; render(); }
+      $('spendStatus').textContent = `${state.data.records.length} requests logged · ${state.data.log_path}`;
+      setStatus(true, `connected to Mantella · updated ${new Date().toLocaleTimeString()}`);
+    }
+  } catch (e) {
+    setStatus(false, 'Mantella server not reachable');
+  }
+}
+applyTheme();
+showTab(['#spend', '#memories'].includes(location.hash) ? location.hash.slice(1) : 'tuning');
+setInterval(refresh, 3000);
+</script>
+</body>
+</html>
