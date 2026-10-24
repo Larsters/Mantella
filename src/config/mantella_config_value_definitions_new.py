@@ -8,6 +8,7 @@ from src.config.definitions.game_definitions import GameDefinitions
 from src.config.definitions.language_definitions import LanguageDefinitions
 from src.config.definitions.llm_definitions import LLMDefinitions
 from src.config.definitions.other_definitions import OtherDefinitions
+from src.config.definitions.bio_generation_definitions import BioGenerationDefinitions
 from src.config.definitions.startup_definitions import StartupDefinitions
 from src.config.definitions.prompt_definitions import PromptDefinitions
 from src.config.definitions.stt_definitions import STTDefinitions
@@ -205,6 +206,11 @@ class MantellaConfigValueDefinitionsNew:
         other_category.add_config_value(RelationshipDefinitions.get_relationship_token_budget_config_value())
         other_category.add_config_value(RelationshipDefinitions.get_relationship_opinion_decay_config_value())
         other_category.add_config_value(OtherDefinitions.get_enable_character_tag_reading_config_value())
+        other_category.add_config_value(BioGenerationDefinitions.get_bio_generation_enabled_config_value())
+        other_category.add_config_value(BioGenerationDefinitions.get_bio_generation_scope_config_value())
+        other_category.add_config_value(BioGenerationDefinitions.get_bio_generation_min_words_config_value())
+        other_category.add_config_value(BioGenerationDefinitions.get_bio_generation_wait_seconds_config_value())
+        other_category.add_config_value(BioGenerationDefinitions.get_bio_generation_model_config_value())
         other_category.add_config_value(OtherDefinitions.get_save_audio_data_to_character_folder_config_value())
         other_category.add_config_value(OtherDefinitions.get_port_config_value())
         other_category.add_config_value(OtherDefinitions.get_show_http_debug_messages_config_value())
