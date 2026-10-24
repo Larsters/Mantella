@@ -1,0 +1,12 @@
+{
+  "_note": "F5: separate tool model on vs off. Use with a set built with --trust (W12). 'live' params mirror the live config: llm_params reasoning_effort minimal (gpt-5.6-luna maps it to low when no tools are sent), verbosity low; function_llm_params max_tokens 500 + stop #.",
+  "candidates": [
+    {"label": "A tool model: 4o-mini + luna (live)", "model": "gpt-5.6-luna", "mode": "tool_model",
+     "params": {"reasoning_effort": "minimal", "verbosity": "low"},
+     "tool_model": {"model": "gpt-4o-mini", "params": {"max_tokens": 500, "stop": ["#"]}}},
+    {"label": "B single: luna effort none", "model": "gpt-5.6-luna", "mode": "single",
+     "params": {"reasoning_effort": "none", "verbosity": "low"}},
+    {"label": "C single: 5.4-mini effort none", "model": "gpt-5.4-mini", "mode": "single",
+     "params": {"reasoning_effort": "none", "verbosity": "low"}}
+  ]
+}

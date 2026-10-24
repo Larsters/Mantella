@@ -126,9 +126,12 @@ def test_build_request_overrides():
                  'system_suffix': 'Keep it short.', 'system_replace': [['Stay in character.', 'Stay in character always.']]}
     request, skip = replay.build_request(item, candidate)
     assert skip is None and request['model'] == 'gpt-5.4-mini'
-    try:  # play: W3's real adapter is present (gpt-5.4-mini has no 'minimal' -> 'low', plus reasoning headroom)
+    try:  # play: W3's real adapter; tools are offered, so (like the server) gpt-5.4-mini is forced to effort none
         from src.llm import model_capabilities as mc
-        assert request['params'] == {'max_completion_tokens': 250 + mc.REASONING_HEADROOM['low'], 'reasoning_effort': 'low'}
+        assert request['params'] == {'max_completion_tokens': 250, 'reasoning_effort': 'none'}
+        assert request['raw_params'] == {'max_tokens': 250, 'reasoning_effort': 'minimal'}
+        no_tools, _ = replay.build_request(item, {**candidate, 'tools': False})  # without tools: 'minimal' -> 'low' + headroom
+        assert no_tools['params'] == {'max_completion_tokens': 250 + mc.REASONING_HEADROOM['low'], 'reasoning_effort': 'low'}
     except ImportError:  # feature branch without W3: W9's fallback adapter
         assert request['params'] == {'max_completion_tokens': 250, 'reasoning_effort': 'minimal'}
     assert request['messages'][0]['content'].endswith('Keep it short.')

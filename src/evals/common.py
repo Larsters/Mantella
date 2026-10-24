@@ -166,12 +166,30 @@ def reasoning_allowance(model: str, params: dict[str, Any]) -> int:
 
 # ---------------------------------------------------------------- token estimates
 
+_ENCODER: Any = None
+
+
+def _encoder() -> Any:
+    """tiktoken's cl100k_base when installed (o200k models tokenize slightly tighter, so this stays conservative)."""
+    global _ENCODER
+    if _ENCODER is None:
+        try:
+            import tiktoken
+            _ENCODER = tiktoken.get_encoding('cl100k_base')
+        except Exception:
+            _ENCODER = False
+    return _ENCODER
+
+
 def estimate_tokens(value: Any) -> int:
-    """Rough token count (≈3.5 characters per token for English prose and JSON schemas).
-    Used only for cost estimates; actual usage comes from the API."""
+    """Token count for cost estimates: tiktoken when available, else ≈3.5 characters per token.
+    Actual usage always comes from the API."""
     if value is None:
         return 0
     text = value if isinstance(value, str) else json.dumps(value, ensure_ascii=False)
+    encoder = _encoder()
+    if encoder:
+        return len(encoder.encode(text, disallowed_special=())) + 1
     return int(len(text) / 3.5) + 1
 
 

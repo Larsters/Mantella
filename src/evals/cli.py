@@ -16,7 +16,7 @@ import sys
 import time
 from typing import Any, Callable
 
-from src.evals import dataset, judge as judge_mod, replay as replay_mod, report as report_mod, seeds
+from src.evals import dataset, judge as judge_mod, replay as replay_mod, report as report_mod, seeds, w12
 from src.evals.budget import Budget, Estimate, check_and_confirm
 from src.evals.common import Pricing, default_data_dir, read_jsonl, run_dir, set_path, sets_dir, write_jsonl, evals_dir
 from src.evals.llm import DEFAULT_BASE_URL, openai_client_factory
@@ -53,6 +53,15 @@ def cmd_build_set(args: argparse.Namespace) -> int:
         seed_items = seeds.build_seed_items(model=args.seed_model, disabled_actions=disabled)
         print(f'Seed scenarios: {len(seed_items)}')
         items += seed_items
+    if args.trust:
+        csv_bios = seeds.load_bios()
+        items = [w12.apply_trust(item, csv_bios=csv_bios) for item in items]
+        print(f'W12 trust prompts/tools applied to {len(items)} items '
+              f'({sum(1 for i in items if i["tags"].get("tools_rebuilt"))} with rebuilt tools)')
+    if args.annotations:
+        print(f'Annotations matched {w12.apply_annotations(items, args.annotations)} items')
+        if args.annotated_only:
+            items = [i for i in items if i['source'] != 'transcript' or i.get('expected')]
     if not items:
         print('Nothing selected. Turn on "Save Conversation Transcripts" in Mantella (Other tab) and play, or use --seeds.')
         return 1
@@ -163,12 +172,17 @@ def cmd_replay(args: argparse.Namespace, client_factory: Callable | None = None,
 
 def _judge_run(args: argparse.Namespace, path: str, factory: Callable, pricing: Pricing, budget: Budget) -> dict[str, Any]:
     items = _items_by_id(os.path.join(path, 'items.jsonl'))
-    replies = judge_mod.judgeable(judge_mod.latest_records(os.path.join(path, 'replies.jsonl')))
+    replies = _only_candidates(args, judge_mod.judgeable(judge_mod.latest_records(os.path.join(path, 'replies.jsonl'))))
     summary = judge_mod.run_judge(items, replies, args.judge_model, _judge_params(args), os.path.join(path, 'judgments.jsonl'),
                                   factory, pricing, budget, base_url=args.judge_base_url, api_key_env=args.judge_api_key_env,
                                   concurrency=args.concurrency, seed=args.seed)
     print(f'Judge: {summary}')
     return summary
+
+
+def _only_candidates(args: argparse.Namespace, replies: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    wanted = getattr(args, 'candidate', None)
+    return [r for r in replies if r['candidate'] in wanted] if wanted else replies
 
 
 def cmd_judge(args: argparse.Namespace, client_factory: Callable | None = None) -> int:
@@ -178,7 +192,7 @@ def cmd_judge(args: argparse.Namespace, client_factory: Callable | None = None) 
     done = {k[:3] for k, r in judge_mod.latest_records(os.path.join(path, 'judgments.jsonl'),
                                                          ('item_id', 'candidate', 'repeat', 'judge_model')).items()
             if r.get('scores') and k[3] == args.judge_model}
-    todo = [r for r in replies if (r['item_id'], r['candidate'], r.get('repeat', 0)) not in done]
+    todo = _only_candidates(args, [r for r in replies if (r['item_id'], r['candidate'], r.get('repeat', 0)) not in done])
     pricing = Pricing()
     estimate = judge_mod.estimate_judge(items, todo, args.judge_model, _judge_params(args), pricing)
     print(f'Run folder: {path}\nReplies to judge: {len(todo)} (already judged: {len(done)})')
@@ -234,6 +248,10 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument('--disabled-actions', help='Comma list of action names to leave out of seed tools')
     p.add_argument('--seed-model', default='gpt-4.1-mini', help='Model recorded as the original for seed items')
     p.add_argument('--seed', type=int, default=7)
+    p.add_argument('--trust', action='store_true', help='Make items match the server with living_npcs_v1 + W12 trust_and_honesty_enabled: '
+                   'prompt block, trust tool descriptions, rebuilt tools for tool-model transcripts, tool-model system prompt')
+    p.add_argument('--annotated-only', action='store_true', help='With --annotations: drop transcript turns that have no label')
+    p.add_argument('--annotations', help='JSON {item_id: {notes, expect_tools, forbid_tools}} with hand labels for real turns')
 
     sub.add_parser('list', help='List eval sets and runs')
 
@@ -264,6 +282,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     p = sub.add_parser('judge', help='Score replies with an LLM judge (paid)')
     p.add_argument('--run', required=True)
+    p.add_argument('--candidate', action='append', help='Judge only this candidate label (repeatable; default: all)')
     judge_opts(p)
     paid(p)
 
