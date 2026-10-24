@@ -138,6 +138,7 @@ class MantellaConfigValueDefinitionsNew:
         actions_category = ConfigValueGroup("Actions", "Actions", "Settings for in-game actions.", on_value_change_callback)
         actions_category.add_config_value(ActionDefinitions.get_advanced_actions_enabled_config_value())
         actions_category.add_config_value(ActionDefinitions.get_disabled_actions_config_value())
+        actions_category.add_config_value(ActionDefinitions.get_guided_action_descriptions_config_value())
         actions_category.add_config_value(ActionDefinitions.get_custom_function_model_config_value())
         actions_category.add_config_value(ActionDefinitions.get_function_llm_api_config_value())
         actions_category.add_config_value(ActionDefinitions.get_function_llm_model_config_value())
@@ -153,6 +154,8 @@ class MantellaConfigValueDefinitionsNew:
         result.add_base_group(language_category)
 
         prompts_category = ConfigValueGroup("Prompts", "Prompts", "Change the basic prompts used by Mantella.", on_value_change_callback)
+        prompts_category.add_config_value(PromptDefinitions.get_prompt_profile_config_value())
+        prompts_category.add_config_value(PromptDefinitions.get_knowledge_scope_enabled_config_value())
         prompts_category.add_config_value(PromptDefinitions.get_skyrim_prompt_config_value())
         prompts_category.add_config_value(PromptDefinitions.get_skyrim_multi_npc_prompt_config_value())
         prompts_category.add_config_value(PromptDefinitions.get_skyrim_radiant_prompt_config_value())

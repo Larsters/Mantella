@@ -313,7 +313,7 @@ class FunctionManager:
                 'type': 'function',
                 'function': {
                     'name': action['name'],
-                    'description': action['description']
+                    'description': action.get('guided_description') if getattr(context.config, 'guided_action_descriptions', False) and action.get('guided_description') else action['description']
                 }
             }
 
@@ -580,7 +580,7 @@ class FunctionManager:
         scoped_with_entities = 0
         has_unscoped_params = False
         for param_name, param_def in parameters['properties'].items():
-            scope = param_def.get('scope')
+            scope = param_def.pop('scope', None)  # internal field: read it, don't send it to the LLM
             
             # Skip parameters without scope (not entity references)
             if not scope:

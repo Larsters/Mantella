@@ -2,6 +2,7 @@
     "identifier": "mantella_npc_offended",
     "name": "Attack",
     "description": "Make NPC(s) attack another NPC / the player.",
+    "guided_description": "Start a real fight. Use at once when someone attacks, draws steel on, or seriously threatens to kill or hurt this NPC or people they protect (guards protect everyone), when an arrest is resisted, or when a brawl or warning did not stop a proud warrior's tormentor. Bandits and enemies attack on sight. Not for jokes or garbled speech.",
     "key": "Attack",
     "parameters": {
         "source": {
