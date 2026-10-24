@@ -17,6 +17,7 @@ import src.utils as utils
 from src.telemetry.telemetry import create_span_from_thread
 from src.actions.function_manager import FunctionManager
 from src.llm.claude_cache_connector import ClaudeCacheConnector
+import src.usage_logger as usage_logger
 
 logger = utils.get_logger()
 
@@ -199,11 +200,14 @@ class ClientBase(AIClient):
                     logger.debug(f"Claude caching transform failed: {e}")
 
             try:
+                start_time = time.time()
                 chat_completion = sync_client.chat.completions.create(
                     model=self.model_name,
                     messages=openai_messages,
                     **request_params,
                 )
+                usage_logger.log(usage_logger.call_type_for(self), self.model_name, self._base_url,
+                                 getattr(chat_completion, 'usage', None), time.time() - start_time)
             except RateLimitError:
                 logger.warning('Could not connect to LLM API, retrying in 5 seconds...')
                 time.sleep(5)
@@ -250,6 +254,12 @@ class ClientBase(AIClient):
                     request_params: dict[str, Any] = {}
                 if is_multi_npc: # override max_tokens to be at least 250 in radiant / multi-NPC conversations
                     request_params["max_tokens"] = max(self.max_tokens_param, 250)
+                async_client = None
+                usage = None
+                usage_start_time = None
+                usage_content = ''
+                accumulated_tool_calls = {}
+                openai_messages = []
                 try:
                     # Prepare the messages including the image if provided
                     vision_hints = ''
@@ -298,19 +308,27 @@ class ClientBase(AIClient):
                     
                     # Dict to track partial tool calls by index
                     accumulated_tool_calls = {}
-                    
+
+                    if not self._is_local:
+                        request_params["stream_options"] = {"include_usage": True}
+                    usage_start_time = time.time()
+                    usage_content = ''
+
                     async for chunk in await async_client.chat.completions.create(
                         model=self.model_name, 
                         messages=openai_messages, 
                         stream=True,
                         **request_params,
                     ):
+                        if getattr(chunk, 'usage', None):
+                            usage = chunk.usage
                         try:
                             if chunk and chunk.choices and chunk.choices[0].delta:
                                 delta = chunk.choices[0].delta
                                 
                                 # Handle regular content
                                 if delta.content:
+                                    usage_content += delta.content
                                     yield ("content", delta.content)
                                 
                                 # Accumulate tool calls by index
@@ -362,6 +380,17 @@ class ClientBase(AIClient):
                     else:
                         logger.error(f"LLM API Streaming Error: {e}")
                 finally:
+                    if usage_start_time is not None:
+                        estimated = usage is None
+                        if estimated: # stream was cut before the final usage chunk arrived
+                            try:
+                                usage = {'prompt_tokens': self.get_count_tokens(messages), 'completion_tokens': self.get_count_tokens(usage_content) if usage_content else 0}
+                            except Exception:
+                                usage = None
+                        usage_logger.log(usage_logger.call_type_for(self), self.model_name, self._base_url, usage,
+                                         time.time() - usage_start_time, estimated=estimated,
+                                         vision=any(isinstance(m, dict) and isinstance(m.get('content'), list) and any(isinstance(part, dict) and part.get('type') == 'image_url' for part in m['content']) for m in openai_messages),
+                                         tool_calls=[t['function']['name'] for t in accumulated_tool_calls.values()] or None)
                     if async_client:
                         await async_client.close()
 

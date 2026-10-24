@@ -22,6 +22,7 @@ from src.http.communication_constants import communication_constants as comm_con
 from src.stt.stt import Transcriber
 import src.utils as utils
 from src.actions.function_manager import FunctionManager
+import src.usage_logger as usage_logger
 
 logger = utils.get_logger()
 
@@ -39,6 +40,7 @@ class Conversation:
         
         self.__context: Context = context_for_conversation
         self.__game = game
+        usage_logger.new_conversation()
         self.__mic_input: bool = mic_input
         self.__mic_ptt: bool = mic_ptt
         self.__allow_interruption: bool = context_for_conversation.config.allow_interruption # allow mic interruption
