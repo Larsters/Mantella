@@ -30,7 +30,8 @@ class PromptDefinitions:
                                 "conversation_summaries",
                                 "actions",
                                 "knowledge_scope",
-                                "relationship"]
+                                "relationship",
+                                "lore"]
     
     ALLOWED_PROMPT_VARIABLES_RADIANT = [
                                 "game",
@@ -48,7 +49,8 @@ class PromptDefinitions:
                                 "conversation_summary",
                                 "conversation_summaries",
                                 "actions",
-                                "knowledge_scope"]
+                                "knowledge_scope",
+                                "lore"]
     
     ALLOWED_PROMPT_VARIABLES_FUNCTION_LLM = [
                                 "game"]
@@ -73,7 +75,8 @@ class PromptDefinitions:
                                 equipment = a basic description of the equipment the NPCs carry
                                 actions = instructions for the LLM how to trigger actions (if advanced actions are disabled, otherwise action instructions are already passed to the LLM as tools via the 'description' field)
                                 knowledge_scope = 1-3 sentences per NPC on what they plausibly know and how they speak, derived from role, race and hold (empty if 'Knowledge Scope' is disabled)
-                                relationship = what the NPC(s) think of and remember about the player: opinion, grudges, promises, debts, facts (only filled if 'NPC Relationships' is enabled)"""
+                                relationship = what the NPC(s) think of and remember about the player: opinion, grudges, promises, debts, facts (only filled if 'NPC Relationships' is enabled)
+                                lore = short lore notes about the current place, its factions and the NPCs' races (only filled if 'Lore Lookup' is enabled)"""
     
     BASE_RADIANT_DESCRIPTION = """The starting prompt sent to the LLM when a radiant conversation is started.
                                 The following are dynamic variables that need to be contained in curly brackets {}:
@@ -89,7 +92,8 @@ class PromptDefinitions:
                                 conversation_summary = reads the latest conversation summaries for the NPCs stored in data/conversations/NPC_Name/NPC_Name_summary_X.txt
                                 equipment = a basic description of the equipment the NPCs carry
                                 actions = instructions for the LLM to trigger actions (if advanced actions are disabled, otherwise action instructions are already passed to the LLM as tools via the 'description' field)
-                                knowledge_scope = 1-3 sentences per NPC on what they plausibly know and how they speak (empty if 'Knowledge Scope' is disabled)"""
+                                knowledge_scope = 1-3 sentences per NPC on what they plausibly know and how they speak (empty if 'Knowledge Scope' is disabled)
+                                lore = short lore notes about the current place, its factions and the NPCs' races (only filled if 'Lore Lookup' is enabled)"""
 
         
     class PromptChecker(ConfigValueConstraint[str]):

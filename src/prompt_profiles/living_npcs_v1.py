@@ -4,10 +4,11 @@ Layout (for OpenAI's automatic prefix cache): the rules come first and contain n
 placeholders, so they are byte-identical for every NPC and every conversation. Per-NPC
 content (bio, knowledge, memories) follows, and the volatile scene comes last.
 
-Integration markers for other workstreams (kept out of the text so the formatter does
-not crash before those placeholders exist):
-  W6  {relationship}  -> goes on its own line right after the "{player_name} is {trust}." line
-  W8  {lore}          -> goes on its own line right after the weather line in "# Right now"
+Placeholders from other workstreams (wired on the `play` integration branch; each one is
+an empty string when its feature is off):
+  W5  {knowledge_scope} -> "# What you know"            (knowledge_scope_enabled)
+  W6  {relationship}    -> own line after "{player_name} is {trust}." (relationship_tracking_enabled)
+  W8  {lore}            -> own line after the weather line in "# Right now" (lore_enabled)
 """
 
 # --- Voice rules -----------------------------------------------------------------------
@@ -63,9 +64,11 @@ You are {name}.
 
 # The player
 {player_name} is {trust}. {player_name} {player_equipment} {player_description}
+{relationship}
 
 # Right now
 {equipment} You are in {location}. It is {time} {time_group} on day {current_day}. {weather}
+{lore}
 {actions}
 Reply as {name} now, in {language}."""
 
@@ -115,9 +118,11 @@ MULTI_CONTEXT = """
 
 # The player
 {player_name} is {trust}. {player_name} {player_equipment} {player_description}
+{relationship}
 
 # Right now
 {equipment} The location is {location}. It is {time} {time_group} on day {current_day}. {weather}
+{lore}
 {actions}
 Speak only as {names}, using their full names. Reply now in {language}."""
 
@@ -149,6 +154,7 @@ RADIANT_CONTEXT = """
 
 # Right now
 {equipment} The location is {location}. It is {time} {time_group} on day {current_day}. {weather}
+{lore}
 {actions}
 Speak only as {names}, using their full names. Reply now in {language}."""
 

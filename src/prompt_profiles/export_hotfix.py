@@ -24,6 +24,7 @@ from pathlib import Path
 from src.prompt_profiles import get_profile_prompts
 
 _KNOWLEDGE_SECTIONS = ("# What you know\n{knowledge_scope}\n\n", "# What they know\n{knowledge_scope}\n\n")
+_INTEGRATION_LINES = ("{relationship}\n", "{lore}\n")
 _KNOWLEDGE_REFERENCES = (", as described under What you know.", ", as described under What they know.")
 
 
@@ -33,7 +34,9 @@ def strip_knowledge_scope(prompt: str) -> str:
         prompt = prompt.replace(section, "")
     for reference in _KNOWLEDGE_REFERENCES:
         prompt = prompt.replace(reference, ".")
-    assert "{knowledge_scope}" not in prompt
+    for line in _INTEGRATION_LINES:  # play: {relationship} / {lore} lines are unknown to older servers too
+        prompt = prompt.replace(line, "")
+    assert "{knowledge_scope}" not in prompt and "{relationship}" not in prompt and "{lore}" not in prompt
     return prompt
 
 
