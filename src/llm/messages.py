@@ -169,6 +169,7 @@ class UserMessage(Message):
         self.__player_character_name: str = player_character_name
         self.__ingame_events: list[str] = []
         self.__time: tuple[str,str] | None = None
+        self.lore_text: str = "" # lore lookup (src/lore): sent to the LLM only, kept out of summaries
         
 
     def get_formatted_content(self) -> str:
@@ -185,7 +186,10 @@ class UserMessage(Message):
         return result
     
     def get_openai_message(self) -> ChatCompletionMessageParam:
-        return {"role":"user", "content": self.get_formatted_content(),}
+        content = self.get_formatted_content()
+        if self.lore_text: # lore lookup: prepended for the LLM only
+            content = f"{self.lore_text}\n{content}"
+        return {"role":"user", "content": content,}
     
     def get_dict_formatted_string(self) -> str:
         dictionary = {"role":"user", "content": self.get_formatted_content(),}
