@@ -117,14 +117,17 @@ def stream_chat(client: Any, model: str, messages: list[Any], tools: list[Any] |
 
 
 def complete_chat(client: Any, model: str, messages: list[Any], params: dict[str, Any]) -> dict[str, Any]:
-    """One non-streaming chat completion (used by the judge)."""
+    """One non-streaming chat completion (the judge; the tool model in tool_model mode, with `tools` in params)."""
     start = time.perf_counter()
     try:
         response = client.chat.completions.create(model=model, messages=messages, **params)
         choices = _get(response, 'choices') or []
         message = _get(choices[0], 'message') if choices else None
+        calls = [{'id': _get(c, 'id') or '', 'type': 'function',
+                  'function': {'name': _get(_get(c, 'function'), 'name') or '', 'arguments': _get(_get(c, 'function'), 'arguments') or ''}}
+                 for c in _get(message, 'tool_calls') or []]
         return {'content': _get(message, 'content') or '', 'usage': usage_to_dict(_get(response, 'usage')),
-                'total_s': round(time.perf_counter() - start, 3), 'error': None}
+                'total_s': round(time.perf_counter() - start, 3), 'error': None, 'tool_calls': calls or None}
     except Exception as e:
         return {'content': '', 'usage': None, 'total_s': round(time.perf_counter() - start, 3),
-                'error': f'{type(e).__name__}: {e}'}
+                'error': f'{type(e).__name__}: {e}', 'tool_calls': None}

@@ -11,6 +11,7 @@ from concurrent.futures import ThreadPoolExecutor
 from typing import Any, Callable
 
 from src.evals.budget import Budget, Estimate
+from src.evals import modes
 from src.evals.checks import action_check, voice_metrics
 from src.evals.common import (Pricing, adapt_request_params, append_jsonl, estimate_request_tokens, output_cap,
                               read_jsonl, reasoning_allowance)
@@ -85,9 +86,14 @@ def build_request(item: dict[str, Any], candidate: dict[str, Any]) -> tuple[dict
         else:
             params[key] = value
     model = candidate['model']
-    params = adapt_request_params(model, params)
     tools = recorded.get('tools') if candidate.get('tools', True) else None
-    return {'model': model, 'messages': messages, 'tools': tools or None, 'params': params}, None
+    raw_params = dict(params)
+    if tools and candidate.get('mode') != 'tool_model':  # the server adapts with tools present (e.g. forces effort none)
+        params = adapt_request_params(model, {**params, 'tools': tools})
+        params.pop('tools', None)
+    else:
+        params = adapt_request_params(model, params)
+    return {'model': model, 'messages': messages, 'tools': tools or None, 'params': params, 'raw_params': raw_params}, None
 
 
 def estimate_replay(items: list[dict[str, Any]], candidates: list[dict[str, Any]], repeats: int,
@@ -108,8 +114,13 @@ def estimate_replay(items: list[dict[str, Any]], candidates: list[dict[str, Any]
                 price, known = candidate['price'], True
             if not known:
                 part.unpriced_models.add(candidate['model'])
+            extra = modes.estimate_extra_calls(candidate, input_tokens, estimate_request_tokens([], request['tools']),
+                                               ((input_tokens * price['input'] + expected_out * price['output']) / 1e6,
+                                                (input_tokens * price['input'] + cap * price['output']) / 1e6), pricing)
             for _ in range(repeats):
-                part.calls += 1
+                part.calls += 1 + extra[0]
+                part.expected_usd += extra[1]
+                part.max_usd += extra[2]
                 part.input_tokens += input_tokens
                 part.expected_output_tokens += expected_out
                 part.max_output_tokens += cap
@@ -133,6 +144,7 @@ def run_replay(items: list[dict[str, Any]], candidates: list[dict[str, Any]], re
             if (item['id'], candidate['label'], r) not in finished]
     random.Random(seed).shuffle(jobs)  # interleave candidates so time-of-day/API load doesn't favour one model
     lock = threading.Lock()
+    waiting_actions = modes.actions_waiting_for_game()
     summary = {'done': 0, 'errors': 0, 'skipped': 0, 'already_done': len(finished), 'stopped_by_budget': 0}
 
     def work(job: tuple[dict[str, Any], dict[str, Any], int]) -> None:
@@ -149,10 +161,16 @@ def run_replay(items: list[dict[str, Any]], candidates: list[dict[str, Any]], re
                 summary['stopped_by_budget' if record['skipped'] == 'budget exhausted' else 'skipped'] += 1
                 append_jsonl(out_path, record)
             return
-        client = client_factory(candidate.get('base_url', DEFAULT_BASE_URL), candidate.get('api_key_env'))
-        result = stream_chat(client, request['model'], request['messages'], request['tools'], request['params'])
-        usage = result['usage'] or {}
-        cost = None
+        if candidate.get('mode'):  # server turn modes: tool model first, or a second call after tool-only replies
+            result = modes.run_turn(item, candidate, request, client_factory, pricing, waiting_actions)
+            cost = result['cost_usd']
+            budget.charge(cost)
+            usage = {}
+        else:
+            client = client_factory(candidate.get('base_url', DEFAULT_BASE_URL), candidate.get('api_key_env'))
+            result = stream_chat(client, request['model'], request['messages'], request['tools'], request['params'])
+            usage = result['usage'] or {}
+            cost = None
         if usage:
             if candidate.get('price'):
                 p = candidate['price']
@@ -170,6 +188,9 @@ def run_replay(items: list[dict[str, Any]], candidates: list[dict[str, Any]], re
             'voice': voice_metrics(result['content'], scenario, result['tool_calls']),
             'action_check': action_check(item.get('expected'), result['tool_calls']),
         })
+        for key in ('mode', 'speech_ttft_s', 'followup', 'waits_for_game', 'calls'):
+            if key in result:
+                record[key] = result[key]
         with lock:
             summary['errors' if result['error'] else 'done'] += 1
             append_jsonl(out_path, record)
