@@ -21,7 +21,7 @@ remember earlier conversations, and run in-game actions (follow, attack, trade, 
 | LLM | Yes | Any API-based service (OpenAI, OpenRouter, ...). A local LLM server on the Mac works too |
 | Text-to-speech (Piper) | Yes | The mod's Windows `piper.exe` runs through Wine, in a separate Wine prefix |
 | Actions, memories, web UI (`http://localhost:4999/ui`) | Yes | Same as on Windows |
-| Vision | Yes, with a small patch | Captures the main display with `mss`. Terminal needs Screen Recording permission |
+| Vision | Yes | Captures the main display with `mss`. Terminal needs Screen Recording permission |
 | Lip sync (`.lip` files) | No | Needs FaceFXWrapper + FonixData under Wine. Not done yet; set `lip_generation = Disabled` |
 | XTTS / xVASynth | Not tested | Both are Windows/NVIDIA-oriented |
 | The mod's bundled `Mantella.exe` inside the game's Wine bottle | No (for voice) | See the next question |
@@ -163,7 +163,7 @@ the server was started from Terminal, not from the game's Wine bottle.
 **The NPC doesn't speak (Piper error).** Check that the launcher's `MANTELLA_WINE` points to a working Wine. Test it with
 `WINEPREFIX=~/Games/mantella-wine wine <MantellaSoftware>/piper/piper.exe --help`.
 
-**Vision returns nothing.** Allow Screen Recording for Terminal. The patch captures the **main** display, so run the game
+**Vision returns nothing.** Allow Screen Recording for Terminal. Vision captures the **main** display, so run the game
 on that display.
 
 **Startup hangs at Hugging Face checks.** After the first successful start, uncomment `export HF_HUB_OFFLINE=1` in the launcher.
@@ -186,7 +186,7 @@ It's moderate. Expect **2–4 hours** the first time, most of it on the game sid
 If you already have a modded Skyrim 1.6.1170 running on your Mac, it's an evening's work. If you're starting from a
 fresh Steam install that has auto-updated to 1.7.x, the downgrade is the main job.
 
-## Code changes for macOS in this branch
+## Code changes for macOS
 - `src/tts/piper.py`: on non-Windows systems, `piper.exe` is started through Wine (`build_piper_command` /
   `find_wine`: `$MANTELLA_WINE` → SkyrimMT's bundled Wine → `wine`/`wine64` on PATH) with `WINEPREFIX` =
   `$MANTELLA_WINEPREFIX` (default `~/Games/mantella-wine`). Windows behaviour is unchanged.
